@@ -1,0 +1,17 @@
+{
+  "name": "term-held",
+  "version": "5.0.0",
+  "description": "Interactive mathematics learning platform for 8th grade students",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "build": "echo 'No build process needed - static files only'",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": ["education", "mathematics", "learning", "client-side"],
+  "author": "Dirk Hierold",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}

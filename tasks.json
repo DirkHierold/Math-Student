@@ -1,0 +1,1262 @@
+{
+  "blocks": {
+    "1": {
+      "title": "Grundlagen",
+      "icon": "📐",
+      "tasks": [
+        {
+          "id": "B1L1T01",
+          "block": 1,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 3x + 2x",
+            "solution": "5x"
+          },
+          "hints": ["Sammle die gleichen Variablen", "3x + 2x = (3+2)x"]
+        },
+        {
+          "id": "B1L1T02",
+          "block": 1,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 7a - 3a",
+            "solution": "4a"
+          },
+          "hints": ["Subtrahiere die Koeffizienten", "7a - 3a = (7-3)a"]
+        },
+        {
+          "id": "B1L2T01",
+          "block": 1,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 4x + 3y - 2x + y",
+            "solution": "2x + 4y"
+          },
+          "hints": ["Sammle x-Terme und y-Terme getrennt", "4x - 2x = 2x und 3y + y = 4y"]
+        },
+        {
+          "id": "B1L2T02",
+          "block": 1,
+          "difficulty": 2,
+          "taskType": "drag_and_drop",
+          "data": {
+            "question": "Ordne und vereinfache:",
+            "initialBlocks": ["5a", "+", "3b", "-", "2a", "+", "b"],
+            "solutionSteps": [
+              { "inputs": ["5a", "-2a"], "output": "3a" },
+              { "inputs": ["3b", "+b"], "output": "4b" }
+            ],
+            "finalSolution": "3a + 4b"
+          },
+          "hints": ["Sammle erst alle a-Terme", "Dann alle b-Terme"]
+        },
+        {
+          "id": "B1L3T01",
+          "block": 1,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 2(3x + 1) - 4x",
+            "solution": "2x + 2"
+          },
+          "hints": ["Multipliziere zuerst die Klammer aus", "2(3x + 1) = 6x + 2"]
+        },
+        {
+          "id": "B1L4T01",
+          "block": 1,
+          "difficulty": 4,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der folgenden Rechnung:",
+            "calculationSteps": [
+              { "line": "3(2x - 1) + 4x", "isCorrect": true },
+              { "line": "6x - 3 + 4x", "isCorrect": true },
+              { "line": "10x + 3", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! -3 + 4x ergibt 10x - 3, nicht 10x + 3."
+          },
+          "hints": ["Achte auf die Vorzeichen", "Was passiert mit der -3?"]
+        },
+        {
+          "id": "B1L1T03",
+          "block": 1,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 8y - 5y",
+            "solution": "3y"
+          },
+          "hints": ["Subtrahiere die Koeffizienten", "8y - 5y = (8-5)y"]
+        },
+        {
+          "id": "B1L1T04",
+          "block": 1,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 2a + 3a + a",
+            "solution": "6a"
+          },
+          "hints": ["Addiere alle Koeffizienten", "2a + 3a + a = 2a + 3a + 1a = 6a"]
+        },
+        {
+          "id": "B1L1T05",
+          "block": 1,
+          "difficulty": 1,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Paare - Einfache Terme.",
+            "pairs": [
+              { "termA": "5x + 2x", "termB": "7x" },
+              { "termA": "9b - 4b", "termB": "5b" },
+              { "termA": "3c + c", "termB": "4c" }
+            ]
+          },
+          "hints": ["Sammle gleiche Variablen", "Vergiss nicht: c = 1c"]
+        },
+        {
+          "id": "B1L2T03",
+          "block": 1,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 6x - 2y + 3x - y",
+            "solution": "9x - 3y"
+          },
+          "hints": ["Sammle x-Terme: 6x + 3x", "Sammle y-Terme: -2y - y"]
+        },
+        {
+          "id": "B1L2T04",
+          "block": 1,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: a + 3b - 2a + 5b",
+            "solution": "-a + 8b"
+          },
+          "hints": ["a - 2a = -a", "3b + 5b = 8b"]
+        },
+        {
+          "id": "B1L2T05",
+          "block": 1,
+          "difficulty": 2,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der Vereinfachung:",
+            "calculationSteps": [
+              { "line": "5x + 3y - 2x + y", "isCorrect": true },
+              { "line": "3x + 4y", "isCorrect": true },
+              { "line": "7xy", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 3x + 4y kann nicht weiter vereinfacht werden. Es ergibt nicht 7xy!"
+          },
+          "hints": ["x und y sind verschiedene Variablen", "Man kann x und y nicht einfach zusammenfassen"]
+        },
+        {
+          "id": "B1L3T02",
+          "block": 1,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 4(x - 2) + 3x",
+            "solution": "7x - 8"
+          },
+          "hints": ["4(x - 2) = 4x - 8", "Dann addiere 3x"]
+        },
+        {
+          "id": "B1L3T03",
+          "block": 1,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: -3(2a + 1) + 5a",
+            "solution": "-a - 3"
+          },
+          "hints": ["-3(2a + 1) = -6a - 3", "-6a + 5a = -a"]
+        },
+        {
+          "id": "B1L3T04",
+          "block": 1,
+          "difficulty": 3,
+          "taskType": "drag_and_drop",
+          "data": {
+            "question": "Ordne und vereinfache: 2(3x - 1) + 4x - 3",
+            "initialBlocks": ["6x", "-", "2", "+", "4x", "-", "3"],
+            "solutionSteps": [
+              { "inputs": ["6x", "+4x"], "output": "10x" },
+              { "inputs": ["-2", "-3"], "output": "-5" }
+            ],
+            "finalSolution": "10x - 5"
+          },
+          "hints": ["Multipliziere zuerst aus: 2(3x - 1) = 6x - 2", "Sammle dann ähnliche Terme"]
+        },
+        {
+          "id": "B1L3T05",
+          "block": 1,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 5(y + 2) - 2(y - 1)",
+            "solution": "3y + 12"
+          },
+          "hints": ["5(y + 2) = 5y + 10", "-2(y - 1) = -2y + 2"]
+        },
+        {
+          "id": "B1L4T02",
+          "block": 1,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 2(3x + 1) - 3(x - 2)",
+            "solution": "3x + 8"
+          },
+          "hints": ["2(3x + 1) = 6x + 2", "-3(x - 2) = -3x + 6"]
+        },
+        {
+          "id": "B1L4T03",
+          "block": 1,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 4(2a - 3) + 3(a + 1) - 5a",
+            "solution": "6a - 9"
+          },
+          "hints": ["Multipliziere alle Klammern aus", "4(2a - 3) = 8a - 12, 3(a + 1) = 3a + 3"]
+        },
+        {
+          "id": "B1L4T04",
+          "block": 1,
+          "difficulty": 4,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler beim Ausmultiplizieren:",
+            "calculationSteps": [
+              { "line": "-2(3x - 4)", "isCorrect": true },
+              { "line": "-6x + 8", "isCorrect": true },
+              { "line": "-6x - 8", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! -2 · (-4) = +8, nicht -8. Die Vorzeichen-Regel: Minus mal Minus ergibt Plus."
+          },
+          "hints": ["Achte auf die Vorzeichen", "Was ergibt -2 · (-4)?"]
+        },
+        {
+          "id": "B1L4T05",
+          "block": 1,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: -3(x + 2) + 2(2x - 1) + x",
+            "solution": "2x - 8"
+          },
+          "hints": ["-3(x + 2) = -3x - 6", "2(2x - 1) = 4x - 2"]
+        },
+        {
+          "id": "B1L5T01",
+          "block": 1,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 3(2x - 1) - 2(x + 3) + 4",
+            "solution": "4x - 5"
+          },
+          "hints": ["Multipliziere beide Klammern aus", "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"]
+        },
+        {
+          "id": "B1L5T02",
+          "block": 1,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 4(3a - 2) - 2(2a + 1) - 3(a - 4)",
+            "solution": "5a + 2"
+          },
+          "hints": ["Multipliziere alle drei Klammern aus", "4(3a - 2) = 12a - 8"]
+        },
+        {
+          "id": "B1L5T03",
+          "block": 1,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: 2(x + 3) - 3(2x - 1) + 4(x - 2)",
+            "solution": "3x + 1"
+          },
+          "hints": ["2(x + 3) = 2x + 6", "-3(2x - 1) = -6x + 3", "4(x - 2) = 4x - 8"]
+        },
+        {
+          "id": "B1L5T04",
+          "block": 1,
+          "difficulty": 5,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der komplexen Vereinfachung:",
+            "calculationSteps": [
+              { "line": "5(2x - 3) - 3(x + 2) + x", "isCorrect": true },
+              { "line": "10x - 15 - 3x - 6 + x", "isCorrect": true },
+              { "line": "8x - 9", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 10x - 3x + x = 8x ist richtig, aber -15 - 6 = -21, nicht -9."
+          },
+          "hints": ["Rechne die x-Terme: 10x - 3x + x", "Rechne die Konstanten: -15 - 6"]
+        },
+        {
+          "id": "B1L5T05",
+          "block": 1,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: -2(3y - 4) + 5(y + 1) - 3(2y - 3)",
+            "solution": "-7y + 22"
+          },
+          "hints": ["-2(3y - 4) = -6y + 8", "5(y + 1) = 5y + 5", "-3(2y - 3) = -6y + 9"]
+        }
+      ]
+    },
+    "2": {
+      "title": "Multiplikation",
+      "icon": "✖️",
+      "tasks": [
+        {
+          "id": "B2L1T01",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: 3(x + 2)",
+            "solution": "3x + 6"
+          },
+          "hints": ["Multipliziere 3 mit jedem Term in der Klammer", "3 · x = 3x und 3 · 2 = 6"]
+        },
+        {
+          "id": "B2L1T02",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: -2(a - 4)",
+            "solution": "-2a + 8"
+          },
+          "hints": ["Achte auf die Vorzeichen", "-2 · a = -2a und -2 · (-4) = +8"]
+        },
+        {
+          "id": "B2L2T01",
+          "block": 2,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (x + 3)(x + 2)",
+            "solution": "x² + 5x + 6"
+          },
+          "hints": ["Verwende die FOIL-Methode", "First, Outer, Inner, Last"]
+        },
+        {
+          "id": "B2L2T02",
+          "block": 2,
+          "difficulty": 2,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Paare.",
+            "pairs": [
+              { "termA": "2(x + 3)", "termB": "2x + 6" },
+              { "termA": "3(2y - 1)", "termB": "6y - 3" },
+              { "termA": "-1(a + b)", "termB": "-a - b" }
+            ]
+          },
+          "hints": ["Multipliziere jeden Term in der Klammer", "Achte auf die Vorzeichen"]
+        },
+        {
+          "id": "B2L3T01",
+          "block": 2,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (2x - 1)(x + 3)",
+            "solution": "2x² + 5x - 3"
+          },
+          "hints": ["2x · x = 2x²", "2x · 3 = 6x, -1 · x = -x, -1 · 3 = -3"]
+        },
+        {
+          "id": "B2L1T03",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: 5(y - 3)",
+            "solution": "5y - 15"
+          },
+          "hints": ["5 · y = 5y", "5 · (-3) = -15"]
+        },
+        {
+          "id": "B2L1T04",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Paare - Ausmultiplizieren.",
+            "pairs": [
+              { "termA": "4(x + 1)", "termB": "4x + 4" },
+              { "termA": "-3(a - 2)", "termB": "-3a + 6" },
+              { "termA": "2(3b + 5)", "termB": "6b + 10" }
+            ]
+          },
+          "hints": ["Multipliziere jeden Term in der Klammer", "Achte auf die Vorzeichen"]
+        },
+        {
+          "id": "B2L1T05",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: 6(2x - 1)",
+            "solution": "12x - 6"
+          },
+          "hints": ["6 · 2x = 12x", "6 · (-1) = -6"]
+        },
+        {
+          "id": "B2L2T03",
+          "block": 2,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (a - 1)(a + 4)",
+            "solution": "a² + 3a - 4"
+          },
+          "hints": ["a · a = a²", "a · 4 = 4a, (-1) · a = -a, (-1) · 4 = -4"]
+        },
+        {
+          "id": "B2L2T04",
+          "block": 2,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (3y + 1)(y - 2)",
+            "solution": "3y² - 5y - 2"
+          },
+          "hints": ["3y · y = 3y²", "3y · (-2) = -6y, 1 · y = y, 1 · (-2) = -2"]
+        },
+        {
+          "id": "B2L2T05",
+          "block": 2,
+          "difficulty": 2,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler beim Ausmultiplizieren:",
+            "calculationSteps": [
+              { "line": "(x + 2)(x + 3)", "isCorrect": true },
+              { "line": "x² + 3x + 2x + 6", "isCorrect": true },
+              { "line": "x² + 6x + 6", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 3x + 2x = 5x, nicht 6x. Also: x² + 5x + 6."
+          },
+          "hints": ["Rechne 3x + 2x", "Die Konstante bleibt 6"]
+        },
+        {
+          "id": "B2L3T02",
+          "block": 2,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (x - 3)(2x + 1)",
+            "solution": "2x² - 5x - 3"
+          },
+          "hints": ["x · 2x = 2x²", "x · 1 = x, (-3) · 2x = -6x, (-3) · 1 = -3"]
+        },
+        {
+          "id": "B2L3T03",
+          "block": 2,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (4a - 3)(a + 2)",
+            "solution": "4a² + 5a - 6"
+          },
+          "hints": ["4a · a = 4a²", "4a · 2 = 8a, (-3) · a = -3a, (-3) · 2 = -6"]
+        },
+        {
+          "id": "B2L3T04",
+          "block": 2,
+          "difficulty": 3,
+          "taskType": "drag_and_drop",
+          "data": {
+            "question": "Ordne die Terme beim Ausmultiplizieren: (2x + 1)(x - 3)",
+            "initialBlocks": ["2x²", "-", "6x", "+", "x", "-", "3"],
+            "solutionSteps": [
+              { "inputs": ["2x²"], "output": "2x²" },
+              { "inputs": ["-6x", "+x"], "output": "-5x" },
+              { "inputs": ["-3"], "output": "-3" }
+            ],
+            "finalSolution": "2x² - 5x - 3"
+          },
+          "hints": ["2x · x = 2x²", "2x · (-3) + 1 · x = -6x + x = -5x"]
+        },
+        {
+          "id": "B2L3T05",
+          "block": 2,
+          "difficulty": 3,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Paare - Komplexere Multiplikation.",
+            "pairs": [
+              { "termA": "(x + 1)(x - 1)", "termB": "x² - 1" },
+              { "termA": "(2a + 3)(a + 1)", "termB": "2a² + 5a + 3" },
+              { "termA": "(3y - 2)(y + 4)", "termB": "3y² + 10y - 8" }
+            ]
+          },
+          "hints": ["Verwende FOIL", "First, Outer, Inner, Last"]
+        },
+        {
+          "id": "B2L4T01",
+          "block": 2,
+          "difficulty": 4,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der folgenden Rechnung für (x - 2)(x + 3):",
+            "calculationSteps": [
+              { "line": "x · x + x · 3 - 2 · x - 2 · 3", "isCorrect": true },
+              { "line": "x² + 3x - 2x - 6", "isCorrect": true },
+              { "line": "x² + x + 6", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 3x - 2x = x und -6 bleibt -6, also x² + x - 6."
+          },
+          "hints": ["Rechne 3x - 2x korrekt", "Was passiert mit -6?"]
+        },
+        {
+          "id": "B2L4T02",
+          "block": 2,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (3x - 4)(2x + 5)",
+            "solution": "6x² + 7x - 20"
+          },
+          "hints": ["3x · 2x = 6x²", "3x · 5 = 15x, (-4) · 2x = -8x, (-4) · 5 = -20"]
+        },
+        {
+          "id": "B2L4T03",
+          "block": 2,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (5a + 2)(3a - 1)",
+            "solution": "15a² + a - 2"
+          },
+          "hints": ["5a · 3a = 15a²", "5a · (-1) = -5a, 2 · 3a = 6a, 2 · (-1) = -2"]
+        },
+        {
+          "id": "B2L4T04",
+          "block": 2,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (2y - 3)(4y + 1)",
+            "solution": "8y² - 10y - 3"
+          },
+          "hints": ["2y · 4y = 8y²", "2y · 1 = 2y, (-3) · 4y = -12y, (-3) · 1 = -3"]
+        },
+        {
+          "id": "B2L4T05",
+          "block": 2,
+          "difficulty": 4,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler beim Multiplizieren:",
+            "calculationSteps": [
+              { "line": "(3x - 2)(x + 4)", "isCorrect": true },
+              { "line": "3x² + 12x - 2x - 8", "isCorrect": true },
+              { "line": "3x² + 14x - 8", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 12x - 2x = 10x, nicht 14x. Korrekt: 3x² + 10x - 8."
+          },
+          "hints": ["Rechne 12x - 2x", "12 - 2 = 10"]
+        },
+        {
+          "id": "B2L5T01",
+          "block": 2,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (4x - 3)(3x + 2) - 2x",
+            "solution": "12x² + 5x - 6"
+          },
+          "hints": ["Multipliziere erst (4x - 3)(3x + 2)", "Dann subtrahiere 2x vom Ergebnis"]
+        },
+        {
+          "id": "B2L5T02",
+          "block": 2,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (2a + 1)(3a - 4) + (a - 2)(a + 1)",
+            "solution": "7a² - 4a - 6"
+          },
+          "hints": ["Multipliziere beide Klammerpaare getrennt", "Dann addiere die Ergebnisse"]
+        },
+        {
+          "id": "B2L5T03",
+          "block": 2,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (x + 2)² - (x - 1)²",
+            "solution": "6x + 3"
+          },
+          "hints": ["(x + 2)² = x² + 4x + 4", "(x - 1)² = x² - 2x + 1"]
+        },
+        {
+          "id": "B2L5T04",
+          "block": 2,
+          "difficulty": 5,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der komplexen Multiplikation:",
+            "calculationSteps": [
+              { "line": "(2x - 1)(x + 3) + x(x - 2)", "isCorrect": true },
+              { "line": "2x² + 6x - x - 3 + x² - 2x", "isCorrect": true },
+              { "line": "3x² + 3x + 3", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 6x - x - 2x = 3x ist richtig, aber -3 bleibt -3. Korrekt: 3x² + 3x - 3."
+          },
+          "hints": ["Rechne die x-Terme: 6x - x - 2x", "Die Konstante ist -3, nicht +3"]
+        },
+        {
+          "id": "B2L5T05",
+          "block": 2,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Multipliziere aus: (3y + 4)(2y - 1) - (y + 2)(y - 3)",
+            "solution": "5y² + 11y + 2"
+          },
+          "hints": ["Multipliziere beide Klammerpaare", "(3y + 4)(2y - 1) und (y + 2)(y - 3)"]
+        }
+      ]
+    },
+    "3": {
+      "title": "Binomische Formeln",
+      "icon": "📏",
+      "tasks": [
+        {
+          "id": "B3L1T01",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die erste binomische Formel an: (x + 3)²",
+            "solution": "x² + 6x + 9"
+          },
+          "hints": ["(a + b)² = a² + 2ab + b²", "a = x, b = 3"]
+        },
+        {
+          "id": "B3L1T02",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Paare - Binomische Formeln.",
+            "pairs": [
+              { "termA": "(a + b)²", "termB": "a² + 2ab + b²" },
+              { "termA": "(a - b)²", "termB": "a² - 2ab + b²" },
+              { "termA": "(a + b)(a - b)", "termB": "a² - b²" }
+            ]
+          },
+          "hints": ["Lerne die drei binomischen Formeln auswendig", "Erste, zweite und dritte binomische Formel"]
+        },
+        {
+          "id": "B3L2T01",
+          "block": 3,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die zweite binomische Formel an: (2x - 1)²",
+            "solution": "4x² - 4x + 1"
+          },
+          "hints": ["(a - b)² = a² - 2ab + b²", "a = 2x, b = 1"]
+        },
+        {
+          "id": "B3L2T02",
+          "block": 3,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die dritte binomische Formel an: (3y + 2)(3y - 2)",
+            "solution": "9y² - 4"
+          },
+          "hints": ["(a + b)(a - b) = a² - b²", "a = 3y, b = 2"]
+        },
+        {
+          "id": "B3L3T01",
+          "block": 3,
+          "difficulty": 3,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der folgenden Rechnung für (x - 5)²:",
+            "calculationSteps": [
+              { "line": "x² - 2·x·5 + 5²", "isCorrect": true },
+              { "line": "x² - 10x - 25", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! (+5)² ergibt +25, nicht -25. Richtig: x² - 10x + 25"
+          },
+          "hints": ["Achte auf das Vorzeichen von b²", "5² ist immer positiv"]
+        },
+        {
+          "id": "B3L1T03",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die zweite binomische Formel an: (y - 2)²",
+            "solution": "y² - 4y + 4"
+          },
+          "hints": ["(a - b)² = a² - 2ab + b²", "a = y, b = 2"]
+        },
+        {
+          "id": "B3L1T04",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die dritte binomische Formel an: (x + 5)(x - 5)",
+            "solution": "x² - 25"
+          },
+          "hints": ["(a + b)(a - b) = a² - b²", "a = x, b = 5"]
+        },
+        {
+          "id": "B3L1T05",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die erste binomische Formel an: (a + 1)²",
+            "solution": "a² + 2a + 1"
+          },
+          "hints": ["(a + b)² = a² + 2ab + b²", "a = a, b = 1"]
+        },
+        {
+          "id": "B3L2T03",
+          "block": 3,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die erste binomische Formel an: (3a + 2)²",
+            "solution": "9a² + 12a + 4"
+          },
+          "hints": ["(a + b)² = a² + 2ab + b²", "a = 3a, b = 2"]
+        },
+        {
+          "id": "B3L2T04",
+          "block": 3,
+          "difficulty": 2,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Paare - Binomische Formeln anwenden.",
+            "pairs": [
+              { "termA": "(x - 4)²", "termB": "x² - 8x + 16" },
+              { "termA": "(2y + 1)²", "termB": "4y² + 4y + 1" },
+              { "termA": "(a + 3)(a - 3)", "termB": "a² - 9" }
+            ]
+          },
+          "hints": ["Erkenne welche Formel zu verwenden ist", "Setze die Werte korrekt ein"]
+        },
+        {
+          "id": "B3L2T05",
+          "block": 3,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende die zweite binomische Formel an: (4x - 3)²",
+            "solution": "16x² - 24x + 9"
+          },
+          "hints": ["(a - b)² = a² - 2ab + b²", "a = 4x, b = 3"]
+        },
+        {
+          "id": "B3L3T02",
+          "block": 3,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (x + 4)² - (x - 2)²",
+            "solution": "12x + 12"
+          },
+          "hints": ["(x + 4)² = x² + 8x + 16", "(x - 2)² = x² - 4x + 4"]
+        },
+        {
+          "id": "B3L3T03",
+          "block": 3,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende binomische Formeln an: (2a + b)(2a - b) + b²",
+            "solution": "4a²"
+          },
+          "hints": ["(2a + b)(2a - b) = 4a² - b²", "Dann addiere b²"]
+        },
+        {
+          "id": "B3L3T04",
+          "block": 3,
+          "difficulty": 3,
+          "taskType": "drag_and_drop",
+          "data": {
+            "question": "Ordne die Terme für (3x - 1)²:",
+            "initialBlocks": ["9x²", "-", "6x", "+", "1"],
+            "solutionSteps": [
+              { "inputs": ["9x²"], "output": "9x²" },
+              { "inputs": ["-6x"], "output": "-6x" },
+              { "inputs": ["+1"], "output": "+1" }
+            ],
+            "finalSolution": "9x² - 6x + 1"
+          },
+          "hints": ["(a - b)² = a² - 2ab + b²", "(3x)² = 9x², 2·3x·1 = 6x, 1² = 1"]
+        },
+        {
+          "id": "B3L3T05",
+          "block": 3,
+          "difficulty": 3,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler bei (2y + 3)²:",
+            "calculationSteps": [
+              { "line": "(2y)² + 2·2y·3 + 3²", "isCorrect": true },
+              { "line": "4y² + 12y + 9", "isCorrect": true },
+              { "line": "4y² + 6y + 9", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 2·2y·3 = 12y, nicht 6y."
+          },
+          "hints": ["Berechne 2ab richtig", "2·2y·3 = ?"]
+        },
+        {
+          "id": "B3L4T01",
+          "block": 3,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (2a + 3b)² - (2a - 3b)²",
+            "solution": "24ab"
+          },
+          "hints": ["Wende beide binomischen Formeln an", "Subtrahiere dann die Ergebnisse"]
+        },
+        {
+          "id": "B3L4T02",
+          "block": 3,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (3x + 2y)² + (3x - 2y)²",
+            "solution": "18x² + 8y²"
+          },
+          "hints": ["Wende beide binomischen Formeln an", "Addiere die Ergebnisse"]
+        },
+        {
+          "id": "B3L4T03",
+          "block": 3,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Wende binomische Formeln an: (a + 2b)² - 4b²",
+            "solution": "a² + 4ab"
+          },
+          "hints": ["(a + 2b)² = a² + 4ab + 4b²", "Subtrahiere dann 4b²"]
+        },
+        {
+          "id": "B3L4T04",
+          "block": 3,
+          "difficulty": 4,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler bei (4x - y)²:",
+            "calculationSteps": [
+              { "line": "16x² - 8xy + y²", "isCorrect": true },
+              { "line": "16x² - 4xy + y²", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 2·4x·y = 8xy, nicht 4xy."
+          },
+          "hints": ["Berechne den mittleren Term", "2ab = 2·4x·y = ?"]
+        },
+        {
+          "id": "B3L4T05",
+          "block": 3,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (5a - 2)² - (3a + 1)²",
+            "solution": "16a² - 26a + 3"
+          },
+          "hints": ["(5a - 2)² = 25a² - 20a + 4", "(3a + 1)² = 9a² + 6a + 1"]
+        },
+        {
+          "id": "B3L5T01",
+          "block": 3,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (2x + 3)³ - 27",
+            "solution": "8x³ + 36x² + 54x"
+          },
+          "hints": ["(2x + 3)³ ist nicht binomisch", "Verwende (a + b)³ = a³ + 3a²b + 3ab² + b³"]
+        },
+        {
+          "id": "B3L5T02",
+          "block": 3,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (a + b + c)² - (a - b - c)²",
+            "solution": "4ab + 4ac + 4bc"
+          },
+          "hints": ["Erweitere auf drei Terme", "Verwende die Differenz der Quadrate"]
+        },
+        {
+          "id": "B3L5T03",
+          "block": 3,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (3x + 2y)² - (3x - 2y)² - 8xy",
+            "solution": "16xy"
+          },
+          "hints": ["Erste Differenz: 24xy", "Dann subtrahiere 8xy"]
+        },
+        {
+          "id": "B3L5T04",
+          "block": 3,
+          "difficulty": 5,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der komplexen Binomformel:",
+            "calculationSteps": [
+              { "line": "(2x + 1)² - (2x - 1)² + 4x", "isCorrect": true },
+              { "line": "8x + 4x", "isCorrect": true },
+              { "line": "12x²", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! 8x + 4x = 12x, nicht 12x². Das Ergebnis ist linear, nicht quadratisch."
+          },
+          "hints": ["8x + 4x = ?", "Das Ergebnis hat keine x²-Terme"]
+        },
+        {
+          "id": "B3L5T05",
+          "block": 3,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Vereinfache: (x² + 1)² - (x² - 1)²",
+            "solution": "4x²"
+          },
+          "hints": ["Setze u = x²", "Dann: (u + 1)² - (u - 1)² = 4u = 4x²"]
+        }
+      ]
+    },
+    "4": {
+      "title": "Faktorisierung",
+      "icon": "🔧",
+      "tasks": [
+        {
+          "id": "B4L1T01",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 6x + 9",
+            "solution": "3(2x + 3)"
+          },
+          "hints": ["Suche den größten gemeinsamen Teiler", "3 ist der größte gemeinsame Teiler von 6 und 9"]
+        },
+        {
+          "id": "B4L1T02",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: x² + 5x",
+            "solution": "x(x + 5)"
+          },
+          "hints": ["x ist der gemeinsame Faktor", "Klammere x aus"]
+        },
+        {
+          "id": "B4L2T01",
+          "block": 4,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere mit binomischer Formel: x² - 16",
+            "solution": "(x + 4)(x - 4)"
+          },
+          "hints": ["Das ist die dritte binomische Formel rückwärts", "a² - b² = (a + b)(a - b)"]
+        },
+        {
+          "id": "B4L2T02",
+          "block": 4,
+          "difficulty": 2,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Faktorisierungen.",
+            "pairs": [
+              { "termA": "x² - 9", "termB": "(x + 3)(x - 3)" },
+              { "termA": "4a² - 1", "termB": "(2a + 1)(2a - 1)" },
+              { "termA": "y² - 25", "termB": "(y + 5)(y - 5)" }
+            ]
+          },
+          "hints": ["Erkenne die Differenz von Quadraten", "a² - b² = (a + b)(a - b)"]
+        },
+        {
+          "id": "B4L3T01",
+          "block": 4,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: x² + 6x + 9",
+            "solution": "(x + 3)²"
+          },
+          "hints": ["Das ist ein vollständiges Quadrat", "Erste binomische Formel rückwärts"]
+        },
+        {
+          "id": "B4L1T03",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 4a + 8",
+            "solution": "4(a + 2)"
+          },
+          "hints": ["4 ist der gemeinsame Faktor", "4a = 4 · a, 8 = 4 · 2"]
+        },
+        {
+          "id": "B4L1T04",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Faktorisierungen - Gemeinsame Faktoren.",
+            "pairs": [
+              { "termA": "3x + 6", "termB": "3(x + 2)" },
+              { "termA": "2y² + 4y", "termB": "2y(y + 2)" },
+              { "termA": "5a - 10", "termB": "5(a - 2)" }
+            ]
+          },
+          "hints": ["Suche den größten gemeinsamen Teiler", "Klammere ihn aus"]
+        },
+        {
+          "id": "B4L1T05",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 3y² - 6y",
+            "solution": "3y(y - 2)"
+          },
+          "hints": ["3y ist der gemeinsame Faktor", "3y² = 3y · y, 6y = 3y · 2"]
+        },
+        {
+          "id": "B4L2T03",
+          "block": 4,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere mit binomischer Formel: a² - 36",
+            "solution": "(a + 6)(a - 6)"
+          },
+          "hints": ["a² - 36 = a² - 6²", "Dritte binomische Formel rückwärts"]
+        },
+        {
+          "id": "B4L2T04",
+          "block": 4,
+          "difficulty": 2,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 9x² - 4",
+            "solution": "(3x + 2)(3x - 2)"
+          },
+          "hints": ["9x² = (3x)², 4 = 2²", "Dritte binomische Formel: a² - b² = (a + b)(a - b)"]
+        },
+        {
+          "id": "B4L2T05",
+          "block": 4,
+          "difficulty": 2,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler bei der Faktorisierung:",
+            "calculationSteps": [
+              { "line": "16a² - 9", "isCorrect": true },
+              { "line": "(4a + 3)(4a + 3)", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! Differenz von Quadraten: (4a + 3)(4a - 3), nicht (4a + 3)²"
+          },
+          "hints": ["a² - b² ≠ (a + b)²", "a² - b² = (a + b)(a - b)"]
+        },
+        {
+          "id": "B4L3T02",
+          "block": 4,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: x² - 8x + 16",
+            "solution": "(x - 4)²"
+          },
+          "hints": ["Suche nach (x - a)²", "x² - 8x + 16 = x² - 2·4x + 4²"]
+        },
+        {
+          "id": "B4L3T03",
+          "block": 4,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 4y² + 12y + 9",
+            "solution": "(2y + 3)²"
+          },
+          "hints": ["4y² = (2y)², 9 = 3²", "Prüfe: 2·2y·3 = 12y ✓"]
+        },
+        {
+          "id": "B4L3T04",
+          "block": 4,
+          "difficulty": 3,
+          "taskType": "assignment_memory",
+          "data": {
+            "question": "Finde die passenden Faktorisierungen - Vollständige Quadrate.",
+            "pairs": [
+              { "termA": "a² + 10a + 25", "termB": "(a + 5)²" },
+              { "termA": "4x² - 4x + 1", "termB": "(2x - 1)²" },
+              { "termA": "9b² + 6b + 1", "termB": "(3b + 1)²" }
+            ]
+          },
+          "hints": ["Erkenne binomische Formeln rückwärts", "a² ± 2ab + b² = (a ± b)²"]
+        },
+        {
+          "id": "B4L3T05",
+          "block": 4,
+          "difficulty": 3,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 25x² - 20x + 4",
+            "solution": "(5x - 2)²"
+          },
+          "hints": ["25x² = (5x)², 4 = 2²", "Prüfe: 2·5x·2 = 20x ✓"]
+        },
+        {
+          "id": "B4L4T01",
+          "block": 4,
+          "difficulty": 4,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler in der Faktorisierung von x² - 4x + 4:",
+            "calculationSteps": [
+              { "line": "Suche nach (x + a)² oder (x - a)²", "isCorrect": true },
+              { "line": "(x + 2)²", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! x² - 4x + 4 = (x - 2)², nicht (x + 2)²"
+          },
+          "hints": ["Achte auf das Vorzeichen des mittleren Terms", "-4x deutet auf (x - 2)² hin"]
+        },
+        {
+          "id": "B4L4T02",
+          "block": 4,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: x⁴ - 16",
+            "solution": "(x² + 4)(x + 2)(x - 2)"
+          },
+          "hints": ["x⁴ - 16 = (x²)² - 4²", "Wende die dritte binomische Formel zweimal an"]
+        },
+        {
+          "id": "B4L4T03",
+          "block": 4,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 2x² - 8",
+            "solution": "2(x + 2)(x - 2)"
+          },
+          "hints": ["Klammere zuerst 2 aus", "2x² - 8 = 2(x² - 4)"]
+        },
+        {
+          "id": "B4L4T04",
+          "block": 4,
+          "difficulty": 4,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 3a² + 6a + 3",
+            "solution": "3(a + 1)²"
+          },
+          "hints": ["Klammere zuerst 3 aus", "3a² + 6a + 3 = 3(a² + 2a + 1)"]
+        },
+        {
+          "id": "B4L4T05",
+          "block": 4,
+          "difficulty": 4,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler bei komplexer Faktorisierung:",
+            "calculationSteps": [
+              { "line": "12x² - 48", "isCorrect": true },
+              { "line": "12(x² - 4)", "isCorrect": true },
+              { "line": "12(x - 2)²", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! x² - 4 = (x + 2)(x - 2), nicht (x - 2)²"
+          },
+          "hints": ["x² - 4 ist eine Differenz von Quadraten", "Nicht ein vollständiges Quadrat"]
+        },
+        {
+          "id": "B4L5T01",
+          "block": 4,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: x³ - 8",
+            "solution": "(x - 2)(x² + 2x + 4)"
+          },
+          "hints": ["x³ - 8 = x³ - 2³", "Verwende die Differenz von Kuben: a³ - b³ = (a - b)(a² + ab + b²)"]
+        },
+        {
+          "id": "B4L5T02",
+          "block": 4,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 8y³ + 27",
+            "solution": "(2y + 3)(4y² - 6y + 9)"
+          },
+          "hints": ["8y³ + 27 = (2y)³ + 3³", "Verwende die Summe von Kuben: a³ + b³ = (a + b)(a² - ab + b²)"]
+        },
+        {
+          "id": "B4L5T03",
+          "block": 4,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: x⁴ - 2x² + 1",
+            "solution": "(x² - 1)²"
+          },
+          "hints": ["Setze u = x²", "u² - 2u + 1 = (u - 1)² = (x² - 1)²"]
+        },
+        {
+          "id": "B4L5T04",
+          "block": 4,
+          "difficulty": 5,
+          "taskType": "find_the_error",
+          "data": {
+            "question": "Finde den Fehler bei schwieriger Faktorisierung:",
+            "calculationSteps": [
+              { "line": "x⁴ + 4x² + 4", "isCorrect": true },
+              { "line": "(x² + 2)²", "isCorrect": true },
+              { "line": "(x + √2)²(x - √2)²", "isCorrect": false }
+            ],
+            "errorExplanation": "Achtung! (x² + 2)² kann über den reellen Zahlen nicht weiter faktorisiert werden."
+          },
+          "hints": ["x² + 2 hat keine reellen Nullstellen", "x² + 2 > 0 für alle reellen x"]
+        },
+        {
+          "id": "B4L5T05",
+          "block": 4,
+          "difficulty": 5,
+          "taskType": "solve_expression",
+          "data": {
+            "question": "Faktorisiere: 6x³ - 24x",
+            "solution": "6x(x + 2)(x - 2)"
+          },
+          "hints": ["Klammere zuerst 6x aus", "6x³ - 24x = 6x(x² - 4)"]
+        }
+      ]
+    }
+  }
+}

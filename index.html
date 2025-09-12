@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Term-Held - Mathematik Lernen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view active">
+            <header class="header">
+                <h1>Term-Held</h1>
+                <button id="settings-btn" class="icon-btn">⚙️</button>
+            </header>
+            
+            <div class="profile-section">
+                <div class="badges-container" id="badges-container">
+                    <!-- Badges will be rendered here -->
+                </div>
+                <p id="badge-status">0 von 5 Abzeichen gesammelt</p>
+            </div>
+            
+            <div class="topic-blocks" id="topic-blocks">
+                <!-- Topic blocks will be rendered here -->
+            </div>
+        </div>
+        
+        <!-- Task View -->
+        <div id="task-view" class="view">
+            <div class="top-bar">
+                <button id="back-btn" class="icon-btn">←</button>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="session-progress"></div>
+                </div>
+                <span id="task-counter">0/10</span>
+            </div>
+            
+            <div class="task-content">
+                <div class="question-area" id="question-area">
+                    <!-- Question content -->
+                </div>
+                
+                <div class="interaction-area" id="interaction-area">
+                    <!-- Dynamic interaction elements -->
+                </div>
+            </div>
+            
+            <div class="bottom-bar">
+                <button id="hint-btn" class="icon-btn">?</button>
+                <button id="check-btn" class="primary-btn" disabled>Prüfen</button>
+            </div>
+        </div>
+        
+        <!-- Settings View -->
+        <div id="settings-view" class="view">
+            <header class="header">
+                <button id="settings-back-btn" class="icon-btn">←</button>
+                <h2>Einstellungen</h2>
+            </header>
+            
+            <div class="settings-content">
+                <section class="settings-section">
+                    <h3>Fortschritt Sichern & Teilen</h3>
+                    <div class="share-section">
+                        <input type="text" id="share-hash" readonly placeholder="Dein Share-Code wird hier angezeigt">
+                        <button id="copy-btn" class="secondary-btn">Kopieren</button>
+                    </div>
+                    <div class="warning">
+                        ⚠️ Achtung: Dein Lernfortschritt wird nur in diesem Browser gespeichert. Wenn du die Browserdaten löschst, ist der Fortschritt verloren. Sichere deinen Code regelmäßig!
+                    </div>
+                </section>
+                
+                <section class="settings-section">
+                    <h3>Fortschritt Importieren</h3>
+                    <div class="import-section">
+                        <input type="text" id="import-hash" placeholder="Share-Code hier eingeben">
+                        <button id="load-btn" class="secondary-btn">Laden</button>
+                    </div>
+                </section>
+                
+                <section class="settings-section">
+                    <h3>Fortschritt Zurücksetzen</h3>
+                    <p>Lösche deinen gesamten Lernfortschritt und beginne von vorne.</p>
+                    <button id="reset-btn" class="danger-btn">Alle Daten löschen</button>
+                    <div class="warning" style="margin-top: 10px;">
+                        ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
+                    </div>
+                </section>
+            </div>
+        </div>
+        
+        <!-- Hint Modal -->
+        <div id="hint-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Hilfe</h3>
+                    <button id="close-hint" class="icon-btn">×</button>
+                </div>
+                <div class="modal-body" id="hint-content">
+                    <!-- Hint content -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
