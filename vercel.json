@@ -1,0 +1,12 @@
+{
+  "buildCommand": "echo 'No build process needed - static files only'",
+  "outputDirectory": ".",
+  "installCommand": "npm install",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
