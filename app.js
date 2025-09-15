@@ -513,6 +513,12 @@ class TermHeldApp {
 
     // Render find the error task
     renderFindTheError(task, container) {
+        // Add instruction text
+        const instruction = document.createElement('div');
+        instruction.className = 'error-instruction';
+        instruction.innerHTML = '<strong>Klicke auf die Zeile mit dem Fehler:</strong>';
+        container.appendChild(instruction);
+        
         const stepsContainer = document.createElement('div');
         stepsContainer.className = 'calculation-steps';
         
@@ -521,7 +527,7 @@ class TermHeldApp {
         task.data.calculationSteps.forEach((step, index) => {
             const line = document.createElement('div');
             line.className = 'calculation-line';
-            line.textContent = step.line;
+            line.innerHTML = `<span class="step-number">${index + 1}.</span><span class="step-content">${step.line}</span>`;
             line.dataset.index = index;
             line.dataset.correct = step.isCorrect;
             
