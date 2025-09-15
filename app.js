@@ -260,6 +260,7 @@ class TermHeldApp {
         // Select tasks for this session (aim for 10, but adapt to available tasks)
         const sessionTasks = this.selectSessionTasks(blockId, currentDifficulty, 10);
         
+        
         if (sessionTasks.length === 0) {
             this.showFeedback('Keine neuen Aufgaben verfügbar. Probiere einen anderen Schwierigkeitsgrad.', 'error');
             return;
@@ -322,12 +323,14 @@ class TermHeldApp {
         const questionArea = document.getElementById('question-area');
         const interactionArea = document.getElementById('interaction-area');
         
+        
         questionArea.innerHTML = `<h2>${task.data.question}</h2>`;
         
         // Reset check button
         const checkBtn = document.getElementById('check-btn');
         checkBtn.textContent = 'Prüfen';
         checkBtn.disabled = true;
+        checkBtn.onclick = () => this.checkAnswer(); // Reset the onclick handler
         
         // Render task-specific interaction
         this.renderTaskInteraction(task, interactionArea);
