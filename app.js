@@ -637,9 +637,14 @@ class TermHeldApp {
         // Save progress
         this.saveData();
         
-        // Update button
-        checkBtn.textContent = isCorrect ? 'Weiter' : 'Weiter';
+        // Update button - always becomes "Weiter" after checking answer
+        checkBtn.textContent = 'Weiter';
         checkBtn.onclick = () => this.nextTask();
+        // Disable button briefly to prevent immediate Enter triggering
+        checkBtn.disabled = true;
+        setTimeout(() => {
+            checkBtn.disabled = false;
+        }, 500); // Half second delay to show feedback
         
         // Add visual feedback to input/interaction
         if (task.taskType === 'solve_expression') {
