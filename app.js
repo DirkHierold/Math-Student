@@ -335,52 +335,98 @@ class TermHeldApp {
 
     // Render drag and drop task
     renderDragAndDrop(task, container) {
-        const dragContainer = document.createElement('div');
-        dragContainer.className = 'drag-container';
+        // Source area for available blocks
+        const sourceArea = document.createElement('div');
+        sourceArea.className = 'drag-container';
+        sourceArea.dataset.area = 'source';
         
+        const sourceLabel = document.createElement('div');
+        sourceLabel.textContent = 'Verfügbare Terme:';
+        sourceLabel.style.marginBottom = '10px';
+        sourceLabel.style.fontWeight = '600';
+        sourceLabel.style.color = '#495057';
+        
+        // Target area for dropped blocks
+        const targetArea = document.createElement('div');
+        targetArea.className = 'drop-zone';
+        targetArea.dataset.area = 'target';
+        targetArea.innerHTML = '<div style="margin-bottom: 10px; font-weight: 600; color: #495057;">Ordne die Terme hier:</div>';
+        
+        // Create draggable blocks
         task.data.initialBlocks.forEach((block, index) => {
-            const dragBlock = document.createElement('div');
-            dragBlock.className = 'drag-block';
-            dragBlock.textContent = block;
-            dragBlock.draggable = true;
-            dragBlock.dataset.index = index;
-            
-            dragBlock.ondragstart = (e) => {
-                e.dataTransfer.setData('text/plain', index);
-                dragBlock.classList.add('dragging');
-            };
-            dragBlock.ondragend = () => dragBlock.classList.remove('dragging');
-            
-            dragContainer.appendChild(dragBlock);
+            const dragBlock = this.createDragBlock(block, index);
+            sourceArea.appendChild(dragBlock);
         });
         
-        const dropZone = document.createElement('div');
-        dropZone.className = 'drop-zone';
-        dropZone.textContent = 'Ziehe die Terme hierher und ordne sie';
-        dropZone.ondragover = (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
+        // Set up drag and drop event handlers
+        this.setupDragAndDropArea(sourceArea);
+        this.setupDragAndDropArea(targetArea);
+        
+        container.appendChild(sourceLabel);
+        container.appendChild(sourceArea);
+        container.appendChild(targetArea);
+        
+        // Store reference for answer checking
+        this.currentDragTask = { sourceArea, targetArea, initialBlocks: task.data.initialBlocks };
+    }
+    
+    // Create a draggable block element
+    createDragBlock(blockText, index) {
+        const dragBlock = document.createElement('div');
+        dragBlock.className = 'drag-block';
+        dragBlock.textContent = blockText;
+        dragBlock.draggable = true;
+        dragBlock.dataset.index = index;
+        dragBlock.dataset.value = blockText;
+        
+        dragBlock.ondragstart = (e) => {
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                index: index,
+                value: blockText,
+                sourceArea: e.target.parentElement.dataset.area
+            }));
+            dragBlock.classList.add('dragging');
         };
-        dropZone.ondragleave = () => dropZone.classList.remove('drag-over');
-        dropZone.ondrop = (e) => {
+        
+        dragBlock.ondragend = () => {
+            dragBlock.classList.remove('dragging');
+        };
+        
+        return dragBlock;
+    }
+    
+    // Set up drag and drop functionality for an area
+    setupDragAndDropArea(area) {
+        area.ondragover = (e) => {
             e.preventDefault();
-            dropZone.classList.remove('drag-over');
-            
-            const index = e.dataTransfer.getData('text/plain');
-            const block = task.data.initialBlocks[index];
-            
-            if (!dropZone.querySelector(`[data-value="${block}"]`)) {
-                const droppedBlock = document.createElement('span');
-                droppedBlock.textContent = block + ' ';
-                droppedBlock.dataset.value = block;
-                dropZone.appendChild(droppedBlock);
-                
-                document.getElementById('check-btn').disabled = false;
+            area.classList.add('drag-over');
+        };
+        
+        area.ondragleave = (e) => {
+            if (!area.contains(e.relatedTarget)) {
+                area.classList.remove('drag-over');
             }
         };
         
-        container.appendChild(dragContainer);
-        container.appendChild(dropZone);
+        area.ondrop = (e) => {
+            e.preventDefault();
+            area.classList.remove('drag-over');
+            
+            const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
+            const draggedElement = document.querySelector(`[data-index="${dragData.index}"][data-value="${dragData.value}"]`);
+            
+            if (draggedElement && draggedElement.parentElement !== area) {
+                // Move the actual element to the new area
+                area.appendChild(draggedElement);
+                
+                // Update check button based on target area content
+                const targetArea = document.querySelector('[data-area="target"]');
+                if (targetArea) {
+                    const targetBlocks = targetArea.querySelectorAll('.drag-block');
+                    document.getElementById('check-btn').disabled = targetBlocks.length === 0;
+                }
+            }
+        };
     }
 
     // Render assignment memory task
@@ -518,11 +564,11 @@ class TermHeldApp {
                 break;
                 
             case 'drag_and_drop':
-                const dropZone = interactionArea.querySelector('.drop-zone');
-                const droppedTerms = Array.from(dropZone.querySelectorAll('[data-value]'))
-                    .map(el => el.dataset.value).join('');
-                userAnswer = droppedTerms.replace(/\s/g, '');
-                isCorrect = userAnswer === task.data.finalSolution.replace(/\s/g, '');
+                const targetArea = interactionArea.querySelector('[data-area="target"]');
+                const droppedBlocks = Array.from(targetArea.querySelectorAll('.drag-block'))
+                    .map(block => block.dataset.value);
+                userAnswer = droppedBlocks.join('');
+                isCorrect = userAnswer.replace(/\s/g, '') === task.data.finalSolution.replace(/\s/g, '');
                 break;
                 
             case 'assignment_memory':
