@@ -159,6 +159,16 @@ class TermHeldApp {
         document.getElementById('hint-modal').onclick = (e) => {
             if (e.target.id === 'hint-modal') this.closeHint();
         };
+        
+        // Global Enter key handler for task view
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && this.currentView === 'task') {
+                const checkBtn = document.getElementById('check-btn');
+                if (checkBtn && !checkBtn.disabled) {
+                    checkBtn.click();
+                }
+            }
+        });
     }
 
     // Show specific view
@@ -381,7 +391,8 @@ class TermHeldApp {
         };
         input.onkeypress = (e) => {
             if (e.key === 'Enter' && !document.getElementById('check-btn').disabled) {
-                this.checkAnswer();
+                // Execute whatever the current button does (Prüfen or Weiter)
+                document.getElementById('check-btn').click();
             }
         };
         
@@ -634,6 +645,7 @@ class TermHeldApp {
         if (task.taskType === 'solve_expression') {
             const input = interactionArea.querySelector('.math-input');
             input.classList.add(isCorrect ? 'correct' : 'incorrect');
+            input.disabled = true; // Disable input after answer to prevent further typing
         } else if (task.taskType === 'find_the_error') {
             const lines = interactionArea.querySelectorAll('.calculation-line.selected');
             lines.forEach(line => {
