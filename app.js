@@ -280,7 +280,7 @@ class TermHeldApp {
     // Select tasks for session based on difficulty and recent history
     selectSessionTasks(blockId, targetDifficulty, maxCount) {
         const blockTasks = this.tasks[blockId].tasks;
-        const recentTaskIds = this.data.progress[`block_${blockId}`].recentAnswers.slice(-10).map(answer => answer.taskId);
+        const recentTaskIds = this.data.progress[`block_${blockId}`].recentAnswers.slice(-5).map(answer => answer.taskId);
         
         // Filter tasks by difficulty
         const allDifficultyTasks = blockTasks.filter(task => task.difficulty === targetDifficulty);
@@ -293,7 +293,13 @@ class TermHeldApp {
             return this.shuffleArray(adjacentTasks).slice(0, Math.min(maxCount, adjacentTasks.length));
         }
         
-        // Prefer tasks not recently answered
+        // If we have 5 or fewer tasks for this difficulty, use all of them
+        // (don't filter by recent history for small sets)
+        if (allDifficultyTasks.length <= 5) {
+            return this.shuffleArray(allDifficultyTasks);
+        }
+        
+        // For larger sets, prefer tasks not recently answered
         const availableTasks = allDifficultyTasks.filter(task => !recentTaskIds.includes(task.id));
         
         // If we have fresh tasks, use them
