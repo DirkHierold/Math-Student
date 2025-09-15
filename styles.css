@@ -502,6 +502,32 @@ body {
     background: #ffc107;
 }
 
+.calculation-line.original-task {
+    background: #e9ecef;
+    border: 2px solid #adb5bd;
+    cursor: default;
+    margin-bottom: 15px;
+}
+
+.calculation-line.original-task:hover {
+    border-color: #adb5bd;
+    transform: none;
+    box-shadow: none;
+}
+
+.calculation-line.original-task:before {
+    background: #6c757d;
+}
+
+.step-label {
+    display: inline-block;
+    min-width: 120px;
+    color: #495057;
+    font-weight: 600;
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
 /* Settings view */
 .settings-content {
     padding: 20px;

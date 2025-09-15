@@ -526,21 +526,28 @@ class TermHeldApp {
         
         task.data.calculationSteps.forEach((step, index) => {
             const line = document.createElement('div');
-            line.className = 'calculation-line';
-            line.innerHTML = `<span class="step-number">${index + 1}.</span><span class="step-content">${step.line}</span>`;
-            line.dataset.index = index;
-            line.dataset.correct = step.isCorrect;
             
-            line.onclick = () => {
-                // Clear previous selection
-                stepsContainer.querySelectorAll('.calculation-line').forEach(l => {
-                    l.classList.remove('selected');
-                });
+            // First line is the original task/expression - not selectable
+            if (index === 0) {
+                line.className = 'calculation-line original-task';
+                line.innerHTML = `<span class="step-label">Ausgangsterm:</span><span class="step-content">${step.line}</span>`;
+            } else {
+                line.className = 'calculation-line';
+                line.innerHTML = `<span class="step-number">Schritt ${index}:</span><span class="step-content">${step.line}</span>`;
+                line.dataset.index = index;
+                line.dataset.correct = step.isCorrect;
                 
-                line.classList.add('selected');
-                selectedLine = index;
-                document.getElementById('check-btn').disabled = false;
-            };
+                line.onclick = () => {
+                    // Clear previous selection
+                    stepsContainer.querySelectorAll('.calculation-line:not(.original-task)').forEach(l => {
+                        l.classList.remove('selected');
+                    });
+                    
+                    line.classList.add('selected');
+                    selectedLine = index;
+                    document.getElementById('check-btn').disabled = false;
+                };
+            }
             
             stepsContainer.appendChild(line);
         });
