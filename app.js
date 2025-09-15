@@ -528,10 +528,14 @@ class TermHeldApp {
 
     // Update session progress bar
     updateSessionProgress() {
-        const progress = (this.currentSession.currentIndex / this.currentSession.tasks.length) * 100;
+        // Progress shows how far we are through the session
+        // Task 1/5 = 20%, Task 2/5 = 40%, ..., Task 5/5 = 100%
+        const currentTask = this.currentSession.currentIndex + 1;
+        const totalTasks = this.currentSession.tasks.length;
+        const progress = (currentTask / totalTasks) * 100;
+        
         document.getElementById('session-progress').style.width = progress + '%';
-        document.getElementById('task-counter').textContent = 
-            `${this.currentSession.currentIndex + 1}/${this.currentSession.tasks.length}`;
+        document.getElementById('task-counter').textContent = `${currentTask}/${totalTasks}`;
     }
 
     // Check user's answer
