@@ -12,7 +12,6 @@ class TermHeldApp {
             correctCount: 0
         };
         this.tasks = {};
-        this.badges = this.initializeBadges();
         
         this.initializeApp();
     }
@@ -46,13 +45,7 @@ class TermHeldApp {
             // Create initial data structure
             const initialData = {
                 version: this.version,
-                userProfile: {
-                    badgesEarned: []
-                },
                 progress: {},
-                streak: {
-                    current: 0
-                },
                 lastSession: new Date().toISOString()
             };
 
@@ -102,41 +95,6 @@ class TermHeldApp {
         this.data = data;
     }
 
-    // Initialize badge definitions
-    initializeBadges() {
-        return {
-            'streak_15': {
-                title: 'Serien-Rechner',
-                description: 'Löse 15 Aufgaben am Stück richtig.',
-                icon: '🔥',
-                condition: { type: 'streak', length: 15 }
-            },
-            'block2_master': {
-                title: 'Klammer-Meister',
-                description: 'Löse 25 Aufgaben aus dem Block "Multiplikation".',
-                icon: '🏆',
-                condition: { type: 'solveCount', block: 2, count: 25 }
-            },
-            'block3_binom_pro': {
-                title: 'Binom-Bändiger',
-                description: 'Löse 20 Aufgaben zu Binomischen Formeln.',
-                icon: '📐',
-                condition: { type: 'solveCount', block: 3, count: 20 }
-            },
-            'find_error_expert': {
-                title: 'Adlerauge',
-                description: 'Finde 10 Fehler in "Fehlersuche"-Aufgaben.',
-                icon: '👁️',
-                condition: { type: 'solveCountByType', taskType: 'find_the_error', count: 10 }
-            },
-            'all_blocks_started': {
-                title: 'Entdecker',
-                description: 'Löse mindestens eine Aufgabe in jedem Block.',
-                icon: '🌟',
-                condition: { type: 'minTasksPerBlock', count: 1 }
-            }
-        };
-    }
 
     // Bind event listeners
     bindEvents() {
@@ -180,35 +138,10 @@ class TermHeldApp {
 
     // Render dashboard
     renderDashboard() {
-        this.renderBadges();
         this.renderTopicBlocks();
         this.updateShareHash();
     }
 
-    // Render badges section
-    renderBadges() {
-        const container = document.getElementById('badges-container');
-        const statusElement = document.getElementById('badge-status');
-        
-        container.innerHTML = '';
-        
-        const earnedBadges = this.data.userProfile.badgesEarned;
-        const totalBadges = Object.keys(this.badges).length;
-        
-        for (let badgeId in this.badges) {
-            const badge = this.badges[badgeId];
-            const isEarned = earnedBadges.includes(badgeId);
-            
-            const badgeElement = document.createElement('div');
-            badgeElement.className = `badge ${isEarned ? '' : 'locked'}`;
-            badgeElement.innerHTML = badge.icon;
-            badgeElement.title = `${badge.title}: ${badge.description}`;
-            
-            container.appendChild(badgeElement);
-        }
-        
-        statusElement.textContent = `${earnedBadges.length} von ${totalBadges} Abzeichen gesammelt`;
-    }
 
     // Render topic blocks
     renderTopicBlocks() {
@@ -625,17 +558,14 @@ class TermHeldApp {
             correct: isCorrect
         });
         
-        // Update streak
+        // Update progress
         if (isCorrect) {
-            this.data.streak.current++;
             this.currentSession.correctCount++;
             
             // Add to correctly solved tasks if not already there
             if (!blockProgress.correctlySolvedTasks.includes(task.id)) {
                 blockProgress.correctlySolvedTasks.push(task.id);
             }
-        } else {
-            this.data.streak.current = 0;
         }
         
         // Show feedback
@@ -644,8 +574,6 @@ class TermHeldApp {
         // Update difficulty based on adaptive logic
         this.updateDifficulty(blockKey, isCorrect);
         
-        // Check for new badges
-        this.checkAndAwardBadges();
         
         // Save progress
         this.saveData();
@@ -724,61 +652,6 @@ class TermHeldApp {
         }
     }
 
-    // Check and award new badges
-    checkAndAwardBadges() {
-        const earnedBadges = this.data.userProfile.badgesEarned;
-        
-        for (let badgeId in this.badges) {
-            if (earnedBadges.includes(badgeId)) continue;
-            
-            const badge = this.badges[badgeId];
-            let shouldAward = false;
-            
-            switch (badge.condition.type) {
-                case 'streak':
-                    shouldAward = this.data.streak.current >= badge.condition.length;
-                    break;
-                    
-                case 'solveCount':
-                    const blockKey = `block_${badge.condition.block}`;
-                    const solvedCount = this.data.progress[blockKey]?.correctlySolvedTasks.length || 0;
-                    shouldAward = solvedCount >= badge.condition.count;
-                    break;
-                    
-                case 'solveCountByType':
-                    let typeCount = 0;
-                    for (let blockKey in this.data.progress) {
-                        const solvedTasks = this.data.progress[blockKey].correctlySolvedTasks;
-                        const blockId = blockKey.replace('block_', '');
-                        if (this.tasks[blockId]) {
-                            solvedTasks.forEach(taskId => {
-                                const task = this.tasks[blockId].tasks.find(t => t.id === taskId);
-                                if (task && task.taskType === badge.condition.taskType) {
-                                    typeCount++;
-                                }
-                            });
-                        }
-                    }
-                    shouldAward = typeCount >= badge.condition.count;
-                    break;
-                    
-                case 'minTasksPerBlock':
-                    let blocksWithTasks = 0;
-                    for (let blockKey in this.data.progress) {
-                        if (this.data.progress[blockKey].correctlySolvedTasks.length >= badge.condition.count) {
-                            blocksWithTasks++;
-                        }
-                    }
-                    shouldAward = blocksWithTasks >= Object.keys(this.tasks).length;
-                    break;
-            }
-            
-            if (shouldAward) {
-                earnedBadges.push(badgeId);
-                this.showFeedback(`Neues Abzeichen erhalten: ${badge.title}!`, 'success');
-            }
-        }
-    }
 
     // Move to next task
     nextTask() {
@@ -829,7 +702,6 @@ class TermHeldApp {
             <div class="feedback success">
                 <h3>Session abgeschlossen!</h3>
                 <p>Du hast ${correctlyAnsweredTasks} von ${totalTasks} Aufgaben richtig gelöst (${percentage}%).</p>
-                <p>Aktuelle Serie: ${this.data.streak.current} richtige Antworten in Folge.</p>
             </div>
         `;
         
