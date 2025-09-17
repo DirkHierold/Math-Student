@@ -346,11 +346,17 @@ class TermHeldApp {
         sourceLabel.style.fontWeight = '600';
         sourceLabel.style.color = '#495057';
         
+        // Target area label and container
+        const targetLabel = document.createElement('div');
+        targetLabel.textContent = 'Ordne die Terme hier:';
+        targetLabel.style.marginBottom = '10px';
+        targetLabel.style.fontWeight = '600';
+        targetLabel.style.color = '#495057';
+        
         // Target area for dropped blocks
         const targetArea = document.createElement('div');
         targetArea.className = 'drop-zone';
         targetArea.dataset.area = 'target';
-        targetArea.innerHTML = '<div style="margin-bottom: 10px; font-weight: 600; color: #495057;">Ordne die Terme hier:</div>';
         
         // Create draggable blocks
         task.data.initialBlocks.forEach((block, index) => {
@@ -364,6 +370,7 @@ class TermHeldApp {
         
         container.appendChild(sourceLabel);
         container.appendChild(sourceArea);
+        container.appendChild(targetLabel);
         container.appendChild(targetArea);
         
         // Store reference for answer checking
@@ -378,12 +385,14 @@ class TermHeldApp {
         dragBlock.draggable = true;
         dragBlock.dataset.index = index;
         dragBlock.dataset.value = blockText;
+        dragBlock.id = `drag-${index}-${blockText.replace(/\s+/g, '')}`;
         
         dragBlock.ondragstart = (e) => {
             e.dataTransfer.setData('text/plain', JSON.stringify({
                 index: index,
                 value: blockText,
-                sourceArea: e.target.parentElement.dataset.area
+                sourceArea: e.target.parentElement.dataset.area,
+                elementId: dragBlock.id
             }));
             dragBlock.classList.add('dragging');
         };
@@ -413,7 +422,7 @@ class TermHeldApp {
             area.classList.remove('drag-over');
             
             const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
-            const draggedElement = document.querySelector(`[data-index="${dragData.index}"][data-value="${dragData.value}"]`);
+            const draggedElement = document.getElementById(dragData.elementId);
             
             if (draggedElement && draggedElement.parentElement !== area) {
                 // Move the actual element to the new area
