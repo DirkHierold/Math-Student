@@ -188,6 +188,13 @@ body {
     font-size: 0.9rem;
 }
 
+.level-progress {
+    font-size: 0.8rem;
+    color: #4A90E2;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
 /* Task view */
 .top-bar {
     display: flex;

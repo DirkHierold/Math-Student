@@ -52,7 +52,8 @@ class TermHeldApp {
             // Initialize progress for all blocks
             for (let blockId in this.tasks) {
                 initialData.progress[`block_${blockId}`] = {
-                    currentDifficulty: 1,
+                    unlockedLevel: 1,
+                    currentLevelProgress: [],
                     correctlySolvedTasks: [],
                     recentAnswers: []
                 };
@@ -71,6 +72,9 @@ class TermHeldApp {
                 this.initializeStorage();
                 return;
             }
+            
+            // Migrate old data structure to new level system
+            this.migrateToLevelSystem();
         }
     }
 
@@ -79,6 +83,42 @@ class TermHeldApp {
         const appMajor = parseInt(this.version.split('.')[0]);
         const dataMajor = parseInt(dataVersion.split('.')[0]);
         return appMajor === dataMajor;
+    }
+    
+    // Migrate old adaptive difficulty system to new fixed level system
+    migrateToLevelSystem() {
+        for (let blockKey in this.data.progress) {
+            const blockProgress = this.data.progress[blockKey];
+            
+            // Check if migration is needed
+            if (blockProgress.hasOwnProperty('currentDifficulty') && !blockProgress.hasOwnProperty('unlockedLevel')) {
+                // Migrate from old system
+                blockProgress.unlockedLevel = Math.min(5, Math.max(1, blockProgress.currentDifficulty));
+                blockProgress.currentLevelProgress = [];
+                
+                // Remove old properties
+                delete blockProgress.currentDifficulty;
+                
+                console.log(`Migrated ${blockKey} to level system: unlocked level ${blockProgress.unlockedLevel}`);
+            }
+            
+            // Ensure all required properties exist
+            if (!blockProgress.hasOwnProperty('unlockedLevel')) {
+                blockProgress.unlockedLevel = 1;
+            }
+            if (!blockProgress.hasOwnProperty('currentLevelProgress')) {
+                blockProgress.currentLevelProgress = [];
+            }
+            if (!blockProgress.hasOwnProperty('correctlySolvedTasks')) {
+                blockProgress.correctlySolvedTasks = [];
+            }
+            if (!blockProgress.hasOwnProperty('recentAnswers')) {
+                blockProgress.recentAnswers = [];
+            }
+        }
+        
+        // Save migrated data
+        this.saveData();
     }
 
     // Save data to LocalStorage
@@ -156,6 +196,10 @@ class TermHeldApp {
             blockElement.className = 'topic-block';
             blockElement.onclick = () => this.startBlockSession(blockId);
             
+            const blockProgress = this.data.progress[`block_${blockId}`];
+            const currentLevel = blockProgress.unlockedLevel;
+            const currentLevelProgress = this.getCurrentLevelProgress(blockId);
+            
             blockElement.innerHTML = `
                 <div class="topic-icon">
                     ${this.renderProgressRing(progress)}
@@ -163,7 +207,8 @@ class TermHeldApp {
                 </div>
                 <div class="topic-info">
                     <h3>${block.title}</h3>
-                    <p>Level ${this.data.progress[`block_${blockId}`].currentDifficulty}/5 erreicht</p>
+                    <p>Level ${currentLevel}/5 freigeschaltet</p>
+                    <div class="level-progress">${currentLevelProgress}</div>
                 </div>
             `;
             
@@ -174,9 +219,34 @@ class TermHeldApp {
     // Calculate block progress percentage
     calculateBlockProgress(blockId) {
         const blockData = this.data.progress[`block_${blockId}`];
-        const totalTasks = this.tasks[blockId].tasks.length;
-        const solvedTasks = blockData.correctlySolvedTasks.length;
-        return Math.round((solvedTasks / totalTasks) * 100);
+        const unlockedLevel = blockData.unlockedLevel;
+        
+        // Progress is based on unlocked levels (20% per level) plus current level progress
+        const levelsCompleted = Math.max(0, unlockedLevel - 1);
+        const baseProgress = (levelsCompleted / 5) * 100;
+        
+        // Add progress within current level
+        const currentLevelTasks = this.tasks[blockId].tasks.filter(t => t.difficulty === unlockedLevel);
+        const currentLevelCompleted = blockData.currentLevelProgress ? blockData.currentLevelProgress.length : 0;
+        const currentLevelProgress = currentLevelTasks.length > 0 ? 
+            (currentLevelCompleted / currentLevelTasks.length) * (100 / 5) : 0;
+        
+        return Math.round(baseProgress + currentLevelProgress);
+    }
+    
+    // Get current level progress description
+    getCurrentLevelProgress(blockId) {
+        const blockData = this.data.progress[`block_${blockId}`];
+        const currentLevel = blockData.unlockedLevel;
+        
+        if (currentLevel > 5) {
+            return 'Alle Level abgeschlossen!';
+        }
+        
+        const currentLevelTasks = this.tasks[blockId].tasks.filter(t => t.difficulty === currentLevel);
+        const completedCount = blockData.currentLevelProgress ? blockData.currentLevelProgress.length : 0;
+        
+        return `${completedCount}/${currentLevelTasks.length} Aufgaben in Level ${currentLevel}`;
     }
 
     // Render SVG progress ring
@@ -198,21 +268,26 @@ class TermHeldApp {
     startBlockSession(blockId) {
         this.currentBlock = blockId;
         const blockProgress = this.data.progress[`block_${blockId}`];
-        const currentDifficulty = blockProgress.currentDifficulty;
+        const currentLevel = blockProgress.unlockedLevel;
         
-        // Select tasks for this session (aim for 10, but adapt to available tasks)
-        const sessionTasks = this.selectSessionTasks(blockId, currentDifficulty, 10);
+        // Select tasks for this session from current unlocked level only
+        const sessionTasks = this.selectSessionTasks(blockId, currentLevel, 10);
         
         
         if (sessionTasks.length === 0) {
-            this.showFeedback('Keine neuen Aufgaben verfügbar. Probiere einen anderen Schwierigkeitsgrad.', 'error');
+            this.showFeedback('Keine neuen Aufgaben verfügbar für dieses Level.', 'error');
             return;
         }
         
+        // Calculate starting index based on completed tasks
+        const completedInLevel = blockProgress.currentLevelProgress || [];
+        const startingIndex = completedInLevel.length;
+        
         this.currentSession = {
             tasks: sessionTasks,
-            currentIndex: 0,
-            correctCount: 0
+            currentIndex: startingIndex,
+            correctCount: completedInLevel.length, // Already completed tasks count
+            errors: 0
         };
         
         this.showView('task');
@@ -220,40 +295,39 @@ class TermHeldApp {
         this.updateSessionProgress();
     }
 
-    // Select tasks for session based on difficulty and recent history
-    selectSessionTasks(blockId, targetDifficulty, maxCount) {
+    // Select tasks for session from current level only
+    selectSessionTasks(blockId, currentLevel, maxCount) {
         const blockTasks = this.tasks[blockId].tasks;
-        const recentTaskIds = this.data.progress[`block_${blockId}`].recentAnswers.slice(-5).map(answer => answer.taskId);
+        const blockProgress = this.data.progress[`block_${blockId}`];
         
-        // Filter tasks by difficulty
-        const allDifficultyTasks = blockTasks.filter(task => task.difficulty === targetDifficulty);
+        // Filter tasks by current level only
+        const levelTasks = blockTasks.filter(task => task.difficulty === currentLevel);
         
-        if (allDifficultyTasks.length === 0) {
-            // No tasks for this difficulty, try adjacent difficulties
-            const adjacentTasks = blockTasks.filter(task => 
-                Math.abs(task.difficulty - targetDifficulty) <= 1
-            );
-            return this.shuffleArray(adjacentTasks).slice(0, Math.min(maxCount, adjacentTasks.length));
+        if (levelTasks.length === 0) {
+            return [];
         }
         
-        // If we have 5 or fewer tasks for this difficulty, use all of them
-        // (don't filter by recent history for small sets)
-        if (allDifficultyTasks.length <= 5) {
-            return this.shuffleArray(allDifficultyTasks);
+        const completedInLevel = blockProgress.currentLevelProgress || [];
+        
+        // If all tasks in this level are completed, present all tasks for practice
+        if (completedInLevel.length >= levelTasks.length) {
+            return this.shuffleArray(levelTasks);
         }
         
-        // For larger sets, prefer tasks not recently answered
-        const availableTasks = allDifficultyTasks.filter(task => !recentTaskIds.includes(task.id));
+        // Create a session that shows progress correctly:
+        // 1. First, add all completed tasks (marked as already done)
+        // 2. Then, add remaining tasks to complete the level
         
-        // If we have fresh tasks, use them
-        if (availableTasks.length > 0) {
-            const sessionSize = Math.min(maxCount, availableTasks.length);
-            return this.shuffleArray(availableTasks).slice(0, sessionSize);
-        }
+        const completedTasks = levelTasks.filter(task => completedInLevel.includes(task.id));
+        const remainingTasks = levelTasks.filter(task => !completedInLevel.includes(task.id));
         
-        // If all tasks were recent, use all available tasks for this difficulty
-        const sessionSize = Math.min(maxCount, allDifficultyTasks.length);
-        return this.shuffleArray(allDifficultyTasks).slice(0, sessionSize);
+        // Create session with completed tasks first, then remaining tasks
+        const sessionTasks = [
+            ...completedTasks,  // Already completed (will be skipped or marked as done)
+            ...this.shuffleArray(remainingTasks)  // Remaining tasks to complete
+        ];
+        
+        return sessionTasks;
     }
 
     // Shuffle array utility
@@ -271,7 +345,15 @@ class TermHeldApp {
         const task = this.currentSession.tasks[this.currentSession.currentIndex];
         const questionArea = document.getElementById('question-area');
         const interactionArea = document.getElementById('interaction-area');
+        const blockProgress = this.data.progress[`block_${this.currentBlock}`];
+        const completedInLevel = blockProgress.currentLevelProgress || [];
         
+        // Check if current task is already completed
+        if (completedInLevel.includes(task.id)) {
+            // Skip already completed task automatically
+            this.skipCompletedTask();
+            return;
+        }
         
         questionArea.innerHTML = `<h2>${task.data.question}</h2>`;
         
@@ -288,6 +370,21 @@ class TermHeldApp {
         const existingFeedback = interactionArea.querySelector('.feedback');
         if (existingFeedback) {
             existingFeedback.remove();
+        }
+    }
+    
+    // Skip already completed task
+    skipCompletedTask() {
+        // Move to next task automatically
+        this.currentSession.currentIndex++;
+        
+        if (this.currentSession.currentIndex >= this.currentSession.tasks.length) {
+            // Session completed
+            this.showSessionSummary();
+        } else {
+            // Continue to next task
+            this.renderCurrentTask();
+            this.updateSessionProgress();
         }
     }
 
@@ -685,8 +782,8 @@ class TermHeldApp {
         // Show feedback
         this.showTaskFeedback(task, isCorrect, interactionArea);
         
-        // Update difficulty based on adaptive logic
-        this.updateDifficulty(blockKey, isCorrect);
+        // Update level progression based on fixed system
+        this.updateLevelProgress(blockKey, task, isCorrect);
         
         
         // Save progress
@@ -736,33 +833,46 @@ class TermHeldApp {
         container.appendChild(feedback);
     }
 
-    // Update difficulty based on adaptive learning logic
-    updateDifficulty(blockKey, isCorrect) {
+    // Update level progression based on fixed level system
+    updateLevelProgress(blockKey, task, isCorrect) {
         const blockProgress = this.data.progress[blockKey];
-        const recentAnswers = blockProgress.recentAnswers.slice(-4); // Last 4 answers
+        const currentLevel = blockProgress.unlockedLevel;
+        
+        if (!blockProgress.currentLevelProgress) {
+            blockProgress.currentLevelProgress = [];
+        }
         
         if (isCorrect) {
-            // Check for 3 consecutive correct answers
-            const lastThree = blockProgress.recentAnswers.slice(-3);
-            if (lastThree.length === 3 && lastThree.every(answer => answer.correct)) {
-                blockProgress.currentDifficulty = Math.min(5, blockProgress.currentDifficulty + 1);
-            }
-        } else {
-            // Check for 2 wrong answers in last 4
-            const wrongCount = recentAnswers.filter(answer => !answer.correct).length;
-            if (wrongCount >= 2) {
-                // Try to find other tasks on same difficulty first
-                const currentDiff = blockProgress.currentDifficulty;
-                const blockTasks = this.tasks[this.currentBlock].tasks;
-                const sameDiffTasks = blockTasks.filter(t => t.difficulty === currentDiff);
-                const recentTaskIds = blockProgress.recentAnswers.map(a => a.taskId);
-                const availableSameDiff = sameDiffTasks.filter(t => !recentTaskIds.includes(t.id));
+            // Only add if session has no errors so far
+            if (this.currentSession.errors === 0) {
+                // Add task to current level progress if not already there
+                if (!blockProgress.currentLevelProgress.includes(task.id)) {
+                    blockProgress.currentLevelProgress.push(task.id);
+                }
                 
-                // Only reduce difficulty if no other tasks available on same level
-                if (availableSameDiff.length === 0) {
-                    blockProgress.currentDifficulty = Math.max(1, blockProgress.currentDifficulty - 1);
+                // Check if all tasks in current level are completed
+                const blockTasks = this.tasks[this.currentBlock].tasks;
+                const currentLevelTasks = blockTasks.filter(t => t.difficulty === currentLevel);
+                
+                const allCurrentLevelCompleted = currentLevelTasks.every(t => 
+                    blockProgress.currentLevelProgress.includes(t.id)
+                );
+                
+                if (allCurrentLevelCompleted && currentLevel < 5) {
+                    // Unlock next level
+                    blockProgress.unlockedLevel = currentLevel + 1;
+                    blockProgress.currentLevelProgress = []; // Reset for new level
+                    
+                    // Show level up feedback
+                    setTimeout(() => {
+                        this.showFeedback(`Glückwunsch! Level ${currentLevel + 1} freigeschaltet!`, 'success');
+                    }, 1000);
                 }
             }
+        } else {
+            // Reset current level progress on any error
+            this.currentSession.errors++;
+            blockProgress.currentLevelProgress = [];
         }
     }
 
@@ -785,16 +895,36 @@ class TermHeldApp {
     showSessionSummary() {
         const interactionArea = document.getElementById('interaction-area');
         
-        // Use the correctly tracked session count
         const totalTasks = this.currentSession.tasks.length;
         const correctlyAnsweredTasks = this.currentSession.correctCount;
-        
+        const errors = this.currentSession.errors;
         const percentage = Math.round((correctlyAnsweredTasks / totalTasks) * 100);
         
+        const blockProgress = this.data.progress[`block_${this.currentBlock}`];
+        const currentLevel = blockProgress.unlockedLevel;
+        
+        let summaryMessage = `Du hast ${correctlyAnsweredTasks} von ${totalTasks} Aufgaben richtig gelöst (${percentage}%).`;
+        
+        if (errors > 0) {
+            summaryMessage += `<br><br><strong>Achtung:</strong> Du hattest ${errors} Fehler. Dein Fortschritt in Level ${currentLevel} wurde zurückgesetzt. Alle Aufgaben eines Levels müssen ohne Fehler gelöst werden!`;
+        } else if (percentage === 100) {
+            const blockTasks = this.tasks[this.currentBlock].tasks;
+            const currentLevelTasks = blockTasks.filter(t => t.difficulty === currentLevel);
+            const allCompleted = currentLevelTasks.every(t => 
+                blockProgress.currentLevelProgress.includes(t.id)
+            );
+            
+            if (allCompleted && currentLevel < 5) {
+                summaryMessage += `<br><br><strong>Perfekt!</strong> Du hast alle Aufgaben von Level ${currentLevel} gemeistert!`;
+            } else if (currentLevel === 5) {
+                summaryMessage += `<br><br><strong>Hervorragend!</strong> Du hast das höchste Level erreicht!`;
+            }
+        }
+        
         interactionArea.innerHTML = `
-            <div class="feedback success">
+            <div class="feedback ${errors > 0 ? 'error' : 'success'}">
                 <h3>Session abgeschlossen!</h3>
-                <p>Du hast ${correctlyAnsweredTasks} von ${totalTasks} Aufgaben richtig gelöst (${percentage}%).</p>
+                <p>${summaryMessage}</p>
             </div>
         `;
         
