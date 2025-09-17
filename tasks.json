@@ -68,17 +68,12 @@
           "id": "B1L4T01",
           "block": 1,
           "difficulty": 4,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der folgenden Rechnung:",
-            "calculationSteps": [
-              { "line": "3(2x - 1) + 4x", "isCorrect": true },
-              { "line": "6x - 3 + 4x", "isCorrect": true },
-              { "line": "10x + 3", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! -3 + 4x ergibt 10x - 3, nicht 10x + 3."
+            "question": "Vereinfache: 3(2x - 1) + 2(x + 3) - 5x",
+            "solution": "3x + 3"
           },
-          "hints": ["Achte auf die Vorzeichen", "Was passiert mit der -3?"]
+          "hints": ["Multipliziere beide Klammern aus", "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"]
         },
         {
           "id": "B1L1T03",
@@ -143,17 +138,12 @@
           "id": "B1L2T05",
           "block": 1,
           "difficulty": 2,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der Vereinfachung:",
-            "calculationSteps": [
-              { "line": "5x + 3y - 2x + y", "isCorrect": true },
-              { "line": "3x + 4y", "isCorrect": true },
-              { "line": "7xy", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 3x + 4y kann nicht weiter vereinfacht werden. Es ergibt nicht 7xy!"
+            "question": "Vereinfache: 8m - 3m + 2n + 5n",
+            "solution": "5m + 7n"
           },
-          "hints": ["x und y sind verschiedene Variablen", "Man kann x und y nicht einfach zusammenfassen"]
+          "hints": ["Sammle m-Terme: 8m - 3m", "Sammle n-Terme: 2n + 5n"]
         },
         {
           "id": "B1L3T02",
@@ -230,17 +220,12 @@
           "id": "B1L4T04",
           "block": 1,
           "difficulty": 4,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler beim Ausmultiplizieren:",
-            "calculationSteps": [
-              { "line": "-2(3x - 4)", "isCorrect": true },
-              { "line": "-6x + 8", "isCorrect": true },
-              { "line": "-6x - 8", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! -2 · (-4) = +8, nicht -8. Die Vorzeichen-Regel: Minus mal Minus ergibt Plus."
+            "question": "Vereinfache: -2(3x - 4) + 5(x + 1) - 3x",
+            "solution": "-8"
           },
-          "hints": ["Achte auf die Vorzeichen", "Was ergibt -2 · (-4)?"]
+          "hints": ["-2(3x - 4) = -6x + 8", "5(x + 1) = 5x + 5"]
         },
         {
           "id": "B1L4T05",
@@ -290,17 +275,12 @@
           "id": "B1L5T04",
           "block": 1,
           "difficulty": 5,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der komplexen Vereinfachung:",
-            "calculationSteps": [
-              { "line": "5(2x - 3) - 3(x + 2) + x", "isCorrect": true },
-              { "line": "10x - 15 - 3x - 6 + x", "isCorrect": true },
-              { "line": "8x - 9", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 10x - 3x + x = 8x ist richtig, aber -15 - 6 = -21, nicht -9."
+            "question": "Vereinfache: 4(3x - 2) - 2(2x + 3) + 3(x - 1) - 5x",
+            "solution": "5x - 17"
           },
-          "hints": ["Rechne die x-Terme: 10x - 3x + x", "Rechne die Konstanten: -15 - 6"]
+          "hints": ["Multipliziere alle Klammern aus", "4(3x - 2) = 12x - 8"]
         },
         {
           "id": "B1L5T05",
@@ -441,17 +421,12 @@
           "id": "B2L2T05",
           "block": 2,
           "difficulty": 2,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler beim Ausmultiplizieren:",
-            "calculationSteps": [
-              { "line": "(x + 2)(x + 3)", "isCorrect": true },
-              { "line": "x² + 3x + 2x + 6", "isCorrect": true },
-              { "line": "x² + 6x + 6", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 3x + 2x = 5x, nicht 6x. Also: x² + 5x + 6."
+            "question": "Vereinfache: 3(x + 4) - 2x",
+            "solution": "x + 12"
           },
-          "hints": ["Rechne 3x + 2x", "Die Konstante bleibt 6"]
+          "hints": ["Multipliziere die Klammer aus", "3(x + 4) = 3x + 12"]
         },
         {
           "id": "B2L3T02",
@@ -511,17 +486,12 @@
           "id": "B2L4T01",
           "block": 2,
           "difficulty": 4,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der folgenden Rechnung für (x - 2)(x + 3):",
-            "calculationSteps": [
-              { "line": "x · x + x · 3 - 2 · x - 2 · 3", "isCorrect": true },
-              { "line": "x² + 3x - 2x - 6", "isCorrect": true },
-              { "line": "x² + x + 6", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 3x - 2x = x und -6 bleibt -6, also x² + x - 6."
+            "question": "Vereinfache: 2x(3x - 4) - (x - 2)(x + 1)",
+            "solution": "5x² - 9x + 2"
           },
-          "hints": ["Rechne 3x - 2x korrekt", "Was passiert mit -6?"]
+          "hints": ["2x(3x - 4) = 6x² - 8x", "(x - 2)(x + 1) = x² - x - 2"]
         },
         {
           "id": "B2L4T02",
@@ -560,17 +530,12 @@
           "id": "B2L4T05",
           "block": 2,
           "difficulty": 4,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler beim Multiplizieren:",
-            "calculationSteps": [
-              { "line": "(3x - 2)(x + 4)", "isCorrect": true },
-              { "line": "3x² + 12x - 2x - 8", "isCorrect": true },
-              { "line": "3x² + 14x - 8", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 12x - 2x = 10x, nicht 14x. Korrekt: 3x² + 10x - 8."
+            "question": "Vereinfache: 3x(2x + 1) - 2(x² - 3x + 4)",
+            "solution": "4x² + 9x - 8"
           },
-          "hints": ["Rechne 12x - 2x", "12 - 2 = 10"]
+          "hints": ["3x(2x + 1) = 6x² + 3x", "-2(x² - 3x + 4) = -2x² + 6x - 8"]
         },
         {
           "id": "B2L5T01",
@@ -609,17 +574,12 @@
           "id": "B2L5T04",
           "block": 2,
           "difficulty": 5,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der komplexen Multiplikation:",
-            "calculationSteps": [
-              { "line": "(2x - 1)(x + 3) + x(x - 2)", "isCorrect": true },
-              { "line": "2x² + 6x - x - 3 + x² - 2x", "isCorrect": true },
-              { "line": "3x² + 3x + 3", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 6x - x - 2x = 3x ist richtig, aber -3 bleibt -3. Korrekt: 3x² + 3x - 3."
+            "question": "Vereinfache: (2x - 1)(3x + 2) - x(x + 4) + (x + 1)(x - 3)",
+            "solution": "6x² - 3x - 5"
           },
-          "hints": ["Rechne die x-Terme: 6x - x - 2x", "Die Konstante ist -3, nicht +3"]
+          "hints": ["Multipliziere alle Klammerpaare aus", "(2x - 1)(3x + 2) = 6x² + x - 2"]
         },
         {
           "id": "B2L5T05",
@@ -690,16 +650,12 @@
           "id": "B3L3T01",
           "block": 3,
           "difficulty": 3,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der folgenden Rechnung für (x - 5)²:",
-            "calculationSteps": [
-              { "line": "x² - 2·x·5 + 5²", "isCorrect": true },
-              { "line": "x² - 10x - 25", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! (+5)² ergibt +25, nicht -25. Richtig: x² - 10x + 25"
+            "question": "Vereinfache: (x - 3)² + (x + 2)²",
+            "solution": "2x² - 2x + 13"
           },
-          "hints": ["Achte auf das Vorzeichen von b²", "5² ist immer positiv"]
+          "hints": ["(x - 3)² = x² - 6x + 9", "(x + 2)² = x² + 4x + 4"]
         },
         {
           "id": "B3L1T03",
@@ -814,17 +770,12 @@
           "id": "B3L3T05",
           "block": 3,
           "difficulty": 3,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler bei (2y + 3)²:",
-            "calculationSteps": [
-              { "line": "(2y)² + 2·2y·3 + 3²", "isCorrect": true },
-              { "line": "4y² + 12y + 9", "isCorrect": true },
-              { "line": "4y² + 6y + 9", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 2·2y·3 = 12y, nicht 6y."
+            "question": "Vereinfache: (2x + 1)² - (x - 2)²",
+            "solution": "3x² + 8x - 3"
           },
-          "hints": ["Berechne 2ab richtig", "2·2y·3 = ?"]
+          "hints": ["(2x + 1)² = 4x² + 4x + 1", "(x - 2)² = x² - 4x + 4"]
         },
         {
           "id": "B3L4T01",
@@ -863,16 +814,12 @@
           "id": "B3L4T04",
           "block": 3,
           "difficulty": 4,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler bei (4x - y)²:",
-            "calculationSteps": [
-              { "line": "16x² - 8xy + y²", "isCorrect": true },
-              { "line": "16x² - 4xy + y²", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 2·4x·y = 8xy, nicht 4xy."
+            "question": "Vereinfache: (3a + 2b)² - (3a - 2b)² + 4b²",
+            "solution": "28ab"
           },
-          "hints": ["Berechne den mittleren Term", "2ab = 2·4x·y = ?"]
+          "hints": ["(3a + 2b)² - (3a - 2b)² = 24ab", "Dann addiere 4b²"]
         },
         {
           "id": "B3L4T05",
@@ -922,17 +869,12 @@
           "id": "B3L5T04",
           "block": 3,
           "difficulty": 5,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der komplexen Binomformel:",
-            "calculationSteps": [
-              { "line": "(2x + 1)² - (2x - 1)² + 4x", "isCorrect": true },
-              { "line": "8x + 4x", "isCorrect": true },
-              { "line": "12x²", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! 8x + 4x = 12x, nicht 12x². Das Ergebnis ist linear, nicht quadratisch."
+            "question": "Vereinfache: (x + y + z)² - (x - y - z)² - 4xz",
+            "solution": "4xy + 4yz"
           },
-          "hints": ["8x + 4x = ?", "Das Ergebnis hat keine x²-Terme"]
+          "hints": ["Expandiere beide Quadrate", "Die Differenz ergibt 4xy + 4xz + 4yz"]
         },
         {
           "id": "B3L5T05",
@@ -1073,16 +1015,12 @@
           "id": "B4L2T05",
           "block": 4,
           "difficulty": 2,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler bei der Faktorisierung:",
-            "calculationSteps": [
-              { "line": "16a² - 9", "isCorrect": true },
-              { "line": "(4a + 3)(4a + 3)", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! Differenz von Quadraten: (4a + 3)(4a - 3), nicht (4a + 3)²"
+            "question": "Vereinfache: (x + 3)(x - 3) + 9",
+            "solution": "x²"
           },
-          "hints": ["a² - b² ≠ (a + b)²", "a² - b² = (a + b)(a - b)"]
+          "hints": ["(x + 3)(x - 3) = x² - 9", "x² - 9 + 9 = x²"]
         },
         {
           "id": "B4L3T02",
@@ -1136,16 +1074,12 @@
           "id": "B4L4T01",
           "block": 4,
           "difficulty": 4,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler in der Faktorisierung von x² - 4x + 4:",
-            "calculationSteps": [
-              { "line": "Suche nach (x + a)² oder (x - a)²", "isCorrect": true },
-              { "line": "(x + 2)²", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! x² - 4x + 4 = (x - 2)², nicht (x + 2)²"
+            "question": "Vereinfache: (x - 2)² + (x + 2)² - 2x²",
+            "solution": "8"
           },
-          "hints": ["Achte auf das Vorzeichen des mittleren Terms", "-4x deutet auf (x - 2)² hin"]
+          "hints": ["(x - 2)² = x² - 4x + 4", "(x + 2)² = x² + 4x + 4"]
         },
         {
           "id": "B4L4T02",
@@ -1184,17 +1118,12 @@
           "id": "B4L4T05",
           "block": 4,
           "difficulty": 4,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler bei komplexer Faktorisierung:",
-            "calculationSteps": [
-              { "line": "12x² - 48", "isCorrect": true },
-              { "line": "12(x² - 4)", "isCorrect": true },
-              { "line": "12(x - 2)²", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! x² - 4 = (x + 2)(x - 2), nicht (x - 2)²"
+            "question": "Vereinfache: 3(x + 1)² - 3(x - 1)²",
+            "solution": "12x"
           },
-          "hints": ["x² - 4 ist eine Differenz von Quadraten", "Nicht ein vollständiges Quadrat"]
+          "hints": ["3(x + 1)² = 3(x² + 2x + 1)", "3(x - 1)² = 3(x² - 2x + 1)"]
         },
         {
           "id": "B4L5T01",
@@ -1233,17 +1162,12 @@
           "id": "B4L5T04",
           "block": 4,
           "difficulty": 5,
-          "taskType": "find_the_error",
+          "taskType": "solve_expression",
           "data": {
-            "question": "Finde den Fehler bei schwieriger Faktorisierung:",
-            "calculationSteps": [
-              { "line": "x⁴ + 4x² + 4", "isCorrect": true },
-              { "line": "(x² + 2)²", "isCorrect": true },
-              { "line": "(x + √2)²(x - √2)²", "isCorrect": false }
-            ],
-            "errorExplanation": "Achtung! (x² + 2)² kann über den reellen Zahlen nicht weiter faktorisiert werden."
+            "question": "Vereinfache: (x² + 1)² - (x² - 1)² - 4x²",
+            "solution": "0"
           },
-          "hints": ["x² + 2 hat keine reellen Nullstellen", "x² + 2 > 0 für alle reellen x"]
+          "hints": ["(x² + 1)² - (x² - 1)² = 4x²", "4x² - 4x² = 0"]
         },
         {
           "id": "B4L5T05",
