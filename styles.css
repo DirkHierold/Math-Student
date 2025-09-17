@@ -386,6 +386,12 @@ body {
     background: #f8fff9;
 }
 
+.memory-card.incorrect {
+    border-color: #D0021B;
+    background: #fff8f8;
+    animation: shake 0.5s;
+}
+
 /* Error finding styles */
 .error-instruction {
     text-align: center;

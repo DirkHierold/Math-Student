@@ -503,28 +503,42 @@ class TermHeldApp {
                 selectedCards.push(card);
                 
                 if (selectedCards.length === 2) {
-                    setTimeout(() => {
-                        const [card1, card2] = selectedCards;
+                    // Immediate feedback - no timeout
+                    const [card1, card2] = selectedCards;
+                    
+                    if (card1.dataset.pair === card2.textContent && card2.dataset.pair === card1.textContent) {
+                        // Match found - mark as matched immediately
+                        card1.classList.remove('selected');
+                        card2.classList.remove('selected');
+                        card1.classList.add('matched');
+                        card2.classList.add('matched');
+                        matchedPairs.push([card1, card2]);
                         
-                        if (card1.dataset.pair === card2.textContent && card2.dataset.pair === card1.textContent) {
-                            // Match found
-                            card1.classList.remove('selected');
-                            card2.classList.remove('selected');
-                            card1.classList.add('matched');
-                            card2.classList.add('matched');
-                            matchedPairs.push([card1, card2]);
-                            
-                            if (matchedPairs.length === task.data.pairs.length) {
-                                document.getElementById('check-btn').disabled = false;
-                            }
-                        } else {
-                            // No match
-                            card1.classList.remove('selected');
-                            card2.classList.remove('selected');
+                        // Check if all pairs are matched
+                        if (matchedPairs.length === task.data.pairs.length) {
+                            // All pairs matched - task completed successfully
+                            document.getElementById('check-btn').disabled = false;
                         }
                         
                         selectedCards = [];
-                    }, 1000);
+                    } else {
+                        // Wrong match - end task immediately
+                        card1.classList.add('incorrect');
+                        card2.classList.add('incorrect');
+                        
+                        // Disable all remaining cards
+                        const allCards = grid.querySelectorAll('.memory-card');
+                        allCards.forEach(c => {
+                            if (!c.classList.contains('matched')) {
+                                c.style.pointerEvents = 'none';
+                                c.style.opacity = '0.5';
+                            }
+                        });
+                        
+                        // Enable check button for completion (will be marked as failed)
+                        document.getElementById('check-btn').disabled = false;
+                        selectedCards = [];
+                    }
                 }
             };
             
@@ -617,7 +631,17 @@ class TermHeldApp {
                 
             case 'assignment_memory':
                 const matchedCards = interactionArea.querySelectorAll('.memory-card.matched');
-                isCorrect = matchedCards.length === task.data.pairs.length * 2;
+                const incorrectCards = interactionArea.querySelectorAll('.memory-card.incorrect');
+                
+                if (incorrectCards.length > 0) {
+                    // Failed due to incorrect selection
+                    isCorrect = false;
+                    userAnswer = 'Falsche Zuordnung';
+                } else {
+                    // Success only if all pairs are matched
+                    isCorrect = matchedCards.length === task.data.pairs.length * 2;
+                    userAnswer = isCorrect ? 'Alle Paare richtig zugeordnet' : 'Nicht alle Paare gefunden';
+                }
                 break;
                 
             case 'find_the_error':
