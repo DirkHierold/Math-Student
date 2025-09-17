@@ -785,30 +785,9 @@ class TermHeldApp {
     showSessionSummary() {
         const interactionArea = document.getElementById('interaction-area');
         
-        // Calculate correct answers properly - count unique tasks solved correctly
+        // Use the correctly tracked session count
         const totalTasks = this.currentSession.tasks.length;
-        let correctlyAnsweredTasks = 0;
-        
-        // Track which tasks were answered correctly at least once
-        const taskCorrectStatus = {};
-        
-        // Go through recent answers for this session's tasks
-        const blockKey = `block_${this.currentBlock}`;
-        const recentAnswers = this.data.progress[blockKey].recentAnswers;
-        const sessionTaskIds = this.currentSession.tasks.map(t => t.id);
-        
-        // Check each task in this session
-        this.currentSession.tasks.forEach(task => {
-            // Find the most recent answer for this task
-            const taskAnswers = recentAnswers.filter(answer => answer.taskId === task.id);
-            if (taskAnswers.length > 0) {
-                // Check if the task was ever answered correctly in this session
-                const hasCorrectAnswer = taskAnswers.some(answer => answer.correct);
-                if (hasCorrectAnswer) {
-                    correctlyAnsweredTasks++;
-                }
-            }
-        });
+        const correctlyAnsweredTasks = this.currentSession.correctCount;
         
         const percentage = Math.round((correctlyAnsweredTasks / totalTasks) * 100);
         
