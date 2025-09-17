@@ -409,6 +409,17 @@ class TermHeldApp {
         area.ondragover = (e) => {
             e.preventDefault();
             area.classList.add('drag-over');
+            
+            // Handle reordering within the same container
+            const draggedElement = document.querySelector('.dragging');
+            if (draggedElement && draggedElement.parentElement === area) {
+                const afterElement = this.getDragAfterElement(area, e.clientX);
+                if (afterElement == null) {
+                    area.appendChild(draggedElement);
+                } else {
+                    area.insertBefore(draggedElement, afterElement);
+                }
+            }
         };
         
         area.ondragleave = (e) => {
@@ -424,9 +435,17 @@ class TermHeldApp {
             const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
             const draggedElement = document.getElementById(dragData.elementId);
             
-            if (draggedElement && draggedElement.parentElement !== area) {
-                // Move the actual element to the new area
-                area.appendChild(draggedElement);
+            if (draggedElement) {
+                if (draggedElement.parentElement !== area) {
+                    // Moving between different areas
+                    const afterElement = this.getDragAfterElement(area, e.clientX);
+                    if (afterElement == null) {
+                        area.appendChild(draggedElement);
+                    } else {
+                        area.insertBefore(draggedElement, afterElement);
+                    }
+                }
+                // If same area, reordering was already handled in dragover
                 
                 // Update check button based on target area content
                 const targetArea = document.querySelector('[data-area="target"]');
@@ -436,6 +455,22 @@ class TermHeldApp {
                 }
             }
         };
+    }
+    
+    // Get the element after which to insert the dragged element
+    getDragAfterElement(container, x) {
+        const draggableElements = [...container.querySelectorAll('.drag-block:not(.dragging)')];
+        
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = x - box.left - box.width / 2;
+            
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
     // Render assignment memory task

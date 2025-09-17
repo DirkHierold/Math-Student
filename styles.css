@@ -304,6 +304,7 @@ body {
 .drag-container.drag-over {
     border-color: #4A90E2;
     background: #f0f7ff;
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
 }
 
 .drag-block {
@@ -323,6 +324,7 @@ body {
 .drag-block.dragging {
     opacity: 0.5;
     cursor: grabbing;
+    transform: rotate(5deg);
 }
 
 .drop-zone {
@@ -348,6 +350,7 @@ body {
 .drop-zone.drag-over {
     border-color: #4A90E2;
     background: #f0f7ff;
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
 }
 
 /* Memory game styles */
