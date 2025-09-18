@@ -53,6 +53,7 @@ class TermHeldApp {
             for (let blockId in this.tasks) {
                 initialData.progress[`block_${blockId}`] = {
                     unlockedLevel: 1,
+                    levelResults: {}, // Track stars per level: {1: 2, 2: 0, 3: 1}
                     currentLevelProgress: [],
                     correctlySolvedTasks: [],
                     recentAnswers: []
@@ -84,6 +85,24 @@ class TermHeldApp {
         const dataMajor = parseInt(dataVersion.split('.')[0]);
         return appMajor === dataMajor;
     }
+
+    // Calculate stars for a specific level (0-3 stars based on correct answers)
+    getLevelStars(blockId, level) {
+        const blockData = this.data.progress[`block_${blockId}`];
+        if (!blockData || !blockData.levelResults) {
+            return 0;
+        }
+
+        return blockData.levelResults[level] || 0;
+    }
+
+    // Calculate stars based on correct answers count
+    calculateStars(correctCount) {
+        if (correctCount === 0) return 0;
+        if (correctCount >= 5) return 3;
+        if (correctCount >= 3) return 2;
+        return 1; // 1-2 correct answers
+    }
     
     // Migrate old adaptive difficulty system to new fixed level system
     migrateToLevelSystem() {
@@ -105,6 +124,9 @@ class TermHeldApp {
             // Ensure all required properties exist
             if (!blockProgress.hasOwnProperty('unlockedLevel')) {
                 blockProgress.unlockedLevel = 1;
+            }
+            if (!blockProgress.hasOwnProperty('levelResults')) {
+                blockProgress.levelResults = {};
             }
             if (!blockProgress.hasOwnProperty('currentLevelProgress')) {
                 blockProgress.currentLevelProgress = [];
@@ -141,7 +163,7 @@ class TermHeldApp {
         // Navigation
         document.getElementById('settings-btn').onclick = () => this.showSettings();
         document.getElementById('settings-back-btn').onclick = () => this.showView('dashboard');
-        document.getElementById('back-btn').onclick = () => this.exitTaskSession();
+        document.getElementById('back-btn').onclick = () => this.showExitConfirmation();
         
         // Settings
         document.getElementById('copy-btn').onclick = () => this.copyShareHash();
@@ -156,6 +178,13 @@ class TermHeldApp {
         // Close modal on backdrop click
         document.getElementById('hint-modal').onclick = (e) => {
             if (e.target.id === 'hint-modal') this.closeHint();
+        };
+
+        // Exit confirmation modal
+        document.getElementById('exit-cancel').onclick = () => this.closeExitConfirmation();
+        document.getElementById('exit-confirm').onclick = () => this.confirmExitSession();
+        document.getElementById('exit-modal').onclick = (e) => {
+            if (e.target.id === 'exit-modal') this.closeExitConfirmation();
         };
         
         // Global Enter key handler for task view
@@ -187,19 +216,17 @@ class TermHeldApp {
     renderTopicBlocks() {
         const container = document.getElementById('topic-blocks');
         container.innerHTML = '';
-        
+
         for (let blockId in this.tasks) {
             const block = this.tasks[blockId];
             const progress = this.calculateBlockProgress(blockId);
-            
+
             const blockElement = document.createElement('div');
             blockElement.className = 'topic-block';
-            blockElement.onclick = () => this.startBlockSession(blockId);
-            
+
             const blockProgress = this.data.progress[`block_${blockId}`];
-            const currentLevel = blockProgress.unlockedLevel;
-            const currentLevelProgress = this.getCurrentLevelProgress(blockId);
-            
+            const unlockedLevel = blockProgress.unlockedLevel;
+
             blockElement.innerHTML = `
                 <div class="topic-icon">
                     ${this.renderProgressRing(progress)}
@@ -207,11 +234,12 @@ class TermHeldApp {
                 </div>
                 <div class="topic-info">
                     <h3>${block.title}</h3>
-                    <p>Level ${currentLevel}/5 freigeschaltet</p>
-                    <div class="level-progress">${currentLevelProgress}</div>
+                    <div class="levels-grid">
+                        ${this.renderLevelsGrid(blockId, unlockedLevel)}
+                    </div>
                 </div>
             `;
-            
+
             container.appendChild(blockElement);
         }
     }
@@ -249,6 +277,38 @@ class TermHeldApp {
         return `${completedCount}/${currentLevelTasks.length} Aufgaben in Level ${currentLevel}`;
     }
 
+    // Render levels grid with star ratings
+    renderLevelsGrid(blockId, unlockedLevel) {
+        let html = '';
+
+        for (let level = 1; level <= 5; level++) {
+            const isUnlocked = level <= unlockedLevel;
+            const stars = this.getLevelStars(blockId, level);
+            const isDisabled = !isUnlocked;
+
+            html += `
+                <button class="level-btn ${isDisabled ? 'disabled' : ''}"
+                        ${isDisabled ? 'disabled' : ''}
+                        onclick="app.startLevelSession('${blockId}', ${level})">
+                    <div class="level-number">${level}</div>
+                    <div class="level-stars">${this.renderStars(stars)}</div>
+                </button>
+            `;
+        }
+
+        return html;
+    }
+
+    // Render star display (0-3 filled stars)
+    renderStars(starCount) {
+        let html = '';
+        for (let i = 1; i <= 3; i++) {
+            const filled = i <= starCount;
+            html += `<span class="star ${filled ? 'filled' : ''}">${filled ? '★' : '☆'}</span>`;
+        }
+        return html;
+    }
+
     // Render SVG progress ring
     renderProgressRing(percentage) {
         const radius = 32;
@@ -264,70 +324,62 @@ class TermHeldApp {
         `;
     }
 
-    // Start a learning session for a specific block
-    startBlockSession(blockId) {
+    // Start a learning session for a specific level
+    startLevelSession(blockId, level) {
         this.currentBlock = blockId;
+        this.currentLevel = level;
+
+        // Check if level is unlocked
         const blockProgress = this.data.progress[`block_${blockId}`];
-        const currentLevel = blockProgress.unlockedLevel;
-        
-        // Select tasks for this session from current unlocked level only
-        const sessionTasks = this.selectSessionTasks(blockId, currentLevel, 10);
-        
-        
-        if (sessionTasks.length === 0) {
-            this.showFeedback('Keine neuen Aufgaben verfügbar für dieses Level.', 'error');
+        if (level > blockProgress.unlockedLevel) {
+            this.showFeedback('Dieses Level ist noch nicht freigeschaltet.', 'error');
             return;
         }
-        
-        // Calculate starting index based on completed tasks
-        const completedInLevel = blockProgress.currentLevelProgress || [];
-        const startingIndex = completedInLevel.length;
-        
+
+        // Select tasks for this session from specified level
+        const sessionTasks = this.selectSessionTasks(blockId, level, 5);
+
+        if (sessionTasks.length === 0) {
+            this.showFeedback('Keine Aufgaben verfügbar für dieses Level.', 'error');
+            return;
+        }
+
+        // Start fresh session for this level
         this.currentSession = {
             tasks: sessionTasks,
-            currentIndex: startingIndex,
-            correctCount: completedInLevel.length, // Already completed tasks count
-            errors: 0
+            currentIndex: 0,
+            correctCount: 0,
+            errors: 0,
+            level: level,
+            sessionResults: [] // Track this session's results
         };
-        
+
         this.showView('task');
         this.renderCurrentTask();
         this.updateSessionProgress();
     }
 
-    // Select tasks for session from current level only
-    selectSessionTasks(blockId, currentLevel, maxCount) {
-        const blockTasks = this.tasks[blockId].tasks;
+    // Start a learning session for a specific block (legacy method - redirect to current unlocked level)
+    startBlockSession(blockId) {
         const blockProgress = this.data.progress[`block_${blockId}`];
-        
-        // Filter tasks by current level only
-        const levelTasks = blockTasks.filter(task => task.difficulty === currentLevel);
-        
+        const currentLevel = blockProgress.unlockedLevel;
+        this.startLevelSession(blockId, currentLevel);
+    }
+
+    // Select tasks for session from specified level
+    selectSessionTasks(blockId, level, maxCount) {
+        const blockTasks = this.tasks[blockId].tasks;
+
+        // Filter tasks by specified level only
+        const levelTasks = blockTasks.filter(task => task.difficulty === level);
+
         if (levelTasks.length === 0) {
             return [];
         }
-        
-        const completedInLevel = blockProgress.currentLevelProgress || [];
-        
-        // If all tasks in this level are completed, present all tasks for practice
-        if (completedInLevel.length >= levelTasks.length) {
-            return this.shuffleArray(levelTasks);
-        }
-        
-        // Create a session that shows progress correctly:
-        // 1. First, add all completed tasks (marked as already done)
-        // 2. Then, add remaining tasks to complete the level
-        
-        const completedTasks = levelTasks.filter(task => completedInLevel.includes(task.id));
-        const remainingTasks = levelTasks.filter(task => !completedInLevel.includes(task.id));
-        
-        // Create session with completed tasks first, then remaining tasks
-        const sessionTasks = [
-            ...completedTasks,  // Already completed (will be skipped or marked as done)
-            ...this.shuffleArray(remainingTasks)  // Remaining tasks to complete
-        ];
-        
-        return sessionTasks;
+
+        // For new level session, select exactly 5 tasks for star rating
+        const selectedTasks = this.shuffleArray(levelTasks).slice(0, 5);
+        return selectedTasks;
     }
 
     // Shuffle array utility
@@ -345,27 +397,18 @@ class TermHeldApp {
         const task = this.currentSession.tasks[this.currentSession.currentIndex];
         const questionArea = document.getElementById('question-area');
         const interactionArea = document.getElementById('interaction-area');
-        const blockProgress = this.data.progress[`block_${this.currentBlock}`];
-        const completedInLevel = blockProgress.currentLevelProgress || [];
-        
-        // Check if current task is already completed
-        if (completedInLevel.includes(task.id)) {
-            // Skip already completed task automatically
-            this.skipCompletedTask();
-            return;
-        }
-        
+
         questionArea.innerHTML = `<h2>${task.data.question}</h2>`;
-        
+
         // Reset check button
         const checkBtn = document.getElementById('check-btn');
         checkBtn.textContent = 'Prüfen';
         checkBtn.disabled = true;
         checkBtn.onclick = () => this.checkAnswer(); // Reset the onclick handler
-        
+
         // Render task-specific interaction
         this.renderTaskInteraction(task, interactionArea);
-        
+
         // Clear any previous feedback
         const existingFeedback = interactionArea.querySelector('.feedback');
         if (existingFeedback) {
@@ -759,36 +802,26 @@ class TermHeldApp {
     processAnswer(task, isCorrect, userAnswer) {
         const interactionArea = document.getElementById('interaction-area');
         const checkBtn = document.getElementById('check-btn');
-        
-        // Record answer
-        const blockKey = `block_${this.currentBlock}`;
-        const blockProgress = this.data.progress[blockKey];
-        
-        blockProgress.recentAnswers.push({
+
+        // Record answer for this session
+        this.currentSession.sessionResults.push({
             taskId: task.id,
             correct: isCorrect
         });
-        
-        // Update progress
+
+        // Update session progress
         if (isCorrect) {
             this.currentSession.correctCount++;
-            
-            // Add to correctly solved tasks if not already there
-            if (!blockProgress.correctlySolvedTasks.includes(task.id)) {
-                blockProgress.correctlySolvedTasks.push(task.id);
-            }
+        } else {
+            this.currentSession.errors++;
         }
-        
+
         // Show feedback
         this.showTaskFeedback(task, isCorrect, interactionArea);
-        
-        // Update level progression based on fixed system
-        this.updateLevelProgress(blockKey, task, isCorrect);
-        
-        
+
         // Save progress
         this.saveData();
-        
+
         // Update button - always becomes "Weiter" after checking answer
         checkBtn.textContent = 'Weiter';
         checkBtn.onclick = () => this.nextTask();
@@ -797,7 +830,7 @@ class TermHeldApp {
         setTimeout(() => {
             checkBtn.disabled = false;
         }, 500); // Half second delay to show feedback
-        
+
         // Add visual feedback to input/interaction
         if (task.taskType === 'solve_expression') {
             const input = interactionArea.querySelector('.math-input');
@@ -833,48 +866,6 @@ class TermHeldApp {
         container.appendChild(feedback);
     }
 
-    // Update level progression based on fixed level system
-    updateLevelProgress(blockKey, task, isCorrect) {
-        const blockProgress = this.data.progress[blockKey];
-        const currentLevel = blockProgress.unlockedLevel;
-        
-        if (!blockProgress.currentLevelProgress) {
-            blockProgress.currentLevelProgress = [];
-        }
-        
-        if (isCorrect) {
-            // Only add if session has no errors so far
-            if (this.currentSession.errors === 0) {
-                // Add task to current level progress if not already there
-                if (!blockProgress.currentLevelProgress.includes(task.id)) {
-                    blockProgress.currentLevelProgress.push(task.id);
-                }
-                
-                // Check if all tasks in current level are completed
-                const blockTasks = this.tasks[this.currentBlock].tasks;
-                const currentLevelTasks = blockTasks.filter(t => t.difficulty === currentLevel);
-                
-                const allCurrentLevelCompleted = currentLevelTasks.every(t => 
-                    blockProgress.currentLevelProgress.includes(t.id)
-                );
-                
-                if (allCurrentLevelCompleted && currentLevel < 5) {
-                    // Unlock next level
-                    blockProgress.unlockedLevel = currentLevel + 1;
-                    blockProgress.currentLevelProgress = []; // Reset for new level
-                    
-                    // Show level up feedback
-                    setTimeout(() => {
-                        this.showFeedback(`Glückwunsch! Level ${currentLevel + 1} freigeschaltet!`, 'success');
-                    }, 1000);
-                }
-            }
-        } else {
-            // Reset current level progress on any error
-            this.currentSession.errors++;
-            blockProgress.currentLevelProgress = [];
-        }
-    }
 
 
     // Move to next task
@@ -894,40 +885,49 @@ class TermHeldApp {
     // Show session summary
     showSessionSummary() {
         const interactionArea = document.getElementById('interaction-area');
-        
+
         const totalTasks = this.currentSession.tasks.length;
-        const correctlyAnsweredTasks = this.currentSession.correctCount;
-        const errors = this.currentSession.errors;
-        const percentage = Math.round((correctlyAnsweredTasks / totalTasks) * 100);
-        
+        const correctCount = this.currentSession.correctCount;
+        const level = this.currentSession.level;
+        const stars = this.calculateStars(correctCount);
+
+        // Update level results in saved data
         const blockProgress = this.data.progress[`block_${this.currentBlock}`];
-        const currentLevel = blockProgress.unlockedLevel;
-        
-        let summaryMessage = `Du hast ${correctlyAnsweredTasks} von ${totalTasks} Aufgaben richtig gelöst (${percentage}%).`;
-        
-        if (errors > 0) {
-            summaryMessage += `<br><br><strong>Achtung:</strong> Du hattest ${errors} Fehler. Dein Fortschritt in Level ${currentLevel} wurde zurückgesetzt. Alle Aufgaben eines Levels müssen ohne Fehler gelöst werden!`;
-        } else if (percentage === 100) {
-            const blockTasks = this.tasks[this.currentBlock].tasks;
-            const currentLevelTasks = blockTasks.filter(t => t.difficulty === currentLevel);
-            const allCompleted = currentLevelTasks.every(t => 
-                blockProgress.currentLevelProgress.includes(t.id)
-            );
-            
-            if (allCompleted && currentLevel < 5) {
-                summaryMessage += `<br><br><strong>Perfekt!</strong> Du hast alle Aufgaben von Level ${currentLevel} gemeistert!`;
-            } else if (currentLevel === 5) {
-                summaryMessage += `<br><br><strong>Hervorragend!</strong> Du hast das höchste Level erreicht!`;
+        const currentStars = blockProgress.levelResults[level] || 0;
+
+        // Only update if this session achieved more stars
+        if (stars > currentStars) {
+            blockProgress.levelResults[level] = stars;
+
+            // Check if should unlock next level (need at least 1 star to unlock)
+            if (stars > 0 && level === blockProgress.unlockedLevel && level < 5) {
+                blockProgress.unlockedLevel = level + 1;
             }
         }
-        
+
+        this.saveData();
+
+        let summaryMessage = `Level ${level} abgeschlossen!<br><br>`;
+        summaryMessage += `Du hast ${correctCount} von ${totalTasks} Aufgaben richtig gelöst.<br><br>`;
+        summaryMessage += `<div class="session-stars">Erreichte Sterne: ${this.renderStars(stars)}</div><br>`;
+
+        if (stars > currentStars) {
+            summaryMessage += `<strong>Neue Bestleistung!</strong> Du hast ${stars} Stern${stars > 1 ? 'e' : ''} erreicht!<br><br>`;
+
+            if (stars > 0 && level === blockProgress.unlockedLevel - 1 && level < 5) {
+                summaryMessage += `<strong>Level ${level + 1} freigeschaltet!</strong>`;
+            }
+        } else if (currentStars > 0) {
+            summaryMessage += `Bisherige Bestleistung: ${this.renderStars(currentStars)}`;
+        }
+
         interactionArea.innerHTML = `
-            <div class="feedback ${errors > 0 ? 'error' : 'success'}">
+            <div class="feedback success">
                 <h3>Session abgeschlossen!</h3>
                 <p>${summaryMessage}</p>
             </div>
         `;
-        
+
         document.getElementById('check-btn').textContent = 'Zurück zum Dashboard';
         document.getElementById('check-btn').onclick = () => this.exitTaskSession();
     }
@@ -944,20 +944,36 @@ class TermHeldApp {
     showHint() {
         const task = this.currentSession.tasks[this.currentSession.currentIndex];
         const hintContent = document.getElementById('hint-content');
-        
+
         hintContent.innerHTML = '';
         task.hints.forEach((hint, index) => {
             const hintElement = document.createElement('p');
             hintElement.textContent = `${index + 1}. ${hint}`;
             hintContent.appendChild(hintElement);
         });
-        
-        document.getElementById('hint-modal').classList.add('active');
+
+        document.getElementById('hint-modal').style.display = 'flex';
     }
 
     // Close hint modal
     closeHint() {
-        document.getElementById('hint-modal').classList.remove('active');
+        document.getElementById('hint-modal').style.display = 'none';
+    }
+
+    // Show exit confirmation modal
+    showExitConfirmation() {
+        document.getElementById('exit-modal').style.display = 'flex';
+    }
+
+    // Close exit confirmation modal
+    closeExitConfirmation() {
+        document.getElementById('exit-modal').style.display = 'none';
+    }
+
+    // Confirm exit session (abandon progress)
+    confirmExitSession() {
+        this.closeExitConfirmation();
+        this.exitTaskSession();
     }
 
     // Show settings page
@@ -1081,5 +1097,6 @@ class TermHeldApp {
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.termHeldApp = new TermHeldApp();
+    window.app = new TermHeldApp();
+    window.termHeldApp = window.app; // Keep backward compatibility
 });

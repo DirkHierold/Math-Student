@@ -195,6 +195,75 @@ body {
     margin-top: 2px;
 }
 
+/* Level grid and stars */
+.levels-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.level-btn {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.level-btn:hover:not(.disabled) {
+    border-color: #4A90E2;
+    background: #f8f9ff;
+}
+
+.level-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f8f9fa;
+}
+
+.level-number {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+}
+
+.level-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    font-size: 0.8rem;
+    color: #ffc107;
+}
+
+.star.filled {
+    color: #ffc107;
+}
+
+.star:not(.filled) {
+    color: #e9ecef;
+}
+
+/* Session stars display */
+.session-stars {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.session-stars .star {
+    font-size: 1.5rem;
+    margin: 0 3px;
+}
+
 /* Task view */
 .top-bar {
     display: flex;
@@ -579,12 +648,12 @@ body {
     height: 100%;
     background: rgba(0,0,0,0.5);
     z-index: 1000;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal.active {
     display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .modal-content {
@@ -607,6 +676,29 @@ body {
 .modal-body {
     padding: 20px;
     line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px;
+    border-top: 1px solid #dee2e6;
+}
+
+.danger-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.danger-btn:hover {
+    background: #c82333;
 }
 
 /* Feedback messages */
