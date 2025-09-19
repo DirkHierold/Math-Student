@@ -170,9 +170,7 @@ class MathStudentApp {
         document.getElementById('load-btn').onclick = () => this.importProgress();
         document.getElementById('reset-btn').onclick = () => this.resetProgress();
         
-        // Task interaction
-        document.getElementById('check-btn').onclick = () => this.checkAnswer();
-        document.getElementById('hint-btn').onclick = () => this.showHint();
+        // Task interaction (hint button is added dynamically)
         document.getElementById('close-hint').onclick = () => this.closeHint();
         
         // Close modal on backdrop click
@@ -187,15 +185,6 @@ class MathStudentApp {
             if (e.target.id === 'exit-modal') this.closeExitConfirmation();
         };
         
-        // Global Enter key handler for task view
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && this.currentView === 'task') {
-                const checkBtn = document.getElementById('check-btn');
-                if (checkBtn && !checkBtn.disabled) {
-                    checkBtn.click();
-                }
-            }
-        });
     }
 
     // Show specific view
@@ -398,13 +387,13 @@ class MathStudentApp {
         const questionArea = document.getElementById('question-area');
         const interactionArea = document.getElementById('interaction-area');
 
-        questionArea.innerHTML = `<h2>${task.data.question}</h2>`;
+        questionArea.innerHTML = `
+            <h2>${task.data.question}</h2>
+            <button id="hint-btn" class="hint-question-mark">?</button>
+        `;
 
-        // Reset check button
-        const checkBtn = document.getElementById('check-btn');
-        checkBtn.textContent = 'Prüfen';
-        checkBtn.disabled = true;
-        checkBtn.onclick = () => this.checkAnswer(); // Reset the onclick handler
+        // Set up hint button event listener after creating it
+        document.getElementById('hint-btn').onclick = () => this.showHint();
 
         // Render task-specific interaction
         this.renderTaskInteraction(task, interactionArea);
@@ -434,47 +423,11 @@ class MathStudentApp {
     // Render task interaction based on task type
     renderTaskInteraction(task, container) {
         container.innerHTML = '';
-        
-        switch (task.taskType) {
-            case 'solve_expression':
-                this.renderSolveExpression(task, container);
-                break;
-            case 'multiple_choice':
-                this.renderMultipleChoice(task, container);
-                break;
-            case 'drag_and_drop':
-                this.renderDragAndDrop(task, container);
-                break;
-            case 'assignment_memory':
-                this.renderAssignmentMemory(task, container);
-                break;
-            case 'find_the_error':
-                this.renderFindTheError(task, container);
-                break;
-            default:
-                container.innerHTML = '<p>Unbekannter Aufgabentyp</p>';
-        }
+
+        // All tasks are now multiple choice
+        this.renderMultipleChoice(task, container);
     }
 
-    // Render solve expression task
-    renderSolveExpression(task, container) {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'math-input';
-        input.placeholder = 'Deine Antwort...';
-        input.oninput = () => {
-            document.getElementById('check-btn').disabled = input.value.trim() === '';
-        };
-        input.onkeypress = (e) => {
-            if (e.key === 'Enter' && !document.getElementById('check-btn').disabled) {
-                // Execute whatever the current button does (Prüfen or Weiter)
-                document.getElementById('check-btn').click();
-            }
-        };
-        
-        container.appendChild(input);
-        input.focus();
-    }
 
     // Render multiple choice task
     renderMultipleChoice(task, container) {
@@ -540,7 +493,7 @@ class MathStudentApp {
                 state.isAnswered = true;
                 solutionArea.innerHTML = `<div class="option-display correct">${currentOption}</div>`;
                 this.showNextTaskButton(buttonContainer);
-                this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], true, currentOption);
+                this.processMultipleChoiceAnswer(this.currentSession.tasks[this.currentSession.currentIndex], true, currentOption);
             } else {
                 // User is wrong - this is NOT the correct solution
                 state.isAnswered = true;
@@ -549,7 +502,7 @@ class MathStudentApp {
                     <small>Das war falsch. Richtig wäre: ${state.correctSolution}</small>
                 </div>`;
                 this.showNextTaskButton(buttonContainer);
-                this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, currentOption);
+                this.processMultipleChoiceAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, currentOption);
             }
         } else {
             // User thinks this solution is wrong
@@ -561,7 +514,7 @@ class MathStudentApp {
                     <small>Das wäre richtig gewesen!</small>
                 </div>`;
                 this.showNextTaskButton(buttonContainer);
-                this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, currentOption);
+                this.processMultipleChoiceAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, currentOption);
             } else {
                 // User is right - this is NOT the correct solution, show next option
                 state.currentOptionIndex++;
@@ -576,7 +529,7 @@ class MathStudentApp {
                         <small>Das ist die richtige Lösung</small>
                     </div>`;
                     this.showNextTaskButton(buttonContainer);
-                    this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, state.correctSolution);
+                    this.processMultipleChoiceAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, state.correctSolution);
                 }
             }
         }
@@ -592,336 +545,8 @@ class MathStudentApp {
         container.appendChild(nextBtn);
     }
 
-    // Render drag and drop task
-    renderDragAndDrop(task, container) {
-        // Source area for available blocks
-        const sourceArea = document.createElement('div');
-        sourceArea.className = 'drag-container';
-        sourceArea.dataset.area = 'source';
-        
-        const sourceLabel = document.createElement('div');
-        sourceLabel.textContent = 'Verfügbare Terme:';
-        sourceLabel.style.marginBottom = '10px';
-        sourceLabel.style.fontWeight = '600';
-        sourceLabel.style.color = '#495057';
-        
-        // Target area label and container
-        const targetLabel = document.createElement('div');
-        targetLabel.textContent = 'Ordne die Terme hier:';
-        targetLabel.style.marginBottom = '10px';
-        targetLabel.style.fontWeight = '600';
-        targetLabel.style.color = '#495057';
-        
-        // Target area for dropped blocks
-        const targetArea = document.createElement('div');
-        targetArea.className = 'drop-zone';
-        targetArea.dataset.area = 'target';
-        
-        // Create draggable blocks
-        task.data.initialBlocks.forEach((block, index) => {
-            const dragBlock = this.createDragBlock(block, index);
-            sourceArea.appendChild(dragBlock);
-        });
-        
-        // Set up drag and drop event handlers
-        this.setupDragAndDropArea(sourceArea);
-        this.setupDragAndDropArea(targetArea);
-        
-        container.appendChild(sourceLabel);
-        container.appendChild(sourceArea);
-        container.appendChild(targetLabel);
-        container.appendChild(targetArea);
-        
-        // Store reference for answer checking
-        this.currentDragTask = { sourceArea, targetArea, initialBlocks: task.data.initialBlocks };
-    }
-    
-    // Create a draggable block element
-    createDragBlock(blockText, index) {
-        const dragBlock = document.createElement('div');
-        dragBlock.className = 'drag-block';
-        dragBlock.textContent = blockText;
-        dragBlock.draggable = true;
-        dragBlock.dataset.index = index;
-        dragBlock.dataset.value = blockText;
-        dragBlock.id = `drag-${index}-${blockText.replace(/\s+/g, '')}`;
-        
-        dragBlock.ondragstart = (e) => {
-            e.dataTransfer.setData('text/plain', JSON.stringify({
-                index: index,
-                value: blockText,
-                sourceArea: e.target.parentElement.dataset.area,
-                elementId: dragBlock.id
-            }));
-            dragBlock.classList.add('dragging');
-        };
-        
-        dragBlock.ondragend = () => {
-            dragBlock.classList.remove('dragging');
-        };
-        
-        return dragBlock;
-    }
-    
-    // Set up drag and drop functionality for an area
-    setupDragAndDropArea(area) {
-        area.ondragover = (e) => {
-            e.preventDefault();
-            area.classList.add('drag-over');
-            
-            // Handle reordering within the same container
-            const draggedElement = document.querySelector('.dragging');
-            if (draggedElement && draggedElement.parentElement === area) {
-                const afterElement = this.getDragAfterElement(area, e.clientX);
-                if (afterElement == null) {
-                    area.appendChild(draggedElement);
-                } else {
-                    area.insertBefore(draggedElement, afterElement);
-                }
-            }
-        };
-        
-        area.ondragleave = (e) => {
-            if (!area.contains(e.relatedTarget)) {
-                area.classList.remove('drag-over');
-            }
-        };
-        
-        area.ondrop = (e) => {
-            e.preventDefault();
-            area.classList.remove('drag-over');
-            
-            const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
-            const draggedElement = document.getElementById(dragData.elementId);
-            
-            if (draggedElement) {
-                if (draggedElement.parentElement !== area) {
-                    // Moving between different areas
-                    const afterElement = this.getDragAfterElement(area, e.clientX);
-                    if (afterElement == null) {
-                        area.appendChild(draggedElement);
-                    } else {
-                        area.insertBefore(draggedElement, afterElement);
-                    }
-                }
-                // If same area, reordering was already handled in dragover
-                
-                // Update check button based on target area content
-                const targetArea = document.querySelector('[data-area="target"]');
-                if (targetArea) {
-                    const targetBlocks = targetArea.querySelectorAll('.drag-block');
-                    document.getElementById('check-btn').disabled = targetBlocks.length === 0;
-                }
-            }
-        };
-    }
-    
-    // Get the element after which to insert the dragged element
-    getDragAfterElement(container, x) {
-        const draggableElements = [...container.querySelectorAll('.drag-block:not(.dragging)')];
-        
-        return draggableElements.reduce((closest, child) => {
-            const box = child.getBoundingClientRect();
-            const offset = x - box.left - box.width / 2;
-            
-            if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
-            } else {
-                return closest;
-            }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    // Render assignment memory task
-    renderAssignmentMemory(task, container) {
-        const grid = document.createElement('div');
-        grid.className = 'memory-grid';
-        
-        // Create shuffled array of all terms
-        const allTerms = [];
-        task.data.pairs.forEach(pair => {
-            allTerms.push({ term: pair.termA, pair: pair.termB, type: 'A' });
-            allTerms.push({ term: pair.termB, pair: pair.termA, type: 'B' });
-        });
-        
-        const shuffledTerms = this.shuffleArray(allTerms);
-        let selectedCards = [];
-        let matchedPairs = [];
-        
-        shuffledTerms.forEach((termObj, index) => {
-            const card = document.createElement('div');
-            card.className = 'memory-card';
-            card.textContent = termObj.term;
-            card.dataset.pair = termObj.pair;
-            card.dataset.index = index;
-            
-            card.onclick = () => {
-                if (card.classList.contains('matched') || card.classList.contains('selected')) return;
-                
-                card.classList.add('selected');
-                selectedCards.push(card);
-                
-                if (selectedCards.length === 2) {
-                    // Immediate feedback - no timeout
-                    const [card1, card2] = selectedCards;
-                    
-                    if (card1.dataset.pair === card2.textContent && card2.dataset.pair === card1.textContent) {
-                        // Match found - mark as matched immediately
-                        card1.classList.remove('selected');
-                        card2.classList.remove('selected');
-                        card1.classList.add('matched');
-                        card2.classList.add('matched');
-                        matchedPairs.push([card1, card2]);
-                        
-                        // Check if all pairs are matched
-                        if (matchedPairs.length === task.data.pairs.length) {
-                            // All pairs matched - task completed successfully
-                            document.getElementById('check-btn').disabled = false;
-                        }
-                        
-                        selectedCards = [];
-                    } else {
-                        // Wrong match - end task immediately
-                        card1.classList.add('incorrect');
-                        card2.classList.add('incorrect');
-                        
-                        // Disable all remaining cards
-                        const allCards = grid.querySelectorAll('.memory-card');
-                        allCards.forEach(c => {
-                            if (!c.classList.contains('matched')) {
-                                c.style.pointerEvents = 'none';
-                                c.style.opacity = '0.5';
-                            }
-                        });
-                        
-                        // Enable check button for completion (will be marked as failed)
-                        document.getElementById('check-btn').disabled = false;
-                        selectedCards = [];
-                    }
-                }
-            };
-            
-            grid.appendChild(card);
-        });
-        
-        container.appendChild(grid);
-    }
-
-    // Render find the error task
-    renderFindTheError(task, container) {
-        // Add instruction text
-        const instruction = document.createElement('div');
-        instruction.className = 'error-instruction';
-        instruction.innerHTML = '<strong>Klicke auf die Zeile mit dem Fehler:</strong>';
-        container.appendChild(instruction);
-        
-        const stepsContainer = document.createElement('div');
-        stepsContainer.className = 'calculation-steps';
-        
-        let selectedLine = null;
-        
-        task.data.calculationSteps.forEach((step, index) => {
-            const line = document.createElement('div');
-            
-            // First line is the original task/expression - not selectable
-            if (index === 0) {
-                line.className = 'calculation-line original-task';
-                line.innerHTML = `<span class="step-label">Ausgangsterm:</span><span class="step-content">${step.line}</span>`;
-            } else {
-                line.className = 'calculation-line';
-                line.innerHTML = `<span class="step-number">Schritt ${index}:</span><span class="step-content">${step.line}</span>`;
-                line.dataset.index = index;
-                line.dataset.correct = step.isCorrect;
-                
-                line.onclick = () => {
-                    // Clear previous selection
-                    stepsContainer.querySelectorAll('.calculation-line:not(.original-task)').forEach(l => {
-                        l.classList.remove('selected');
-                    });
-                    
-                    line.classList.add('selected');
-                    selectedLine = index;
-                    document.getElementById('check-btn').disabled = false;
-                };
-            }
-            
-            stepsContainer.appendChild(line);
-        });
-        
-        container.appendChild(stepsContainer);
-        container.selectedLine = () => selectedLine;
-    }
-
-    // Update session progress bar
-    updateSessionProgress() {
-        // Progress shows how far we are through the session
-        // Task 1/5 = 20%, Task 2/5 = 40%, ..., Task 5/5 = 100%
-        const currentTask = this.currentSession.currentIndex + 1;
-        const totalTasks = this.currentSession.tasks.length;
-        const progress = (currentTask / totalTasks) * 100;
-        
-        document.getElementById('session-progress').style.width = progress + '%';
-        document.getElementById('task-counter').textContent = `${currentTask}/${totalTasks}`;
-    }
-
-    // Check user's answer
-    checkAnswer() {
-        const task = this.currentSession.tasks[this.currentSession.currentIndex];
-        const interactionArea = document.getElementById('interaction-area');
-        let isCorrect = false;
-        let userAnswer = '';
-        
-        // Get answer based on task type
-        switch (task.taskType) {
-            case 'solve_expression':
-                const input = interactionArea.querySelector('.math-input');
-                userAnswer = input.value.trim().toLowerCase().replace(/\s/g, '');
-                const correctAnswer = task.data.solution.toLowerCase().replace(/\s/g, '');
-                isCorrect = userAnswer === correctAnswer;
-                break;
-                
-            case 'drag_and_drop':
-                const targetArea = interactionArea.querySelector('[data-area="target"]');
-                const droppedBlocks = Array.from(targetArea.querySelectorAll('.drag-block'))
-                    .map(block => block.dataset.value);
-                userAnswer = droppedBlocks.join('');
-                isCorrect = userAnswer.replace(/\s/g, '') === task.data.finalSolution.replace(/\s/g, '');
-                break;
-                
-            case 'assignment_memory':
-                const matchedCards = interactionArea.querySelectorAll('.memory-card.matched');
-                const incorrectCards = interactionArea.querySelectorAll('.memory-card.incorrect');
-                
-                if (incorrectCards.length > 0) {
-                    // Failed due to incorrect selection
-                    isCorrect = false;
-                    userAnswer = 'Falsche Zuordnung';
-                } else {
-                    // Success only if all pairs are matched
-                    isCorrect = matchedCards.length === task.data.pairs.length * 2;
-                    userAnswer = isCorrect ? 'Alle Paare richtig zugeordnet' : 'Nicht alle Paare gefunden';
-                }
-                break;
-                
-            case 'find_the_error':
-                const selectedLineIndex = interactionArea.selectedLine();
-                if (selectedLineIndex !== null) {
-                    const step = task.data.calculationSteps[selectedLineIndex];
-                    isCorrect = !step.isCorrect; // User should select the incorrect line
-                    userAnswer = `Line ${selectedLineIndex + 1}`;
-                }
-                break;
-        }
-        
-        // Process answer
-        this.processAnswer(task, isCorrect, userAnswer);
-    }
-
-    // Process the answer and update progress
-    processAnswer(task, isCorrect, userAnswer) {
-        const interactionArea = document.getElementById('interaction-area');
-        const checkBtn = document.getElementById('check-btn');
-
+    // Process multiple choice answer
+    processMultipleChoiceAnswer(task, isCorrect, userAnswer) {
         // Record answer for this session
         this.currentSession.sessionResults.push({
             taskId: task.id,
@@ -935,60 +560,25 @@ class MathStudentApp {
             this.currentSession.errors++;
         }
 
-        // Show feedback
-        this.showTaskFeedback(task, isCorrect, interactionArea);
-
         // Save progress
         this.saveData();
-
-        // Update button - always becomes "Weiter" after checking answer
-        checkBtn.textContent = 'Weiter';
-        checkBtn.onclick = () => this.nextTask();
-        // Disable button briefly to prevent immediate Enter triggering
-        checkBtn.disabled = true;
-        setTimeout(() => {
-            checkBtn.disabled = false;
-        }, 500); // Half second delay to show feedback
-
-        // Add visual feedback to input/interaction
-        if (task.taskType === 'solve_expression') {
-            const input = interactionArea.querySelector('.math-input');
-            input.classList.add(isCorrect ? 'correct' : 'incorrect');
-            input.disabled = true; // Disable input after answer to prevent further typing
-        } else if (task.taskType === 'find_the_error') {
-            const lines = interactionArea.querySelectorAll('.calculation-line.selected');
-            lines.forEach(line => {
-                line.classList.add(isCorrect ? 'correct-selection' : 'incorrect-selection');
-            });
-        }
     }
 
-    // Show task-specific feedback
-    showTaskFeedback(task, isCorrect, container) {
-        // Skip feedback for multiple_choice tasks - they handle feedback in the solution area
-        if (task.taskType === 'multiple_choice') {
-            return;
-        }
 
-        const feedback = document.createElement('div');
-        feedback.className = `feedback ${isCorrect ? 'success' : 'error'}`;
-
-        if (isCorrect) {
-            const encouragements = ['Richtig!', 'Super!', 'Gut gemacht!', 'Perfekt!', 'Klasse!'];
-            feedback.textContent = encouragements[Math.floor(Math.random() * encouragements.length)];
-        } else {
-            feedback.textContent = 'Das ist noch nicht richtig.';
-
-            // Show error explanation for find_the_error tasks
-            if (task.taskType === 'find_the_error' && task.data.errorExplanation) {
-                feedback.innerHTML += '<br><br>' + task.data.errorExplanation;
-            } else if (task.taskType === 'solve_expression') {
-                feedback.innerHTML += '<br>Die richtige Antwort ist: ' + task.data.solution;
-            }
-        }
-
-        container.appendChild(feedback);
+    // Update session progress bar
+    updateSessionProgress() {
+        // Progress shows how far we are through the session
+        // Task 1/5 = 20%, Task 2/5 = 40%, ..., Task 5/5 = 100%
+        const currentTask = this.currentSession.currentIndex + 1;
+        const totalTasks = this.currentSession.tasks.length;
+        const progress = (currentTask / totalTasks) * 100;
+        
+        document.getElementById('session-progress').style.width = progress + '%';
+        document.getElementById('task-counter').textContent = `${currentTask}/${totalTasks}`;
     }
+
+
+
 
 
 
@@ -1045,15 +635,25 @@ class MathStudentApp {
             summaryMessage += `Bisherige Bestleistung: ${this.renderStars(currentStars)}`;
         }
 
-        interactionArea.innerHTML = `
-            <div class="feedback success">
-                <h3>Session abgeschlossen!</h3>
-                <p>${summaryMessage}</p>
-            </div>
+        const summaryDiv = document.createElement('div');
+        summaryDiv.className = 'feedback success';
+        summaryDiv.innerHTML = `
+            <h3>Session abgeschlossen!</h3>
+            <p>${summaryMessage}</p>
         `;
 
-        document.getElementById('check-btn').textContent = 'Zurück zum Dashboard';
-        document.getElementById('check-btn').onclick = () => this.exitTaskSession();
+        const returnBtn = document.createElement('button');
+        returnBtn.className = 'primary-btn';
+        returnBtn.textContent = 'Zurück zum Dashboard';
+        returnBtn.style.marginTop = '20px';
+        returnBtn.style.display = 'block';
+        returnBtn.style.marginLeft = 'auto';
+        returnBtn.style.marginRight = 'auto';
+        returnBtn.onclick = () => this.exitTaskSession();
+
+        interactionArea.innerHTML = '';
+        interactionArea.appendChild(summaryDiv);
+        interactionArea.appendChild(returnBtn);
     }
 
     // Exit task session and return to dashboard

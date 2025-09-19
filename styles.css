@@ -407,8 +407,8 @@ body {
 }
 
 .task-content {
-    padding: 30px 20px;
-    min-height: calc(100vh - 120px);
+    padding: 30px 20px 40px 20px;
+    min-height: calc(100vh - 80px);
 }
 
 .question-area {
@@ -417,6 +417,7 @@ body {
     background: #f8f9fa;
     border-radius: 12px;
     text-align: center;
+    position: relative;
 }
 
 .question-area h2 {
@@ -425,24 +426,35 @@ body {
     margin-bottom: 10px;
 }
 
+.hint-question-mark {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hint-question-mark:hover {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #4A90E2;
+    transform: scale(1.1);
+}
+
 .interaction-area {
     margin-bottom: 30px;
 }
 
-.bottom-bar {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 800px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background: white;
-    border-top: 1px solid #dee2e6;
-}
 
 /* Input styles */
 .math-input {

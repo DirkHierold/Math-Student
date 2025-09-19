@@ -168,27 +168,20 @@
           "id": "B1L1T05",
           "block": 1,
           "difficulty": 1,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Paare - Einfache Terme.",
-            "pairs": [
-              {
-                "termA": "5x + 2x",
-                "termB": "7x"
-              },
-              {
-                "termA": "9b - 4b",
-                "termB": "5b"
-              },
-              {
-                "termA": "3c + c",
-                "termB": "4c"
-              }
+            "question": "Vereinfache: 5x + 2x",
+            "correctSolution": "7x",
+            "options": [
+              "7x",
+              "8x",
+              "6x",
+              "10x"
             ]
           },
           "hints": [
             "Sammle gleiche Variablen",
-            "Vergiss nicht: c = 1c"
+            "5x + 2x = (5+2)x"
           ]
         },
         {
@@ -583,27 +576,20 @@
           "id": "B2L2T02",
           "block": 2,
           "difficulty": 2,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Paare.",
-            "pairs": [
-              {
-                "termA": "2(x + 3)",
-                "termB": "2x + 6"
-              },
-              {
-                "termA": "3(2y - 1)",
-                "termB": "6y - 3"
-              },
-              {
-                "termA": "-1(a + b)",
-                "termB": "-a - b"
-              }
+            "question": "Multipliziere aus: 2(x + 3)",
+            "correctSolution": "2x + 6",
+            "options": [
+              "2x + 6",
+              "2x + 3",
+              "5x",
+              "6x"
             ]
           },
           "hints": [
             "Multipliziere jeden Term in der Klammer",
-            "Achte auf die Vorzeichen"
+            "2 · x = 2x und 2 · 3 = 6"
           ]
         },
         {
@@ -650,27 +636,20 @@
           "id": "B2L1T04",
           "block": 2,
           "difficulty": 1,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Paare - Ausmultiplizieren.",
-            "pairs": [
-              {
-                "termA": "4(x + 1)",
-                "termB": "4x + 4"
-              },
-              {
-                "termA": "-3(a - 2)",
-                "termB": "-3a + 6"
-              },
-              {
-                "termA": "2(3b + 5)",
-                "termB": "6b + 10"
-              }
+            "question": "Multipliziere aus: 4(x + 1)",
+            "correctSolution": "4x + 4",
+            "options": [
+              "4x + 4",
+              "4x + 1",
+              "5x",
+              "8x"
             ]
           },
           "hints": [
             "Multipliziere jeden Term in der Klammer",
-            "Achte auf die Vorzeichen"
+            "4 · x = 4x und 4 · 1 = 4"
           ]
         },
         {
@@ -817,27 +796,20 @@
           "id": "B2L3T05",
           "block": 2,
           "difficulty": 3,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Paare - Komplexere Multiplikation.",
-            "pairs": [
-              {
-                "termA": "(x + 1)(x - 1)",
-                "termB": "x² - 1"
-              },
-              {
-                "termA": "(2a + 3)(a + 1)",
-                "termB": "2a² + 5a + 3"
-              },
-              {
-                "termA": "(3y - 2)(y + 4)",
-                "termB": "3y² + 10y - 8"
-              }
+            "question": "Multipliziere aus: (x + 1)(x - 1)",
+            "correctSolution": "x² - 1",
+            "options": [
+              "x² - 1",
+              "x² + 1",
+              "2x",
+              "0"
             ]
           },
           "hints": [
-            "Verwende FOIL",
-            "First, Outer, Inner, Last"
+            "Verwende FOIL oder erkenne die dritte binomische Formel",
+            "(a + b)(a - b) = a² - b²"
           ]
         },
         {
@@ -1070,27 +1042,20 @@
           "id": "B3L1T02",
           "block": 3,
           "difficulty": 1,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Paare - Binomische Formeln.",
-            "pairs": [
-              {
-                "termA": "(a + b)²",
-                "termB": "a² + 2ab + b²"
-              },
-              {
-                "termA": "(a - b)²",
-                "termB": "a² - 2ab + b²"
-              },
-              {
-                "termA": "(a + b)(a - b)",
-                "termB": "a² - b²"
-              }
+            "question": "Welche Formel entspricht (a + b)²?",
+            "correctSolution": "a² + 2ab + b²",
+            "options": [
+              "a² + 2ab + b²",
+              "a² - 2ab + b²",
+              "a² - b²",
+              "a² + b²"
             ]
           },
           "hints": [
-            "Lerne die drei binomischen Formeln auswendig",
-            "Erste, zweite und dritte binomische Formel"
+            "Das ist die erste binomische Formel",
+            "(a + b)² = (a + b)(a + b)"
           ]
         },
         {
@@ -1237,27 +1202,20 @@
           "id": "B3L2T04",
           "block": 3,
           "difficulty": 2,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Paare - Binomische Formeln anwenden.",
-            "pairs": [
-              {
-                "termA": "(x - 4)²",
-                "termB": "x² - 8x + 16"
-              },
-              {
-                "termA": "(2y + 1)²",
-                "termB": "4y² + 4y + 1"
-              },
-              {
-                "termA": "(a + 3)(a - 3)",
-                "termB": "a² - 9"
-              }
+            "question": "Wende die binomische Formel an: (x - 4)²",
+            "correctSolution": "x² - 8x + 16",
+            "options": [
+              "x² - 8x + 16",
+              "x² + 8x + 16",
+              "x² - 16",
+              "x² + 16"
             ]
           },
           "hints": [
-            "Erkenne welche Formel zu verwenden ist",
-            "Setze die Werte korrekt ein"
+            "Verwende die zweite binomische Formel: (a - b)²",
+            "a = x, b = 4"
           ]
         },
         {
@@ -1630,27 +1588,20 @@
           "id": "B4L2T02",
           "block": 4,
           "difficulty": 2,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Faktorisierungen.",
-            "pairs": [
-              {
-                "termA": "x² - 9",
-                "termB": "(x + 3)(x - 3)"
-              },
-              {
-                "termA": "4a² - 1",
-                "termB": "(2a + 1)(2a - 1)"
-              },
-              {
-                "termA": "y² - 25",
-                "termB": "(y + 5)(y - 5)"
-              }
+            "question": "Faktorisiere: x² - 9",
+            "correctSolution": "(x + 3)(x - 3)",
+            "options": [
+              "(x + 3)(x - 3)",
+              "(x - 3)²",
+              "(x + 3)²",
+              "x(x - 9)"
             ]
           },
           "hints": [
             "Erkenne die Differenz von Quadraten",
-            "a² - b² = (a + b)(a - b)"
+            "x² - 9 = x² - 3², also a² - b² = (a + b)(a - b)"
           ]
         },
         {
@@ -1697,27 +1648,20 @@
           "id": "B4L1T04",
           "block": 4,
           "difficulty": 1,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Faktorisierungen - Gemeinsame Faktoren.",
-            "pairs": [
-              {
-                "termA": "3x + 6",
-                "termB": "3(x + 2)"
-              },
-              {
-                "termA": "2y² + 4y",
-                "termB": "2y(y + 2)"
-              },
-              {
-                "termA": "5a - 10",
-                "termB": "5(a - 2)"
-              }
+            "question": "Faktorisiere: 3x + 6",
+            "correctSolution": "3(x + 2)",
+            "options": [
+              "3(x + 2)",
+              "x(3 + 6)",
+              "3x + 2",
+              "(3x)(6)"
             ]
           },
           "hints": [
             "Suche den größten gemeinsamen Teiler",
-            "Klammere ihn aus"
+            "3 ist der gemeinsame Faktor von 3x und 6"
           ]
         },
         {
@@ -1844,27 +1788,20 @@
           "id": "B4L3T04",
           "block": 4,
           "difficulty": 3,
-          "taskType": "assignment_memory",
+          "taskType": "multiple_choice",
           "data": {
-            "question": "Finde die passenden Faktorisierungen - Vollständige Quadrate.",
-            "pairs": [
-              {
-                "termA": "a² + 10a + 25",
-                "termB": "(a + 5)²"
-              },
-              {
-                "termA": "4x² - 4x + 1",
-                "termB": "(2x - 1)²"
-              },
-              {
-                "termA": "9b² + 6b + 1",
-                "termB": "(3b + 1)²"
-              }
+            "question": "Faktorisiere: a² + 10a + 25",
+            "correctSolution": "(a + 5)²",
+            "options": [
+              "(a + 5)²",
+              "(a + 5)(a - 5)",
+              "a(a + 10 + 25)",
+              "(a² + 5)²"
             ]
           },
           "hints": [
-            "Erkenne binomische Formeln rückwärts",
-            "a² ± 2ab + b² = (a ± b)²"
+            "Erkenne die erste binomische Formel rückwärts",
+            "a² + 10a + 25 = a² + 2·5a + 5² = (a + 5)²"
           ]
         },
         {
