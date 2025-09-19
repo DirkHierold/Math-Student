@@ -4,7 +4,7 @@ Hier ist die überarbeitete, finale Version. Alle Referenzen wurden entfernt und
 
 ---
 
-# Software-Design-Dokument: Lernplattform "Term-Held" (Version 5.0 - Finale, Standalone-Spezifikation)
+# Software-Design-Dokument: Lernplattform "Math-Student" (Version 5.0 - Finale, Standalone-Spezifikation)
 
 ## 1. Einleitung
 
@@ -38,7 +38,7 @@ Dieser Abschnitt beschreibt den Aufbau der zentralen Ansichten als Vorlage für 
 ### 3.1 Hauptübersicht (Dashboard)
 *   **Layout:** Vertikale, scrollbare Liste.
 *   **Komponenten:**
-    *   **Header:** Titel "Term-Held". Oben rechts ein Icon (z.B. Zahnrad) für die Einstellungsseite.
+    *   **Header:** Titel "Math-Student". Oben rechts ein Icon (z.B. Zahnrad) für die Einstellungsseite.
     *   **Profil-Bereich:** Zeigt gesammelte Abzeichen (Icons) und einen kurzen Statustext (z.B. "3 von 5 Abzeichen gesammelt").
     *   **Themenblock-Liste:** Untereinander angeordnete "Karten" für jeden Themenblock.
         *   **Jede Karte enthält:**

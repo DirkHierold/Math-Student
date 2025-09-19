@@ -1,7 +1,7 @@
-// Term-Held Mathematics Learning Platform
+// Math-Student Mathematics Learning Platform
 // Version 5.0.0 - Client-side implementation
 
-class TermHeldApp {
+class MathStudentApp {
     constructor() {
         this.version = "5.0.0";
         this.currentView = "dashboard";
@@ -39,7 +39,7 @@ class TermHeldApp {
 
     // Initialize LocalStorage with default data
     initializeStorage() {
-        let stored = localStorage.getItem('termHeldData');
+        let stored = localStorage.getItem('mathStudentData');
         
         if (!stored) {
             // Create initial data structure
@@ -69,7 +69,7 @@ class TermHeldApp {
             if (!this.isCompatibleVersion(this.data.version)) {
                 this.showFeedback('Import fehlgeschlagen: Dieser Speicherstand stammt von einer inkompatiblen Programmversion und kann nicht geladen werden.', 'error');
                 // Reset to initial data
-                localStorage.removeItem('termHeldData');
+                localStorage.removeItem('mathStudentData');
                 this.initializeStorage();
                 return;
             }
@@ -153,7 +153,7 @@ class TermHeldApp {
         }
         
         data.lastSession = new Date().toISOString();
-        localStorage.setItem('termHeldData', JSON.stringify(data));
+        localStorage.setItem('mathStudentData', JSON.stringify(data));
         this.data = data;
     }
 
@@ -1052,7 +1052,7 @@ class TermHeldApp {
     resetProgress() {
         if (confirm('Bist du sicher, dass du deinen gesamten Fortschritt löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')) {
             // Clear localStorage
-            localStorage.removeItem('termHeldData');
+            localStorage.removeItem('mathStudentData');
             
             // Reinitialize app data
             this.initializeStorage();
@@ -1097,6 +1097,6 @@ class TermHeldApp {
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new TermHeldApp();
-    window.termHeldApp = window.app; // Keep backward compatibility
+    window.app = new MathStudentApp();
+    window.mathStudentApp = window.app;
 });
