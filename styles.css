@@ -851,6 +851,18 @@ body {
     border: 1px solid #f5c6cb;
 }
 
+/* Session summary - neutral styling for better star visibility */
+.session-summary {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    text-align: center;
+    font-weight: 600;
+    background: #f8f9fa;
+    color: #333;
+    border: 1px solid #dee2e6;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     .topic-block {

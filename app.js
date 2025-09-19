@@ -387,8 +387,14 @@ class MathStudentApp {
         const questionArea = document.getElementById('question-area');
         const interactionArea = document.getElementById('interaction-area');
 
+        // Ensure question area is visible when rendering a task
+        questionArea.style.display = 'block';
+
+        // Use instruction if available, otherwise default to "Vereinfache!"
+        const instruction = task.data.instruction || "Vereinfache!";
+
         questionArea.innerHTML = `
-            <h2>Vereinfache! <button id="hint-btn" class="hint-question-mark">?</button></h2>
+            <h2>${instruction} <button id="hint-btn" class="hint-question-mark">?</button></h2>
             <h3>${task.data.question}</h3>
         `;
 
@@ -540,7 +546,11 @@ class MathStudentApp {
         container.innerHTML = '';
         const nextBtn = document.createElement('button');
         nextBtn.className = 'primary-btn';
-        nextBtn.textContent = 'Nächste Aufgabe';
+
+        // Check if this is the last task in the session
+        const isLastTask = (this.currentSession.currentIndex + 1) >= this.currentSession.tasks.length;
+        nextBtn.textContent = isLastTask ? 'Auswertung' : 'Nächste Aufgabe';
+
         nextBtn.onclick = () => this.nextTask();
         container.appendChild(nextBtn);
     }
@@ -598,7 +608,11 @@ class MathStudentApp {
 
     // Show session summary
     showSessionSummary() {
+        const questionArea = document.getElementById('question-area');
         const interactionArea = document.getElementById('interaction-area');
+
+        // Hide the last task question when showing completion screen
+        questionArea.style.display = 'none';
 
         const totalTasks = this.currentSession.tasks.length;
         const correctCount = this.currentSession.correctCount;
@@ -636,7 +650,7 @@ class MathStudentApp {
         }
 
         const summaryDiv = document.createElement('div');
-        summaryDiv.className = 'feedback success';
+        summaryDiv.className = 'session-summary';
         summaryDiv.innerHTML = `
             <h3>Session abgeschlossen!</h3>
             <p>${summaryMessage}</p>
