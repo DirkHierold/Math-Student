@@ -439,6 +439,9 @@ class MathStudentApp {
             case 'solve_expression':
                 this.renderSolveExpression(task, container);
                 break;
+            case 'multiple_choice':
+                this.renderMultipleChoice(task, container);
+                break;
             case 'drag_and_drop':
                 this.renderDragAndDrop(task, container);
                 break;
@@ -471,6 +474,122 @@ class MathStudentApp {
         
         container.appendChild(input);
         input.focus();
+    }
+
+    // Render multiple choice task
+    renderMultipleChoice(task, container) {
+        // Store the current options and state
+        this.currentMultipleChoiceState = {
+            correctSolution: task.data.correctSolution,
+            currentOptionIndex: 0,
+            shuffledOptions: [...task.data.options].sort(() => Math.random() - 0.5),
+            isAnswered: false
+        };
+
+        // Create solution display area
+        const solutionArea = document.createElement('div');
+        solutionArea.className = 'multiple-choice-solution';
+
+        // Show current option
+        this.showNextOption(solutionArea);
+
+        container.appendChild(solutionArea);
+
+        // Create button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'multiple-choice-buttons';
+
+        // Wrong answer button (red X)
+        const wrongBtn = document.createElement('button');
+        wrongBtn.className = 'choice-btn wrong-btn';
+        wrongBtn.innerHTML = '❌';
+        wrongBtn.onclick = () => this.handleMultipleChoiceAnswer(false, solutionArea, buttonContainer);
+
+        // Correct answer button (green checkmark)
+        const correctBtn = document.createElement('button');
+        correctBtn.className = 'choice-btn correct-btn';
+        correctBtn.innerHTML = '✅';
+        correctBtn.onclick = () => this.handleMultipleChoiceAnswer(true, solutionArea, buttonContainer);
+
+        buttonContainer.appendChild(wrongBtn);
+        buttonContainer.appendChild(correctBtn);
+        container.appendChild(buttonContainer);
+    }
+
+    // Show next option in multiple choice
+    showNextOption(solutionArea) {
+        const state = this.currentMultipleChoiceState;
+        if (state.currentOptionIndex < state.shuffledOptions.length) {
+            const currentOption = state.shuffledOptions[state.currentOptionIndex];
+            solutionArea.innerHTML = `<div class="option-display">${currentOption}</div>`;
+        }
+    }
+
+    // Handle multiple choice answer
+    handleMultipleChoiceAnswer(userSaysCorrect, solutionArea, buttonContainer) {
+        const state = this.currentMultipleChoiceState;
+        if (state.isAnswered) return;
+
+        const currentOption = state.shuffledOptions[state.currentOptionIndex];
+        const isActuallyCorrect = currentOption === state.correctSolution;
+
+        if (userSaysCorrect) {
+            // User thinks this solution is correct
+            if (isActuallyCorrect) {
+                // User is right - this IS the correct solution
+                state.isAnswered = true;
+                solutionArea.innerHTML = `<div class="option-display correct">${currentOption}</div>`;
+                this.showNextTaskButton(buttonContainer);
+                this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], true, currentOption);
+            } else {
+                // User is wrong - this is NOT the correct solution
+                state.isAnswered = true;
+                solutionArea.innerHTML = `<div class="option-display incorrect with-feedback">
+                    <div class="solution-text">${currentOption}</div>
+                    <small>Das war falsch. Richtig wäre: ${state.correctSolution}</small>
+                </div>`;
+                this.showNextTaskButton(buttonContainer);
+                this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, currentOption);
+            }
+        } else {
+            // User thinks this solution is wrong
+            if (isActuallyCorrect) {
+                // User is wrong - this IS the correct solution but they rejected it
+                state.isAnswered = true;
+                solutionArea.innerHTML = `<div class="option-display incorrect with-feedback">
+                    <div class="solution-text">${currentOption}</div>
+                    <small>Das wäre richtig gewesen!</small>
+                </div>`;
+                this.showNextTaskButton(buttonContainer);
+                this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, currentOption);
+            } else {
+                // User is right - this is NOT the correct solution, show next option
+                state.currentOptionIndex++;
+                if (state.currentOptionIndex < state.shuffledOptions.length) {
+                    // Show next option
+                    this.showNextOption(solutionArea);
+                } else {
+                    // All options exhausted, show correct answer
+                    state.isAnswered = true;
+                    solutionArea.innerHTML = `<div class="option-display correct with-feedback">
+                        <div class="solution-text">${state.correctSolution}</div>
+                        <small>Das ist die richtige Lösung</small>
+                    </div>`;
+                    this.showNextTaskButton(buttonContainer);
+                    this.processAnswer(this.currentSession.tasks[this.currentSession.currentIndex], false, state.correctSolution);
+                }
+            }
+        }
+    }
+
+    // Show next task button
+    showNextTaskButton(container) {
+        container.innerHTML = '';
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'primary-btn';
+        nextBtn.textContent = 'Nächste Aufgabe';
+        nextBtn.onclick = () => this.nextTask();
+        container.appendChild(nextBtn);
     }
 
     // Render drag and drop task
@@ -846,15 +965,20 @@ class MathStudentApp {
 
     // Show task-specific feedback
     showTaskFeedback(task, isCorrect, container) {
+        // Skip feedback for multiple_choice tasks - they handle feedback in the solution area
+        if (task.taskType === 'multiple_choice') {
+            return;
+        }
+
         const feedback = document.createElement('div');
         feedback.className = `feedback ${isCorrect ? 'success' : 'error'}`;
-        
+
         if (isCorrect) {
             const encouragements = ['Richtig!', 'Super!', 'Gut gemacht!', 'Perfekt!', 'Klasse!'];
             feedback.textContent = encouragements[Math.floor(Math.random() * encouragements.length)];
         } else {
             feedback.textContent = 'Das ist noch nicht richtig.';
-            
+
             // Show error explanation for find_the_error tasks
             if (task.taskType === 'find_the_error' && task.data.errorExplanation) {
                 feedback.innerHTML += '<br><br>' + task.data.errorExplanation;
@@ -862,7 +986,7 @@ class MathStudentApp {
                 feedback.innerHTML += '<br>Die richtige Antwort ist: ' + task.data.solution;
             }
         }
-        
+
         container.appendChild(feedback);
     }
 

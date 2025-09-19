@@ -8,89 +8,161 @@
           "id": "B1L1T01",
           "block": 1,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 3x + 2x",
-            "solution": "5x"
+            "correctSolution": "5x",
+            "options": [
+              "5x",
+              "6x",
+              "5x²",
+              "3x + 2x"
+            ]
           },
-          "hints": ["Sammle die gleichen Variablen", "3x + 2x = (3+2)x"]
+          "hints": [
+            "Sammle die gleichen Variablen",
+            "3x + 2x = (3+2)x"
+          ]
         },
         {
           "id": "B1L1T02",
           "block": 1,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 7a - 3a",
-            "solution": "4a"
+            "correctSolution": "4a",
+            "options": [
+              "4a",
+              "10a",
+              "4a²",
+              "7a - 3a"
+            ]
           },
-          "hints": ["Subtrahiere die Koeffizienten", "7a - 3a = (7-3)a"]
+          "hints": [
+            "Subtrahiere die Koeffizienten",
+            "7a - 3a = (7-3)a"
+          ]
         },
         {
           "id": "B1L2T01",
           "block": 1,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 4x + 3y - 2x + y",
-            "solution": "2x + 4y"
+            "correctSolution": "2x + 4y",
+            "options": [
+              "2x + 4y",
+              "6x + 4y",
+              "2x + 3y",
+              "4x + 3y - 2x + y"
+            ]
           },
-          "hints": ["Sammle x-Terme und y-Terme getrennt", "4x - 2x = 2x und 3y + y = 4y"]
+          "hints": [
+            "Sammle x-Terme und y-Terme getrennt",
+            "4x - 2x = 2x und 3y + y = 4y"
+          ]
         },
         {
           "id": "B1L2T02",
           "block": 1,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 5a + 3b - 2a + b",
-            "solution": "3a + 4b"
+            "correctSolution": "3a + 4b",
+            "options": [
+              "3a + 4b",
+              "4a",
+              "2a",
+              "6a"
+            ]
           },
-          "hints": ["Sammle erst alle a-Terme", "Dann alle b-Terme"]
+          "hints": [
+            "Sammle erst alle a-Terme",
+            "Dann alle b-Terme"
+          ]
         },
         {
           "id": "B1L3T01",
           "block": 1,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 2(3x + 1) - 4x",
-            "solution": "2x + 2"
+            "correctSolution": "2x + 2",
+            "options": [
+              "2x + 2",
+              "3x",
+              "1x",
+              "4x"
+            ]
           },
-          "hints": ["Multipliziere zuerst die Klammer aus", "2(3x + 1) = 6x + 2"]
+          "hints": [
+            "Multipliziere zuerst die Klammer aus",
+            "2(3x + 1) = 6x + 2"
+          ]
         },
         {
           "id": "B1L4T01",
           "block": 1,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 3(2x - 1) + 2(x + 3) - 5x",
-            "solution": "3x + 3"
+            "correctSolution": "3x + 3",
+            "options": [
+              "3x + 3",
+              "4x",
+              "2x",
+              "6x"
+            ]
           },
-          "hints": ["Multipliziere beide Klammern aus", "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"]
+          "hints": [
+            "Multipliziere beide Klammern aus",
+            "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"
+          ]
         },
         {
           "id": "B1L1T03",
           "block": 1,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 8y - 5y",
-            "solution": "3y"
+            "correctSolution": "3y",
+            "options": [
+              "3y",
+              "4y",
+              "2y",
+              "6y"
+            ]
           },
-          "hints": ["Subtrahiere die Koeffizienten", "8y - 5y = (8-5)y"]
+          "hints": [
+            "Subtrahiere die Koeffizienten",
+            "8y - 5y = (8-5)y"
+          ]
         },
         {
           "id": "B1L1T04",
           "block": 1,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 2a + 3a + a",
-            "solution": "6a"
+            "correctSolution": "6a",
+            "options": [
+              "6a",
+              "7a",
+              "5a",
+              "12a"
+            ]
           },
-          "hints": ["Addiere alle Koeffizienten", "2a + 3a + a = 2a + 3a + 1a = 6a"]
+          "hints": [
+            "Addiere alle Koeffizienten",
+            "2a + 3a + a = 2a + 3a + 1a = 6a"
+          ]
         },
         {
           "id": "B1L1T05",
@@ -100,188 +172,346 @@
           "data": {
             "question": "Finde die passenden Paare - Einfache Terme.",
             "pairs": [
-              { "termA": "5x + 2x", "termB": "7x" },
-              { "termA": "9b - 4b", "termB": "5b" },
-              { "termA": "3c + c", "termB": "4c" }
+              {
+                "termA": "5x + 2x",
+                "termB": "7x"
+              },
+              {
+                "termA": "9b - 4b",
+                "termB": "5b"
+              },
+              {
+                "termA": "3c + c",
+                "termB": "4c"
+              }
             ]
           },
-          "hints": ["Sammle gleiche Variablen", "Vergiss nicht: c = 1c"]
+          "hints": [
+            "Sammle gleiche Variablen",
+            "Vergiss nicht: c = 1c"
+          ]
         },
         {
           "id": "B1L2T03",
           "block": 1,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 6x - 2y + 3x - y",
-            "solution": "9x - 3y"
+            "correctSolution": "9x - 3y",
+            "options": [
+              "9x - 3y",
+              "10x",
+              "8x",
+              "18x"
+            ]
           },
-          "hints": ["Sammle x-Terme: 6x + 3x", "Sammle y-Terme: -2y - y"]
+          "hints": [
+            "Sammle x-Terme: 6x + 3x",
+            "Sammle y-Terme: -2y - y"
+          ]
         },
         {
           "id": "B1L2T04",
           "block": 1,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: a + 3b - 2a + 5b",
-            "solution": "-a + 8b"
+            "correctSolution": "-a + 8b",
+            "options": [
+              "-a + 8b",
+              "0a",
+              "-2a",
+              "1a"
+            ]
           },
-          "hints": ["a - 2a = -a", "3b + 5b = 8b"]
+          "hints": [
+            "a - 2a = -a",
+            "3b + 5b = 8b"
+          ]
         },
         {
           "id": "B1L2T05",
           "block": 1,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 8m - 3m + 2n + 5n",
-            "solution": "5m + 7n"
+            "correctSolution": "5m + 7n",
+            "options": [
+              "5m + 7n",
+              "6m",
+              "4m",
+              "10m"
+            ]
           },
-          "hints": ["Sammle m-Terme: 8m - 3m", "Sammle n-Terme: 2n + 5n"]
+          "hints": [
+            "Sammle m-Terme: 8m - 3m",
+            "Sammle n-Terme: 2n + 5n"
+          ]
         },
         {
           "id": "B1L3T02",
           "block": 1,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 4(x - 2) + 3x",
-            "solution": "7x - 8"
+            "correctSolution": "7x - 8",
+            "options": [
+              "7x - 8",
+              "8x",
+              "6x",
+              "14x"
+            ]
           },
-          "hints": ["4(x - 2) = 4x - 8", "Dann addiere 3x"]
+          "hints": [
+            "4(x - 2) = 4x - 8",
+            "Dann addiere 3x"
+          ]
         },
         {
           "id": "B1L3T03",
           "block": 1,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: -3(2a + 1) + 5a",
-            "solution": "-a - 3"
+            "correctSolution": "-a - 3",
+            "options": [
+              "-a - 3",
+              "0a",
+              "-2a",
+              "1a"
+            ]
           },
-          "hints": ["-3(2a + 1) = -6a - 3", "-6a + 5a = -a"]
+          "hints": [
+            "-3(2a + 1) = -6a - 3",
+            "-6a + 5a = -a"
+          ]
         },
         {
           "id": "B1L3T04",
           "block": 1,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 2(3x - 1) + 4x - 3",
-            "solution": "10x - 5"
+            "correctSolution": "10x - 5",
+            "options": [
+              "10x - 5",
+              "11x",
+              "9x",
+              "20x"
+            ]
           },
-          "hints": ["Multipliziere zuerst aus: 2(3x - 1) = 6x - 2", "Sammle dann ähnliche Terme: 6x + 4x = 10x und -2 - 3 = -5"]
+          "hints": [
+            "Multipliziere zuerst aus: 2(3x - 1) = 6x - 2",
+            "Sammle dann ähnliche Terme: 6x + 4x = 10x und -2 - 3 = -5"
+          ]
         },
         {
           "id": "B1L3T05",
           "block": 1,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 5(y + 2) - 2(y - 1)",
-            "solution": "3y + 12"
+            "correctSolution": "3y + 12",
+            "options": [
+              "3y + 12",
+              "4y",
+              "2y",
+              "6y"
+            ]
           },
-          "hints": ["5(y + 2) = 5y + 10", "-2(y - 1) = -2y + 2"]
+          "hints": [
+            "5(y + 2) = 5y + 10",
+            "-2(y - 1) = -2y + 2"
+          ]
         },
         {
           "id": "B1L4T02",
           "block": 1,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 2(3x + 1) - 3(x - 2)",
-            "solution": "3x + 8"
+            "correctSolution": "3x + 8",
+            "options": [
+              "3x + 8",
+              "4x",
+              "2x",
+              "6x"
+            ]
           },
-          "hints": ["2(3x + 1) = 6x + 2", "-3(x - 2) = -3x + 6"]
+          "hints": [
+            "2(3x + 1) = 6x + 2",
+            "-3(x - 2) = -3x + 6"
+          ]
         },
         {
           "id": "B1L4T03",
           "block": 1,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 4(2a - 3) + 3(a + 1) - 5a",
-            "solution": "6a - 9"
+            "correctSolution": "6a - 9",
+            "options": [
+              "6a - 9",
+              "7a",
+              "5a",
+              "12a"
+            ]
           },
-          "hints": ["Multipliziere alle Klammern aus", "4(2a - 3) = 8a - 12, 3(a + 1) = 3a + 3"]
+          "hints": [
+            "Multipliziere alle Klammern aus",
+            "4(2a - 3) = 8a - 12, 3(a + 1) = 3a + 3"
+          ]
         },
         {
           "id": "B1L4T04",
           "block": 1,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: -2(3x - 4) + 5(x + 1) - 3x",
-            "solution": "-8"
+            "correctSolution": "-8",
+            "options": [
+              "-8",
+              "-7x",
+              "-9x",
+              "-16x"
+            ]
           },
-          "hints": ["-2(3x - 4) = -6x + 8", "5(x + 1) = 5x + 5"]
+          "hints": [
+            "-2(3x - 4) = -6x + 8",
+            "5(x + 1) = 5x + 5"
+          ]
         },
         {
           "id": "B1L4T05",
           "block": 1,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: -3(x + 2) + 2(2x - 1) + x",
-            "solution": "2x - 8"
+            "correctSolution": "2x - 8",
+            "options": [
+              "2x - 8",
+              "3x",
+              "1x",
+              "4x"
+            ]
           },
-          "hints": ["-3(x + 2) = -3x - 6", "2(2x - 1) = 4x - 2"]
+          "hints": [
+            "-3(x + 2) = -3x - 6",
+            "2(2x - 1) = 4x - 2"
+          ]
         },
         {
           "id": "B1L5T01",
           "block": 1,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 3(2x - 1) - 2(x + 3) + 4",
-            "solution": "4x - 5"
+            "correctSolution": "4x - 5",
+            "options": [
+              "4x - 5",
+              "5x",
+              "3x",
+              "8x"
+            ]
           },
-          "hints": ["Multipliziere beide Klammern aus", "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"]
+          "hints": [
+            "Multipliziere beide Klammern aus",
+            "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"
+          ]
         },
         {
           "id": "B1L5T02",
           "block": 1,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 4(3a - 2) - 2(2a + 1) - 3(a - 4)",
-            "solution": "5a + 2"
+            "correctSolution": "5a + 2",
+            "options": [
+              "5a + 2",
+              "6a",
+              "4a",
+              "10a"
+            ]
           },
-          "hints": ["Multipliziere alle drei Klammern aus", "4(3a - 2) = 12a - 8"]
+          "hints": [
+            "Multipliziere alle drei Klammern aus",
+            "4(3a - 2) = 12a - 8"
+          ]
         },
         {
           "id": "B1L5T03",
           "block": 1,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 2(x + 3) - 3(2x - 1) + 4(x - 2)",
-            "solution": "3x + 1"
+            "correctSolution": "3x + 1",
+            "options": [
+              "3x + 1",
+              "4x",
+              "2x",
+              "6x"
+            ]
           },
-          "hints": ["2(x + 3) = 2x + 6", "-3(2x - 1) = -6x + 3", "4(x - 2) = 4x - 8"]
+          "hints": [
+            "2(x + 3) = 2x + 6",
+            "-3(2x - 1) = -6x + 3",
+            "4(x - 2) = 4x - 8"
+          ]
         },
         {
           "id": "B1L5T04",
           "block": 1,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 4(3x - 2) - 2(2x + 3) + 3(x - 1) - 5x",
-            "solution": "5x - 17"
+            "correctSolution": "5x - 17",
+            "options": [
+              "5x - 17",
+              "6x",
+              "4x",
+              "10x"
+            ]
           },
-          "hints": ["Multipliziere alle Klammern aus", "4(3x - 2) = 12x - 8"]
+          "hints": [
+            "Multipliziere alle Klammern aus",
+            "4(3x - 2) = 12x - 8"
+          ]
         },
         {
           "id": "B1L5T05",
           "block": 1,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: -2(3y - 4) + 5(y + 1) - 3(2y - 3)",
-            "solution": "-7y + 22"
+            "correctSolution": "-7y + 22",
+            "options": [
+              "-7y + 22",
+              "-6y",
+              "-8y",
+              "-14y"
+            ]
           },
-          "hints": ["-2(3y - 4) = -6y + 8", "5(y + 1) = 5y + 5", "-3(2y - 3) = -6y + 9"]
+          "hints": [
+            "-2(3y - 4) = -6y + 8",
+            "5(y + 1) = 5y + 5",
+            "-3(2y - 3) = -6y + 9"
+          ]
         }
       ]
     },
@@ -293,34 +523,61 @@
           "id": "B2L1T01",
           "block": 2,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: 3(x + 2)",
-            "solution": "3x + 6"
+            "correctSolution": "3x + 6",
+            "options": [
+              "3x + 6",
+              "4x",
+              "2x",
+              "6x"
+            ]
           },
-          "hints": ["Multipliziere 3 mit jedem Term in der Klammer", "3 · x = 3x und 3 · 2 = 6"]
+          "hints": [
+            "Multipliziere 3 mit jedem Term in der Klammer",
+            "3 · x = 3x und 3 · 2 = 6"
+          ]
         },
         {
           "id": "B2L1T02",
           "block": 2,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: -2(a - 4)",
-            "solution": "-2a + 8"
+            "correctSolution": "-2a + 8",
+            "options": [
+              "-2a + 8",
+              "-1a",
+              "-3a",
+              "-4a"
+            ]
           },
-          "hints": ["Achte auf die Vorzeichen", "-2 · a = -2a und -2 · (-4) = +8"]
+          "hints": [
+            "Achte auf die Vorzeichen",
+            "-2 · a = -2a und -2 · (-4) = +8"
+          ]
         },
         {
           "id": "B2L2T01",
           "block": 2,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (x + 3)(x + 2)",
-            "solution": "x² + 5x + 6"
+            "correctSolution": "x² + 5x + 6",
+            "options": [
+              "x² + 5x + 6",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["Verwende die FOIL-Methode", "First, Outer, Inner, Last"]
+          "hints": [
+            "Verwende die FOIL-Methode",
+            "First, Outer, Inner, Last"
+          ]
         },
         {
           "id": "B2L2T02",
@@ -330,34 +587,64 @@
           "data": {
             "question": "Finde die passenden Paare.",
             "pairs": [
-              { "termA": "2(x + 3)", "termB": "2x + 6" },
-              { "termA": "3(2y - 1)", "termB": "6y - 3" },
-              { "termA": "-1(a + b)", "termB": "-a - b" }
+              {
+                "termA": "2(x + 3)",
+                "termB": "2x + 6"
+              },
+              {
+                "termA": "3(2y - 1)",
+                "termB": "6y - 3"
+              },
+              {
+                "termA": "-1(a + b)",
+                "termB": "-a - b"
+              }
             ]
           },
-          "hints": ["Multipliziere jeden Term in der Klammer", "Achte auf die Vorzeichen"]
+          "hints": [
+            "Multipliziere jeden Term in der Klammer",
+            "Achte auf die Vorzeichen"
+          ]
         },
         {
           "id": "B2L3T01",
           "block": 2,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (2x - 1)(x + 3)",
-            "solution": "2x² + 5x - 3"
+            "correctSolution": "2x² + 5x - 3",
+            "options": [
+              "2x² + 5x - 3",
+              "3x",
+              "1x",
+              "4x"
+            ]
           },
-          "hints": ["2x · x = 2x²", "2x · 3 = 6x, -1 · x = -x, -1 · 3 = -3"]
+          "hints": [
+            "2x · x = 2x²",
+            "2x · 3 = 6x, -1 · x = -x, -1 · 3 = -3"
+          ]
         },
         {
           "id": "B2L1T03",
           "block": 2,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: 5(y - 3)",
-            "solution": "5y - 15"
+            "correctSolution": "5y - 15",
+            "options": [
+              "5y - 15",
+              "6y",
+              "4y",
+              "10y"
+            ]
           },
-          "hints": ["5 · y = 5y", "5 · (-3) = -15"]
+          "hints": [
+            "5 · y = 5y",
+            "5 · (-3) = -15"
+          ]
         },
         {
           "id": "B2L1T04",
@@ -367,89 +654,164 @@
           "data": {
             "question": "Finde die passenden Paare - Ausmultiplizieren.",
             "pairs": [
-              { "termA": "4(x + 1)", "termB": "4x + 4" },
-              { "termA": "-3(a - 2)", "termB": "-3a + 6" },
-              { "termA": "2(3b + 5)", "termB": "6b + 10" }
+              {
+                "termA": "4(x + 1)",
+                "termB": "4x + 4"
+              },
+              {
+                "termA": "-3(a - 2)",
+                "termB": "-3a + 6"
+              },
+              {
+                "termA": "2(3b + 5)",
+                "termB": "6b + 10"
+              }
             ]
           },
-          "hints": ["Multipliziere jeden Term in der Klammer", "Achte auf die Vorzeichen"]
+          "hints": [
+            "Multipliziere jeden Term in der Klammer",
+            "Achte auf die Vorzeichen"
+          ]
         },
         {
           "id": "B2L1T05",
           "block": 2,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: 6(2x - 1)",
-            "solution": "12x - 6"
+            "correctSolution": "12x - 6",
+            "options": [
+              "12x - 6",
+              "13x",
+              "11x",
+              "24x"
+            ]
           },
-          "hints": ["6 · 2x = 12x", "6 · (-1) = -6"]
+          "hints": [
+            "6 · 2x = 12x",
+            "6 · (-1) = -6"
+          ]
         },
         {
           "id": "B2L2T03",
           "block": 2,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (a - 1)(a + 4)",
-            "solution": "a² + 3a - 4"
+            "correctSolution": "a² + 3a - 4",
+            "options": [
+              "a² + 3a - 4",
+              "2a",
+              "0a",
+              "-1a"
+            ]
           },
-          "hints": ["a · a = a²", "a · 4 = 4a, (-1) · a = -a, (-1) · 4 = -4"]
+          "hints": [
+            "a · a = a²",
+            "a · 4 = 4a, (-1) · a = -a, (-1) · 4 = -4"
+          ]
         },
         {
           "id": "B2L2T04",
           "block": 2,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (3y + 1)(y - 2)",
-            "solution": "3y² - 5y - 2"
+            "correctSolution": "3y² - 5y - 2",
+            "options": [
+              "3y² - 5y - 2",
+              "4y",
+              "2y",
+              "6y"
+            ]
           },
-          "hints": ["3y · y = 3y²", "3y · (-2) = -6y, 1 · y = y, 1 · (-2) = -2"]
+          "hints": [
+            "3y · y = 3y²",
+            "3y · (-2) = -6y, 1 · y = y, 1 · (-2) = -2"
+          ]
         },
         {
           "id": "B2L2T05",
           "block": 2,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 3(x + 4) - 2x",
-            "solution": "x + 12"
+            "correctSolution": "x + 12",
+            "options": [
+              "x + 12",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["Multipliziere die Klammer aus", "3(x + 4) = 3x + 12"]
+          "hints": [
+            "Multipliziere die Klammer aus",
+            "3(x + 4) = 3x + 12"
+          ]
         },
         {
           "id": "B2L3T02",
           "block": 2,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (x - 3)(2x + 1)",
-            "solution": "2x² - 5x - 3"
+            "correctSolution": "2x² - 5x - 3",
+            "options": [
+              "2x² - 5x - 3",
+              "3x",
+              "1x",
+              "4x"
+            ]
           },
-          "hints": ["x · 2x = 2x²", "x · 1 = x, (-3) · 2x = -6x, (-3) · 1 = -3"]
+          "hints": [
+            "x · 2x = 2x²",
+            "x · 1 = x, (-3) · 2x = -6x, (-3) · 1 = -3"
+          ]
         },
         {
           "id": "B2L3T03",
           "block": 2,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (4a - 3)(a + 2)",
-            "solution": "4a² + 5a - 6"
+            "correctSolution": "4a² + 5a - 6",
+            "options": [
+              "4a² + 5a - 6",
+              "5a",
+              "3a",
+              "8a"
+            ]
           },
-          "hints": ["4a · a = 4a²", "4a · 2 = 8a, (-3) · a = -3a, (-3) · 2 = -6"]
+          "hints": [
+            "4a · a = 4a²",
+            "4a · 2 = 8a, (-3) · a = -3a, (-3) · 2 = -6"
+          ]
         },
         {
           "id": "B2L3T04",
           "block": 2,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (2x + 1)(x - 3)",
-            "solution": "2x² - 5x - 3"
+            "correctSolution": "2x² - 5x - 3",
+            "options": [
+              "2x² - 5x - 3",
+              "3x",
+              "1x",
+              "4x"
+            ]
           },
-          "hints": ["Verwende FOIL: 2x · x = 2x²", "2x · (-3) + 1 · x = -6x + x = -5x, und 1 · (-3) = -3"]
+          "hints": [
+            "Verwende FOIL: 2x · x = 2x²",
+            "2x · (-3) + 1 · x = -6x + x = -5x, und 1 · (-3) = -3"
+          ]
         },
         {
           "id": "B2L3T05",
@@ -459,122 +821,224 @@
           "data": {
             "question": "Finde die passenden Paare - Komplexere Multiplikation.",
             "pairs": [
-              { "termA": "(x + 1)(x - 1)", "termB": "x² - 1" },
-              { "termA": "(2a + 3)(a + 1)", "termB": "2a² + 5a + 3" },
-              { "termA": "(3y - 2)(y + 4)", "termB": "3y² + 10y - 8" }
+              {
+                "termA": "(x + 1)(x - 1)",
+                "termB": "x² - 1"
+              },
+              {
+                "termA": "(2a + 3)(a + 1)",
+                "termB": "2a² + 5a + 3"
+              },
+              {
+                "termA": "(3y - 2)(y + 4)",
+                "termB": "3y² + 10y - 8"
+              }
             ]
           },
-          "hints": ["Verwende FOIL", "First, Outer, Inner, Last"]
+          "hints": [
+            "Verwende FOIL",
+            "First, Outer, Inner, Last"
+          ]
         },
         {
           "id": "B2L4T01",
           "block": 2,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 2x(3x - 4) - (x - 2)(x + 1)",
-            "solution": "5x² - 9x + 2"
+            "correctSolution": "5x² - 9x + 2",
+            "options": [
+              "5x² - 9x + 2",
+              "6x",
+              "4x",
+              "10x"
+            ]
           },
-          "hints": ["2x(3x - 4) = 6x² - 8x", "(x - 2)(x + 1) = x² - x - 2"]
+          "hints": [
+            "2x(3x - 4) = 6x² - 8x",
+            "(x - 2)(x + 1) = x² - x - 2"
+          ]
         },
         {
           "id": "B2L4T02",
           "block": 2,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (3x - 4)(2x + 5)",
-            "solution": "6x² + 7x - 20"
+            "correctSolution": "6x² + 7x - 20",
+            "options": [
+              "6x² + 7x - 20",
+              "7x",
+              "5x",
+              "12x"
+            ]
           },
-          "hints": ["3x · 2x = 6x²", "3x · 5 = 15x, (-4) · 2x = -8x, (-4) · 5 = -20"]
+          "hints": [
+            "3x · 2x = 6x²",
+            "3x · 5 = 15x, (-4) · 2x = -8x, (-4) · 5 = -20"
+          ]
         },
         {
           "id": "B2L4T03",
           "block": 2,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (5a + 2)(3a - 1)",
-            "solution": "15a² + a - 2"
+            "correctSolution": "15a² + a - 2",
+            "options": [
+              "15a² + a - 2",
+              "16a",
+              "14a",
+              "30a"
+            ]
           },
-          "hints": ["5a · 3a = 15a²", "5a · (-1) = -5a, 2 · 3a = 6a, 2 · (-1) = -2"]
+          "hints": [
+            "5a · 3a = 15a²",
+            "5a · (-1) = -5a, 2 · 3a = 6a, 2 · (-1) = -2"
+          ]
         },
         {
           "id": "B2L4T04",
           "block": 2,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (2y - 3)(4y + 1)",
-            "solution": "8y² - 10y - 3"
+            "correctSolution": "8y² - 10y - 3",
+            "options": [
+              "8y² - 10y - 3",
+              "9y",
+              "7y",
+              "16y"
+            ]
           },
-          "hints": ["2y · 4y = 8y²", "2y · 1 = 2y, (-3) · 4y = -12y, (-3) · 1 = -3"]
+          "hints": [
+            "2y · 4y = 8y²",
+            "2y · 1 = 2y, (-3) · 4y = -12y, (-3) · 1 = -3"
+          ]
         },
         {
           "id": "B2L4T05",
           "block": 2,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 3x(2x + 1) - 2(x² - 3x + 4)",
-            "solution": "4x² + 9x - 8"
+            "correctSolution": "4x² + 9x - 8",
+            "options": [
+              "4x² + 9x - 8",
+              "5x",
+              "3x",
+              "8x"
+            ]
           },
-          "hints": ["3x(2x + 1) = 6x² + 3x", "-2(x² - 3x + 4) = -2x² + 6x - 8"]
+          "hints": [
+            "3x(2x + 1) = 6x² + 3x",
+            "-2(x² - 3x + 4) = -2x² + 6x - 8"
+          ]
         },
         {
           "id": "B2L5T01",
           "block": 2,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (4x - 3)(3x + 2) - 2x",
-            "solution": "12x² + 5x - 6"
+            "correctSolution": "12x² + 5x - 6",
+            "options": [
+              "12x² + 5x - 6",
+              "13x",
+              "11x",
+              "24x"
+            ]
           },
-          "hints": ["Multipliziere erst (4x - 3)(3x + 2)", "Dann subtrahiere 2x vom Ergebnis"]
+          "hints": [
+            "Multipliziere erst (4x - 3)(3x + 2)",
+            "Dann subtrahiere 2x vom Ergebnis"
+          ]
         },
         {
           "id": "B2L5T02",
           "block": 2,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (2a + 1)(3a - 4) + (a - 2)(a + 1)",
-            "solution": "7a² - 4a - 6"
+            "correctSolution": "7a² - 4a - 6",
+            "options": [
+              "7a² - 4a - 6",
+              "8a",
+              "6a",
+              "14a"
+            ]
           },
-          "hints": ["Multipliziere beide Klammerpaare getrennt", "Dann addiere die Ergebnisse"]
+          "hints": [
+            "Multipliziere beide Klammerpaare getrennt",
+            "Dann addiere die Ergebnisse"
+          ]
         },
         {
           "id": "B2L5T03",
           "block": 2,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x + 2)² - (x - 1)²",
-            "solution": "6x + 3"
+            "correctSolution": "6x + 3",
+            "options": [
+              "6x + 3",
+              "7x",
+              "5x",
+              "12x"
+            ]
           },
-          "hints": ["(x + 2)² = x² + 4x + 4", "(x - 1)² = x² - 2x + 1"]
+          "hints": [
+            "(x + 2)² = x² + 4x + 4",
+            "(x - 1)² = x² - 2x + 1"
+          ]
         },
         {
           "id": "B2L5T04",
           "block": 2,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (2x - 1)(3x + 2) - x(x + 4) + (x + 1)(x - 3)",
-            "solution": "6x² - 3x - 5"
+            "correctSolution": "6x² - 3x - 5",
+            "options": [
+              "6x² - 3x - 5",
+              "7x",
+              "5x",
+              "12x"
+            ]
           },
-          "hints": ["Multipliziere alle Klammerpaare aus", "(2x - 1)(3x + 2) = 6x² + x - 2"]
+          "hints": [
+            "Multipliziere alle Klammerpaare aus",
+            "(2x - 1)(3x + 2) = 6x² + x - 2"
+          ]
         },
         {
           "id": "B2L5T05",
           "block": 2,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Multipliziere aus: (3y + 4)(2y - 1) - (y + 2)(y - 3)",
-            "solution": "5y² + 11y + 2"
+            "correctSolution": "5y² + 11y + 2",
+            "options": [
+              "5y² + 11y + 2",
+              "6y",
+              "4y",
+              "10y"
+            ]
           },
-          "hints": ["Multipliziere beide Klammerpaare", "(3y + 4)(2y - 1) und (y + 2)(y - 3)"]
+          "hints": [
+            "Multipliziere beide Klammerpaare",
+            "(3y + 4)(2y - 1) und (y + 2)(y - 3)"
+          ]
         }
       ]
     },
@@ -586,12 +1050,21 @@
           "id": "B3L1T01",
           "block": 3,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die erste binomische Formel an: (x + 3)²",
-            "solution": "x² + 6x + 9"
+            "correctSolution": "x² + 6x + 9",
+            "options": [
+              "x² + 6x + 9",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["(a + b)² = a² + 2ab + b²", "a = x, b = 3"]
+          "hints": [
+            "(a + b)² = a² + 2ab + b²",
+            "a = x, b = 3"
+          ]
         },
         {
           "id": "B3L1T02",
@@ -601,89 +1074,164 @@
           "data": {
             "question": "Finde die passenden Paare - Binomische Formeln.",
             "pairs": [
-              { "termA": "(a + b)²", "termB": "a² + 2ab + b²" },
-              { "termA": "(a - b)²", "termB": "a² - 2ab + b²" },
-              { "termA": "(a + b)(a - b)", "termB": "a² - b²" }
+              {
+                "termA": "(a + b)²",
+                "termB": "a² + 2ab + b²"
+              },
+              {
+                "termA": "(a - b)²",
+                "termB": "a² - 2ab + b²"
+              },
+              {
+                "termA": "(a + b)(a - b)",
+                "termB": "a² - b²"
+              }
             ]
           },
-          "hints": ["Lerne die drei binomischen Formeln auswendig", "Erste, zweite und dritte binomische Formel"]
+          "hints": [
+            "Lerne die drei binomischen Formeln auswendig",
+            "Erste, zweite und dritte binomische Formel"
+          ]
         },
         {
           "id": "B3L2T01",
           "block": 3,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die zweite binomische Formel an: (2x - 1)²",
-            "solution": "4x² - 4x + 1"
+            "correctSolution": "4x² - 4x + 1",
+            "options": [
+              "4x² - 4x + 1",
+              "5x",
+              "3x",
+              "8x"
+            ]
           },
-          "hints": ["(a - b)² = a² - 2ab + b²", "a = 2x, b = 1"]
+          "hints": [
+            "(a - b)² = a² - 2ab + b²",
+            "a = 2x, b = 1"
+          ]
         },
         {
           "id": "B3L2T02",
           "block": 3,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die dritte binomische Formel an: (3y + 2)(3y - 2)",
-            "solution": "9y² - 4"
+            "correctSolution": "9y² - 4",
+            "options": [
+              "9y² - 4",
+              "10y",
+              "8y",
+              "18y"
+            ]
           },
-          "hints": ["(a + b)(a - b) = a² - b²", "a = 3y, b = 2"]
+          "hints": [
+            "(a + b)(a - b) = a² - b²",
+            "a = 3y, b = 2"
+          ]
         },
         {
           "id": "B3L3T01",
           "block": 3,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x - 3)² + (x + 2)²",
-            "solution": "2x² - 2x + 13"
+            "correctSolution": "2x² - 2x + 13",
+            "options": [
+              "2x² - 2x + 13",
+              "3x",
+              "1x",
+              "4x"
+            ]
           },
-          "hints": ["(x - 3)² = x² - 6x + 9", "(x + 2)² = x² + 4x + 4"]
+          "hints": [
+            "(x - 3)² = x² - 6x + 9",
+            "(x + 2)² = x² + 4x + 4"
+          ]
         },
         {
           "id": "B3L1T03",
           "block": 3,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die zweite binomische Formel an: (y - 2)²",
-            "solution": "y² - 4y + 4"
+            "correctSolution": "y² - 4y + 4",
+            "options": [
+              "y² - 4y + 4",
+              "2y",
+              "0y",
+              "-1y"
+            ]
           },
-          "hints": ["(a - b)² = a² - 2ab + b²", "a = y, b = 2"]
+          "hints": [
+            "(a - b)² = a² - 2ab + b²",
+            "a = y, b = 2"
+          ]
         },
         {
           "id": "B3L1T04",
           "block": 3,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die dritte binomische Formel an: (x + 5)(x - 5)",
-            "solution": "x² - 25"
+            "correctSolution": "x² - 25",
+            "options": [
+              "x² - 25",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["(a + b)(a - b) = a² - b²", "a = x, b = 5"]
+          "hints": [
+            "(a + b)(a - b) = a² - b²",
+            "a = x, b = 5"
+          ]
         },
         {
           "id": "B3L1T05",
           "block": 3,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die erste binomische Formel an: (a + 1)²",
-            "solution": "a² + 2a + 1"
+            "correctSolution": "a² + 2a + 1",
+            "options": [
+              "a² + 2a + 1",
+              "2a",
+              "0a",
+              "-1a"
+            ]
           },
-          "hints": ["(a + b)² = a² + 2ab + b²", "a = a, b = 1"]
+          "hints": [
+            "(a + b)² = a² + 2ab + b²",
+            "a = a, b = 1"
+          ]
         },
         {
           "id": "B3L2T03",
           "block": 3,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die erste binomische Formel an: (3a + 2)²",
-            "solution": "9a² + 12a + 4"
+            "correctSolution": "9a² + 12a + 4",
+            "options": [
+              "9a² + 12a + 4",
+              "10a",
+              "8a",
+              "18a"
+            ]
           },
-          "hints": ["(a + b)² = a² + 2ab + b²", "a = 3a, b = 2"]
+          "hints": [
+            "(a + b)² = a² + 2ab + b²",
+            "a = 3a, b = 2"
+          ]
         },
         {
           "id": "B3L2T04",
@@ -693,177 +1241,324 @@
           "data": {
             "question": "Finde die passenden Paare - Binomische Formeln anwenden.",
             "pairs": [
-              { "termA": "(x - 4)²", "termB": "x² - 8x + 16" },
-              { "termA": "(2y + 1)²", "termB": "4y² + 4y + 1" },
-              { "termA": "(a + 3)(a - 3)", "termB": "a² - 9" }
+              {
+                "termA": "(x - 4)²",
+                "termB": "x² - 8x + 16"
+              },
+              {
+                "termA": "(2y + 1)²",
+                "termB": "4y² + 4y + 1"
+              },
+              {
+                "termA": "(a + 3)(a - 3)",
+                "termB": "a² - 9"
+              }
             ]
           },
-          "hints": ["Erkenne welche Formel zu verwenden ist", "Setze die Werte korrekt ein"]
+          "hints": [
+            "Erkenne welche Formel zu verwenden ist",
+            "Setze die Werte korrekt ein"
+          ]
         },
         {
           "id": "B3L2T05",
           "block": 3,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende die zweite binomische Formel an: (4x - 3)²",
-            "solution": "16x² - 24x + 9"
+            "correctSolution": "16x² - 24x + 9",
+            "options": [
+              "16x² - 24x + 9",
+              "17x",
+              "15x",
+              "32x"
+            ]
           },
-          "hints": ["(a - b)² = a² - 2ab + b²", "a = 4x, b = 3"]
+          "hints": [
+            "(a - b)² = a² - 2ab + b²",
+            "a = 4x, b = 3"
+          ]
         },
         {
           "id": "B3L3T02",
           "block": 3,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x + 4)² - (x - 2)²",
-            "solution": "12x + 12"
+            "correctSolution": "12x + 12",
+            "options": [
+              "12x + 12",
+              "13x",
+              "11x",
+              "24x"
+            ]
           },
-          "hints": ["(x + 4)² = x² + 8x + 16", "(x - 2)² = x² - 4x + 4"]
+          "hints": [
+            "(x + 4)² = x² + 8x + 16",
+            "(x - 2)² = x² - 4x + 4"
+          ]
         },
         {
           "id": "B3L3T03",
           "block": 3,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende binomische Formeln an: (2a + b)(2a - b) + b²",
-            "solution": "4a²"
+            "correctSolution": "4a²",
+            "options": [
+              "4a²",
+              "5a",
+              "3a",
+              "8a"
+            ]
           },
-          "hints": ["(2a + b)(2a - b) = 4a² - b²", "Dann addiere b²"]
+          "hints": [
+            "(2a + b)(2a - b) = 4a² - b²",
+            "Dann addiere b²"
+          ]
         },
         {
           "id": "B3L3T04",
           "block": 3,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (3x - 1)²",
-            "solution": "9x² - 6x + 1"
+            "correctSolution": "9x² - 6x + 1",
+            "options": [
+              "9x² - 6x + 1",
+              "10x",
+              "8x",
+              "18x"
+            ]
           },
-          "hints": ["Verwende die zweite binomische Formel: (a - b)² = a² - 2ab + b²", "(3x)² = 9x², 2·3x·1 = 6x, 1² = 1"]
+          "hints": [
+            "Verwende die zweite binomische Formel: (a - b)² = a² - 2ab + b²",
+            "(3x)² = 9x², 2·3x·1 = 6x, 1² = 1"
+          ]
         },
         {
           "id": "B3L3T05",
           "block": 3,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (2x + 1)² - (x - 2)²",
-            "solution": "3x² + 8x - 3"
+            "correctSolution": "3x² + 8x - 3",
+            "options": [
+              "3x² + 8x - 3",
+              "4x",
+              "2x",
+              "6x"
+            ]
           },
-          "hints": ["(2x + 1)² = 4x² + 4x + 1", "(x - 2)² = x² - 4x + 4"]
+          "hints": [
+            "(2x + 1)² = 4x² + 4x + 1",
+            "(x - 2)² = x² - 4x + 4"
+          ]
         },
         {
           "id": "B3L4T01",
           "block": 3,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (2a + 3b)² - (2a - 3b)²",
-            "solution": "24ab"
+            "correctSolution": "24ab",
+            "options": [
+              "24ab",
+              "25a",
+              "23a",
+              "48a"
+            ]
           },
-          "hints": ["Wende beide binomischen Formeln an", "Subtrahiere dann die Ergebnisse"]
+          "hints": [
+            "Wende beide binomischen Formeln an",
+            "Subtrahiere dann die Ergebnisse"
+          ]
         },
         {
           "id": "B3L4T02",
           "block": 3,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (3x + 2y)² + (3x - 2y)²",
-            "solution": "18x² + 8y²"
+            "correctSolution": "18x² + 8y²",
+            "options": [
+              "18x² + 8y²",
+              "19x",
+              "17x",
+              "36x"
+            ]
           },
-          "hints": ["Wende beide binomischen Formeln an", "Addiere die Ergebnisse"]
+          "hints": [
+            "Wende beide binomischen Formeln an",
+            "Addiere die Ergebnisse"
+          ]
         },
         {
           "id": "B3L4T03",
           "block": 3,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Wende binomische Formeln an: (a + 2b)² - 4b²",
-            "solution": "a² + 4ab"
+            "correctSolution": "a² + 4ab",
+            "options": [
+              "a² + 4ab",
+              "2a",
+              "0a",
+              "-1a"
+            ]
           },
-          "hints": ["(a + 2b)² = a² + 4ab + 4b²", "Subtrahiere dann 4b²"]
+          "hints": [
+            "(a + 2b)² = a² + 4ab + 4b²",
+            "Subtrahiere dann 4b²"
+          ]
         },
         {
           "id": "B3L4T04",
           "block": 3,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (3a + 2b)² - (3a - 2b)² + 4b²",
-            "solution": "28ab"
+            "correctSolution": "28ab",
+            "options": [
+              "28ab",
+              "29a",
+              "27a",
+              "56a"
+            ]
           },
-          "hints": ["(3a + 2b)² - (3a - 2b)² = 24ab", "Dann addiere 4b²"]
+          "hints": [
+            "(3a + 2b)² - (3a - 2b)² = 24ab",
+            "Dann addiere 4b²"
+          ]
         },
         {
           "id": "B3L4T05",
           "block": 3,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (5a - 2)² - (3a + 1)²",
-            "solution": "16a² - 26a + 3"
+            "correctSolution": "16a² - 26a + 3",
+            "options": [
+              "16a² - 26a + 3",
+              "17a",
+              "15a",
+              "32a"
+            ]
           },
-          "hints": ["(5a - 2)² = 25a² - 20a + 4", "(3a + 1)² = 9a² + 6a + 1"]
+          "hints": [
+            "(5a - 2)² = 25a² - 20a + 4",
+            "(3a + 1)² = 9a² + 6a + 1"
+          ]
         },
         {
           "id": "B3L5T01",
           "block": 3,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (2x + 3)³ - 27",
-            "solution": "8x³ + 36x² + 54x"
+            "correctSolution": "8x³ + 36x² + 54x",
+            "options": [
+              "8x³ + 36x² + 54x",
+              "9x",
+              "7x",
+              "16x"
+            ]
           },
-          "hints": ["(2x + 3)³ ist nicht binomisch", "Verwende (a + b)³ = a³ + 3a²b + 3ab² + b³"]
+          "hints": [
+            "(2x + 3)³ ist nicht binomisch",
+            "Verwende (a + b)³ = a³ + 3a²b + 3ab² + b³"
+          ]
         },
         {
           "id": "B3L5T02",
           "block": 3,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (a + b + c)² - (a - b - c)²",
-            "solution": "4ab + 4ac + 4bc"
+            "correctSolution": "4ab + 4ac + 4bc",
+            "options": [
+              "4ab + 4ac + 4bc",
+              "5a",
+              "3a",
+              "8a"
+            ]
           },
-          "hints": ["Erweitere auf drei Terme", "Verwende die Differenz der Quadrate"]
+          "hints": [
+            "Erweitere auf drei Terme",
+            "Verwende die Differenz der Quadrate"
+          ]
         },
         {
           "id": "B3L5T03",
           "block": 3,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (3x + 2y)² - (3x - 2y)² - 8xy",
-            "solution": "16xy"
+            "correctSolution": "16xy",
+            "options": [
+              "16xy",
+              "17x",
+              "15x",
+              "32x"
+            ]
           },
-          "hints": ["Erste Differenz: 24xy", "Dann subtrahiere 8xy"]
+          "hints": [
+            "Erste Differenz: 24xy",
+            "Dann subtrahiere 8xy"
+          ]
         },
         {
           "id": "B3L5T04",
           "block": 3,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x + y + z)² - (x - y - z)² - 4xz",
-            "solution": "4xy + 4yz"
+            "correctSolution": "4xy + 4yz",
+            "options": [
+              "4xy + 4yz",
+              "5x",
+              "3x",
+              "8x"
+            ]
           },
-          "hints": ["Expandiere beide Quadrate", "Die Differenz ergibt 4xy + 4xz + 4yz"]
+          "hints": [
+            "Expandiere beide Quadrate",
+            "Die Differenz ergibt 4xy + 4xz + 4yz"
+          ]
         },
         {
           "id": "B3L5T05",
           "block": 3,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x² + 1)² - (x² - 1)²",
-            "solution": "4x²"
+            "correctSolution": "4x²",
+            "options": [
+              "4x²",
+              "5x",
+              "3x",
+              "8x"
+            ]
           },
-          "hints": ["Setze u = x²", "Dann: (u + 1)² - (u - 1)² = 4u = 4x²"]
+          "hints": [
+            "Setze u = x²",
+            "Dann: (u + 1)² - (u - 1)² = 4u = 4x²"
+          ]
         }
       ]
     },
@@ -875,34 +1570,61 @@
           "id": "B4L1T01",
           "block": 4,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 6x + 9",
-            "solution": "3(2x + 3)"
+            "correctSolution": "3(2x + 3)",
+            "options": [
+              "3(2x + 3)",
+              "4x",
+              "2x",
+              "6x"
+            ]
           },
-          "hints": ["Suche den größten gemeinsamen Teiler", "3 ist der größte gemeinsame Teiler von 6 und 9"]
+          "hints": [
+            "Suche den größten gemeinsamen Teiler",
+            "3 ist der größte gemeinsame Teiler von 6 und 9"
+          ]
         },
         {
           "id": "B4L1T02",
           "block": 4,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: x² + 5x",
-            "solution": "x(x + 5)"
+            "correctSolution": "x(x + 5)",
+            "options": [
+              "x(x + 5)",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["x ist der gemeinsame Faktor", "Klammere x aus"]
+          "hints": [
+            "x ist der gemeinsame Faktor",
+            "Klammere x aus"
+          ]
         },
         {
           "id": "B4L2T01",
           "block": 4,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere mit binomischer Formel: x² - 16",
-            "solution": "(x + 4)(x - 4)"
+            "correctSolution": "(x + 4)(x - 4)",
+            "options": [
+              "(x + 4)(x - 4)",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["Das ist die dritte binomische Formel rückwärts", "a² - b² = (a + b)(a - b)"]
+          "hints": [
+            "Das ist die dritte binomische Formel rückwärts",
+            "a² - b² = (a + b)(a - b)"
+          ]
         },
         {
           "id": "B4L2T02",
@@ -912,34 +1634,64 @@
           "data": {
             "question": "Finde die passenden Faktorisierungen.",
             "pairs": [
-              { "termA": "x² - 9", "termB": "(x + 3)(x - 3)" },
-              { "termA": "4a² - 1", "termB": "(2a + 1)(2a - 1)" },
-              { "termA": "y² - 25", "termB": "(y + 5)(y - 5)" }
+              {
+                "termA": "x² - 9",
+                "termB": "(x + 3)(x - 3)"
+              },
+              {
+                "termA": "4a² - 1",
+                "termB": "(2a + 1)(2a - 1)"
+              },
+              {
+                "termA": "y² - 25",
+                "termB": "(y + 5)(y - 5)"
+              }
             ]
           },
-          "hints": ["Erkenne die Differenz von Quadraten", "a² - b² = (a + b)(a - b)"]
+          "hints": [
+            "Erkenne die Differenz von Quadraten",
+            "a² - b² = (a + b)(a - b)"
+          ]
         },
         {
           "id": "B4L3T01",
           "block": 4,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: x² + 6x + 9",
-            "solution": "(x + 3)²"
+            "correctSolution": "(x + 3)²",
+            "options": [
+              "(x + 3)²",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["Das ist ein vollständiges Quadrat", "Erste binomische Formel rückwärts"]
+          "hints": [
+            "Das ist ein vollständiges Quadrat",
+            "Erste binomische Formel rückwärts"
+          ]
         },
         {
           "id": "B4L1T03",
           "block": 4,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 4a + 8",
-            "solution": "4(a + 2)"
+            "correctSolution": "4(a + 2)",
+            "options": [
+              "4(a + 2)",
+              "5a",
+              "3a",
+              "8a"
+            ]
           },
-          "hints": ["4 ist der gemeinsame Faktor", "4a = 4 · a, 8 = 4 · 2"]
+          "hints": [
+            "4 ist der gemeinsame Faktor",
+            "4a = 4 · a, 8 = 4 · 2"
+          ]
         },
         {
           "id": "B4L1T04",
@@ -949,78 +1701,144 @@
           "data": {
             "question": "Finde die passenden Faktorisierungen - Gemeinsame Faktoren.",
             "pairs": [
-              { "termA": "3x + 6", "termB": "3(x + 2)" },
-              { "termA": "2y² + 4y", "termB": "2y(y + 2)" },
-              { "termA": "5a - 10", "termB": "5(a - 2)" }
+              {
+                "termA": "3x + 6",
+                "termB": "3(x + 2)"
+              },
+              {
+                "termA": "2y² + 4y",
+                "termB": "2y(y + 2)"
+              },
+              {
+                "termA": "5a - 10",
+                "termB": "5(a - 2)"
+              }
             ]
           },
-          "hints": ["Suche den größten gemeinsamen Teiler", "Klammere ihn aus"]
+          "hints": [
+            "Suche den größten gemeinsamen Teiler",
+            "Klammere ihn aus"
+          ]
         },
         {
           "id": "B4L1T05",
           "block": 4,
           "difficulty": 1,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 3y² - 6y",
-            "solution": "3y(y - 2)"
+            "correctSolution": "3y(y - 2)",
+            "options": [
+              "3y(y - 2)",
+              "4y",
+              "2y",
+              "6y"
+            ]
           },
-          "hints": ["3y ist der gemeinsame Faktor", "3y² = 3y · y, 6y = 3y · 2"]
+          "hints": [
+            "3y ist der gemeinsame Faktor",
+            "3y² = 3y · y, 6y = 3y · 2"
+          ]
         },
         {
           "id": "B4L2T03",
           "block": 4,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere mit binomischer Formel: a² - 36",
-            "solution": "(a + 6)(a - 6)"
+            "correctSolution": "(a + 6)(a - 6)",
+            "options": [
+              "(a + 6)(a - 6)",
+              "2a",
+              "0a",
+              "-1a"
+            ]
           },
-          "hints": ["a² - 36 = a² - 6²", "Dritte binomische Formel rückwärts"]
+          "hints": [
+            "a² - 36 = a² - 6²",
+            "Dritte binomische Formel rückwärts"
+          ]
         },
         {
           "id": "B4L2T04",
           "block": 4,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 9x² - 4",
-            "solution": "(3x + 2)(3x - 2)"
+            "correctSolution": "(3x + 2)(3x - 2)",
+            "options": [
+              "(3x + 2)(3x - 2)",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["9x² = (3x)², 4 = 2²", "Dritte binomische Formel: a² - b² = (a + b)(a - b)"]
+          "hints": [
+            "9x² = (3x)², 4 = 2²",
+            "Dritte binomische Formel: a² - b² = (a + b)(a - b)"
+          ]
         },
         {
           "id": "B4L2T05",
           "block": 4,
           "difficulty": 2,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x + 3)(x - 3) + 9",
-            "solution": "x²"
+            "correctSolution": "x²",
+            "options": [
+              "x²",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["(x + 3)(x - 3) = x² - 9", "x² - 9 + 9 = x²"]
+          "hints": [
+            "(x + 3)(x - 3) = x² - 9",
+            "x² - 9 + 9 = x²"
+          ]
         },
         {
           "id": "B4L3T02",
           "block": 4,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: x² - 8x + 16",
-            "solution": "(x - 4)²"
+            "correctSolution": "(x - 4)²",
+            "options": [
+              "(x - 4)²",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["Suche nach (x - a)²", "x² - 8x + 16 = x² - 2·4x + 4²"]
+          "hints": [
+            "Suche nach (x - a)²",
+            "x² - 8x + 16 = x² - 2·4x + 4²"
+          ]
         },
         {
           "id": "B4L3T03",
           "block": 4,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 4y² + 12y + 9",
-            "solution": "(2y + 3)²"
+            "correctSolution": "(2y + 3)²",
+            "options": [
+              "(2y + 3)²",
+              "2y",
+              "0y",
+              "-1y"
+            ]
           },
-          "hints": ["4y² = (2y)², 9 = 3²", "Prüfe: 2·2y·3 = 12y ✓"]
+          "hints": [
+            "4y² = (2y)², 9 = 3²",
+            "Prüfe: 2·2y·3 = 12y ✓"
+          ]
         },
         {
           "id": "B4L3T04",
@@ -1030,133 +1848,244 @@
           "data": {
             "question": "Finde die passenden Faktorisierungen - Vollständige Quadrate.",
             "pairs": [
-              { "termA": "a² + 10a + 25", "termB": "(a + 5)²" },
-              { "termA": "4x² - 4x + 1", "termB": "(2x - 1)²" },
-              { "termA": "9b² + 6b + 1", "termB": "(3b + 1)²" }
+              {
+                "termA": "a² + 10a + 25",
+                "termB": "(a + 5)²"
+              },
+              {
+                "termA": "4x² - 4x + 1",
+                "termB": "(2x - 1)²"
+              },
+              {
+                "termA": "9b² + 6b + 1",
+                "termB": "(3b + 1)²"
+              }
             ]
           },
-          "hints": ["Erkenne binomische Formeln rückwärts", "a² ± 2ab + b² = (a ± b)²"]
+          "hints": [
+            "Erkenne binomische Formeln rückwärts",
+            "a² ± 2ab + b² = (a ± b)²"
+          ]
         },
         {
           "id": "B4L3T05",
           "block": 4,
           "difficulty": 3,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 25x² - 20x + 4",
-            "solution": "(5x - 2)²"
+            "correctSolution": "(5x - 2)²",
+            "options": [
+              "(5x - 2)²",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["25x² = (5x)², 4 = 2²", "Prüfe: 2·5x·2 = 20x ✓"]
+          "hints": [
+            "25x² = (5x)², 4 = 2²",
+            "Prüfe: 2·5x·2 = 20x ✓"
+          ]
         },
         {
           "id": "B4L4T01",
           "block": 4,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x - 2)² + (x + 2)² - 2x²",
-            "solution": "8"
+            "correctSolution": "8",
+            "options": [
+              "8",
+              "9x",
+              "7x",
+              "16x"
+            ]
           },
-          "hints": ["(x - 2)² = x² - 4x + 4", "(x + 2)² = x² + 4x + 4"]
+          "hints": [
+            "(x - 2)² = x² - 4x + 4",
+            "(x + 2)² = x² + 4x + 4"
+          ]
         },
         {
           "id": "B4L4T02",
           "block": 4,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: x⁴ - 16",
-            "solution": "(x² + 4)(x + 2)(x - 2)"
+            "correctSolution": "(x² + 4)(x + 2)(x - 2)",
+            "options": [
+              "(x² + 4)(x + 2)(x - 2)",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["x⁴ - 16 = (x²)² - 4²", "Wende die dritte binomische Formel zweimal an"]
+          "hints": [
+            "x⁴ - 16 = (x²)² - 4²",
+            "Wende die dritte binomische Formel zweimal an"
+          ]
         },
         {
           "id": "B4L4T03",
           "block": 4,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 2x² - 8",
-            "solution": "2(x + 2)(x - 2)"
+            "correctSolution": "2(x + 2)(x - 2)",
+            "options": [
+              "2(x + 2)(x - 2)",
+              "3x",
+              "1x",
+              "4x"
+            ]
           },
-          "hints": ["Klammere zuerst 2 aus", "2x² - 8 = 2(x² - 4)"]
+          "hints": [
+            "Klammere zuerst 2 aus",
+            "2x² - 8 = 2(x² - 4)"
+          ]
         },
         {
           "id": "B4L4T04",
           "block": 4,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 3a² + 6a + 3",
-            "solution": "3(a + 1)²"
+            "correctSolution": "3(a + 1)²",
+            "options": [
+              "3(a + 1)²",
+              "4a",
+              "2a",
+              "6a"
+            ]
           },
-          "hints": ["Klammere zuerst 3 aus", "3a² + 6a + 3 = 3(a² + 2a + 1)"]
+          "hints": [
+            "Klammere zuerst 3 aus",
+            "3a² + 6a + 3 = 3(a² + 2a + 1)"
+          ]
         },
         {
           "id": "B4L4T05",
           "block": 4,
           "difficulty": 4,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 3(x + 1)² - 3(x - 1)²",
-            "solution": "12x"
+            "correctSolution": "12x",
+            "options": [
+              "12x",
+              "13x",
+              "11x",
+              "24x"
+            ]
           },
-          "hints": ["3(x + 1)² = 3(x² + 2x + 1)", "3(x - 1)² = 3(x² - 2x + 1)"]
+          "hints": [
+            "3(x + 1)² = 3(x² + 2x + 1)",
+            "3(x - 1)² = 3(x² - 2x + 1)"
+          ]
         },
         {
           "id": "B4L5T01",
           "block": 4,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: x³ - 8",
-            "solution": "(x - 2)(x² + 2x + 4)"
+            "correctSolution": "(x - 2)(x² + 2x + 4)",
+            "options": [
+              "(x - 2)(x² + 2x + 4)",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["x³ - 8 = x³ - 2³", "Verwende die Differenz von Kuben: a³ - b³ = (a - b)(a² + ab + b²)"]
+          "hints": [
+            "x³ - 8 = x³ - 2³",
+            "Verwende die Differenz von Kuben: a³ - b³ = (a - b)(a² + ab + b²)"
+          ]
         },
         {
           "id": "B4L5T02",
           "block": 4,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 8y³ + 27",
-            "solution": "(2y + 3)(4y² - 6y + 9)"
+            "correctSolution": "(2y + 3)(4y² - 6y + 9)",
+            "options": [
+              "(2y + 3)(4y² - 6y + 9)",
+              "2y",
+              "0y",
+              "-1y"
+            ]
           },
-          "hints": ["8y³ + 27 = (2y)³ + 3³", "Verwende die Summe von Kuben: a³ + b³ = (a + b)(a² - ab + b²)"]
+          "hints": [
+            "8y³ + 27 = (2y)³ + 3³",
+            "Verwende die Summe von Kuben: a³ + b³ = (a + b)(a² - ab + b²)"
+          ]
         },
         {
           "id": "B4L5T03",
           "block": 4,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: x⁴ - 2x² + 1",
-            "solution": "(x² - 1)²"
+            "correctSolution": "(x² - 1)²",
+            "options": [
+              "(x² - 1)²",
+              "2x",
+              "0x",
+              "-1x"
+            ]
           },
-          "hints": ["Setze u = x²", "u² - 2u + 1 = (u - 1)² = (x² - 1)²"]
+          "hints": [
+            "Setze u = x²",
+            "u² - 2u + 1 = (u - 1)² = (x² - 1)²"
+          ]
         },
         {
           "id": "B4L5T04",
           "block": 4,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (x² + 1)² - (x² - 1)² - 4x²",
-            "solution": "0"
+            "correctSolution": "0",
+            "options": [
+              "0",
+              "Vereinfache x",
+              "6x",
+              "7x"
+            ]
           },
-          "hints": ["(x² + 1)² - (x² - 1)² = 4x²", "4x² - 4x² = 0"]
+          "hints": [
+            "(x² + 1)² - (x² - 1)² = 4x²",
+            "4x² - 4x² = 0"
+          ]
         },
         {
           "id": "B4L5T05",
           "block": 4,
           "difficulty": 5,
-          "taskType": "solve_expression",
+          "taskType": "multiple_choice",
           "data": {
             "question": "Faktorisiere: 6x³ - 24x",
-            "solution": "6x(x + 2)(x - 2)"
+            "correctSolution": "6x(x + 2)(x - 2)",
+            "options": [
+              "6x(x + 2)(x - 2)",
+              "7x",
+              "5x",
+              "12x"
+            ]
           },
-          "hints": ["Klammere zuerst 6x aus", "6x³ - 24x = 6x(x² - 4)"]
+          "hints": [
+            "Klammere zuerst 6x aus",
+            "6x³ - 24x = 6x(x² - 4)"
+          ]
         }
       ]
     }
