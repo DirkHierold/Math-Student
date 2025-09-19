@@ -20,8 +20,8 @@
             ]
           },
           "hints": [
-            "Sammle die gleichen Variablen",
-            "3x + 2x = (3+2)x"
+            "3x + 2x = (3+2)x",
+            "= 5x"
           ]
         },
         {
@@ -40,8 +40,8 @@
             ]
           },
           "hints": [
-            "Subtrahiere die Koeffizienten",
-            "7a - 3a = (7-3)a"
+            "7a - 3a = (7-3)a",
+            "= 4a"
           ]
         },
         {
@@ -60,8 +60,8 @@
             ]
           },
           "hints": [
-            "Sammle x-Terme und y-Terme getrennt",
-            "4x - 2x = 2x und 3y + y = 4y"
+            "4x - 2x = 2x",
+            "3y + y = 4y"
           ]
         },
         {
@@ -80,8 +80,8 @@
             ]
           },
           "hints": [
-            "Sammle erst alle a-Terme",
-            "Dann alle b-Terme"
+            "5a - 2a = 3a",
+            "3b + b = 4b"
           ]
         },
         {
@@ -100,8 +100,8 @@
             ]
           },
           "hints": [
-            "Multipliziere zuerst die Klammer aus",
-            "2(3x + 1) = 6x + 2"
+            "2(3x + 1) = 6x + 2",
+            "6x + 2 - 4x = 2x + 2"
           ]
         },
         {
@@ -120,8 +120,8 @@
             ]
           },
           "hints": [
-            "Multipliziere beide Klammern aus",
-            "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"
+            "3(2x - 1) = 6x - 3",
+            "2(x + 3) = 2x + 6"
           ]
         },
         {
@@ -140,8 +140,8 @@
             ]
           },
           "hints": [
-            "Subtrahiere die Koeffizienten",
-            "8y - 5y = (8-5)y"
+            "8y - 5y = (8-5)y",
+            "= 3y"
           ]
         },
         {
@@ -160,8 +160,8 @@
             ]
           },
           "hints": [
-            "Addiere alle Koeffizienten",
-            "2a + 3a + a = 2a + 3a + 1a = 6a"
+            "2a + 3a + a = 2a + 3a + 1a",
+            "= (2+3+1)a = 6a"
           ]
         },
         {
@@ -180,8 +180,8 @@
             ]
           },
           "hints": [
-            "Sammle gleiche Variablen",
-            "5x + 2x = (5+2)x"
+            "5x + 2x = (5+2)x",
+            "= 7x"
           ]
         },
         {
@@ -200,8 +200,8 @@
             ]
           },
           "hints": [
-            "Sammle x-Terme: 6x + 3x",
-            "Sammle y-Terme: -2y - y"
+            "6x + 3x = 9x",
+            "-2y - y = -3y"
           ]
         },
         {
@@ -240,8 +240,8 @@
             ]
           },
           "hints": [
-            "Sammle m-Terme: 8m - 3m",
-            "Sammle n-Terme: 2n + 5n"
+            "8m - 3m = 5m",
+            "2n + 5n = 7n"
           ]
         },
         {
@@ -261,7 +261,7 @@
           },
           "hints": [
             "4(x - 2) = 4x - 8",
-            "Dann addiere 3x"
+            "4x - 8 + 3x = 7x - 8"
           ]
         },
         {
@@ -281,7 +281,7 @@
           },
           "hints": [
             "-3(2a + 1) = -6a - 3",
-            "-6a + 5a = -a"
+            "-6a - 3 + 5a = -a - 3"
           ]
         },
         {
@@ -371,12 +371,12 @@
           "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: -2(3x - 4) + 5(x + 1) - 3x",
-            "correctSolution": "-8",
+            "correctSolution": "-4x + 13",
             "options": [
-              "-8",
-              "-7x",
-              "-9x",
-              "-16x"
+              "-4x + 13",
+              "-7x + 13",
+              "-4x + 8",
+              "-6x + 13"
             ]
           },
           "hints": [
@@ -472,17 +472,17 @@
           "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: 4(3x - 2) - 2(2x + 3) + 3(x - 1) - 5x",
-            "correctSolution": "5x - 17",
+            "correctSolution": "6x - 17",
             "options": [
+              "6x - 17",
               "5x - 17",
-              "6x",
-              "4x",
-              "10x"
+              "7x - 17",
+              "6x - 13"
             ]
           },
           "hints": [
-            "Multipliziere alle Klammern aus",
-            "4(3x - 2) = 12x - 8"
+            "4(3x - 2) = 12x - 8",
+            "-2(2x + 3) = -4x - 6, 3(x - 1) = 3x - 3"
           ]
         },
         {
@@ -528,8 +528,8 @@
             ]
           },
           "hints": [
-            "Multipliziere 3 mit jedem Term in der Klammer",
-            "3 · x = 3x und 3 · 2 = 6"
+            "3 · x = 3x",
+            "3 · 2 = 6"
           ]
         },
         {
@@ -548,8 +548,8 @@
             ]
           },
           "hints": [
-            "Achte auf die Vorzeichen",
-            "-2 · a = -2a und -2 · (-4) = +8"
+            "-2 · a = -2a",
+            "-2 · (-4) = +8"
           ]
         },
         {
@@ -568,8 +568,8 @@
             ]
           },
           "hints": [
-            "Verwende die FOIL-Methode",
-            "First, Outer, Inner, Last"
+            "x · x = x², x · 2 = 2x",
+            "3 · x = 3x, 3 · 2 = 6"
           ]
         },
         {
@@ -588,8 +588,8 @@
             ]
           },
           "hints": [
-            "Multipliziere jeden Term in der Klammer",
-            "2 · x = 2x und 2 · 3 = 6"
+            "2 · x = 2x",
+            "2 · 3 = 6"
           ]
         },
         {
@@ -648,8 +648,8 @@
             ]
           },
           "hints": [
-            "Multipliziere jeden Term in der Klammer",
-            "4 · x = 4x und 4 · 1 = 4"
+            "4 · x = 4x",
+            "4 · 1 = 4"
           ]
         },
         {
@@ -728,8 +728,8 @@
             ]
           },
           "hints": [
-            "Multipliziere die Klammer aus",
-            "3(x + 4) = 3x + 12"
+            "3(x + 4) = 3x + 12",
+            "3x + 12 - 2x = x + 12"
           ]
         },
         {
@@ -788,8 +788,8 @@
             ]
           },
           "hints": [
-            "Verwende FOIL: 2x · x = 2x²",
-            "2x · (-3) + 1 · x = -6x + x = -5x, und 1 · (-3) = -3"
+            "2x · x = 2x²",
+            "2x · (-3) + 1 · x = -6x + x = -5x"
           ]
         },
         {
@@ -808,8 +808,8 @@
             ]
           },
           "hints": [
-            "Verwende FOIL oder erkenne die dritte binomische Formel",
-            "(a + b)(a - b) = a² - b²"
+            "x · x = x², x · (-1) = -x",
+            "1 · x = x, 1 · (-1) = -1"
           ]
         },
         {
@@ -928,8 +928,8 @@
             ]
           },
           "hints": [
-            "Multipliziere erst (4x - 3)(3x + 2)",
-            "Dann subtrahiere 2x vom Ergebnis"
+            "(4x - 3)(3x + 2) = 12x² - x - 6",
+            "12x² - x - 6 - 2x = 12x² - 3x - 6"
           ]
         },
         {
@@ -948,8 +948,8 @@
             ]
           },
           "hints": [
-            "Multipliziere beide Klammerpaare getrennt",
-            "Dann addiere die Ergebnisse"
+            "(2a + 1)(3a - 4) = 6a² - 5a - 4",
+            "(a - 2)(a + 1) = a² - a - 2"
           ]
         },
         {
@@ -988,8 +988,8 @@
             ]
           },
           "hints": [
-            "Multipliziere alle Klammerpaare aus",
-            "(2x - 1)(3x + 2) = 6x² + x - 2"
+            "(2x - 1)(3x + 2) = 6x² + x - 2",
+            "x(x + 4) = x² + 4x, (x + 1)(x - 3) = x² - 2x - 3"
           ]
         },
         {
@@ -1008,8 +1008,8 @@
             ]
           },
           "hints": [
-            "Multipliziere beide Klammerpaare",
-            "(3y + 4)(2y - 1) und (y + 2)(y - 3)"
+            "(3y + 4)(2y - 1) = 6y² + 5y - 4",
+            "(y + 2)(y - 3) = y² - y - 6"
           ]
         }
       ]
@@ -1054,8 +1054,8 @@
             ]
           },
           "hints": [
-            "Das ist die erste binomische Formel",
-            "(a + b)² = (a + b)(a + b)"
+            "(a + b)² = (a + b)(a + b)",
+            "= a² + ab + ab + b² = a² + 2ab + b²"
           ]
         },
         {
@@ -1214,8 +1214,8 @@
             ]
           },
           "hints": [
-            "Verwende die zweite binomische Formel: (a - b)²",
-            "a = x, b = 4"
+            "(a - b)² = a² - 2ab + b²",
+            "x² - 2 · x · 4 + 4² = x² - 8x + 16"
           ]
         },
         {
@@ -1294,8 +1294,8 @@
             ]
           },
           "hints": [
-            "Verwende die zweite binomische Formel: (a - b)² = a² - 2ab + b²",
-            "(3x)² = 9x², 2·3x·1 = 6x, 1² = 1"
+            "(3x)² = 9x²",
+            "2 · 3x · 1 = 6x, 1² = 1"
           ]
         },
         {
@@ -1334,8 +1334,8 @@
             ]
           },
           "hints": [
-            "Wende beide binomischen Formeln an",
-            "Subtrahiere dann die Ergebnisse"
+            "(2a + 3b)² = 4a² + 12ab + 9b²",
+            "(2a - 3b)² = 4a² - 12ab + 9b²"
           ]
         },
         {
@@ -1354,8 +1354,8 @@
             ]
           },
           "hints": [
-            "Wende beide binomischen Formeln an",
-            "Addiere die Ergebnisse"
+            "(3x + 2y)² = 9x² + 12xy + 4y²",
+            "(3x - 2y)² = 9x² - 12xy + 4y²"
           ]
         },
         {
@@ -1375,7 +1375,7 @@
           },
           "hints": [
             "(a + 2b)² = a² + 4ab + 4b²",
-            "Subtrahiere dann 4b²"
+            "a² + 4ab + 4b² - 4b² = a² + 4ab"
           ]
         },
         {
@@ -1385,17 +1385,17 @@
           "taskType": "multiple_choice",
           "data": {
             "question": "Vereinfache: (3a + 2b)² - (3a - 2b)² + 4b²",
-            "correctSolution": "28ab",
+            "correctSolution": "24ab + 4b²",
             "options": [
+              "24ab + 4b²",
               "28ab",
-              "29a",
-              "27a",
-              "56a"
+              "20ab + 4b²",
+              "24ab + 8b²"
             ]
           },
           "hints": [
             "(3a + 2b)² - (3a - 2b)² = 24ab",
-            "Dann addiere 4b²"
+            "24ab + 4b² = 24ab + 4b²"
           ]
         },
         {
@@ -1434,8 +1434,8 @@
             ]
           },
           "hints": [
-            "(2x + 3)³ ist nicht binomisch",
-            "Verwende (a + b)³ = a³ + 3a²b + 3ab² + b³"
+            "(2x + 3)³ = 8x³ + 36x² + 54x + 27",
+            "8x³ + 36x² + 54x + 27 - 27 = 8x³ + 36x² + 54x"
           ]
         },
         {
@@ -1454,8 +1454,8 @@
             ]
           },
           "hints": [
-            "Erweitere auf drei Terme",
-            "Verwende die Differenz der Quadrate"
+            "(a + b + c)² = a² + b² + c² + 2ab + 2ac + 2bc",
+            "(a - b - c)² = a² + b² + c² - 2ab - 2ac + 2bc"
           ]
         },
         {
@@ -1474,8 +1474,8 @@
             ]
           },
           "hints": [
-            "Erste Differenz: 24xy",
-            "Dann subtrahiere 8xy"
+            "(3x + 2y)² - (3x - 2y)² = 24xy",
+            "24xy - 8xy = 16xy"
           ]
         },
         {
@@ -1494,8 +1494,8 @@
             ]
           },
           "hints": [
-            "Expandiere beide Quadrate",
-            "Die Differenz ergibt 4xy + 4xz + 4yz"
+            "(x + y + z)² - (x - y - z)² = 4xy + 4xz + 4yz",
+            "4xy + 4xz + 4yz - 4xz = 4xy + 4yz"
           ]
         },
         {
@@ -1514,8 +1514,8 @@
             ]
           },
           "hints": [
-            "Setze u = x²",
-            "Dann: (u + 1)² - (u - 1)² = 4u = 4x²"
+            "u = x²: (u + 1)² - (u - 1)²",
+            "= 4u = 4x²"
           ]
         }
       ]
@@ -1540,8 +1540,8 @@
             ]
           },
           "hints": [
-            "Suche den größten gemeinsamen Teiler",
-            "3 ist der größte gemeinsame Teiler von 6 und 9"
+            "6x = 3 · 2x, 9 = 3 · 3",
+            "= 3(2x + 3)"
           ]
         },
         {
@@ -1560,8 +1560,8 @@
             ]
           },
           "hints": [
-            "x ist der gemeinsame Faktor",
-            "Klammere x aus"
+            "x² = x · x, 5x = x · 5",
+            "= x(x + 5)"
           ]
         },
         {
@@ -1580,8 +1580,8 @@
             ]
           },
           "hints": [
-            "Das ist die dritte binomische Formel rückwärts",
-            "a² - b² = (a + b)(a - b)"
+            "x² - 16 = x² - 4²",
+            "a² - b² = (a + b)(a - b) = (x + 4)(x - 4)"
           ]
         },
         {
@@ -1600,8 +1600,8 @@
             ]
           },
           "hints": [
-            "Erkenne die Differenz von Quadraten",
-            "x² - 9 = x² - 3², also a² - b² = (a + b)(a - b)"
+            "x² - 9 = x² - 3²",
+            "a² - b² = (a + b)(a - b) = (x + 3)(x - 3)"
           ]
         },
         {
@@ -1620,8 +1620,8 @@
             ]
           },
           "hints": [
-            "Das ist ein vollständiges Quadrat",
-            "Erste binomische Formel rückwärts"
+            "x² + 6x + 9 = x² + 2 · 3x + 3²",
+            "(a + b)² = (x + 3)²"
           ]
         },
         {
@@ -1640,8 +1640,8 @@
             ]
           },
           "hints": [
-            "4 ist der gemeinsame Faktor",
-            "4a = 4 · a, 8 = 4 · 2"
+            "4a = 4 · a, 8 = 4 · 2",
+            "= 4(a + 2)"
           ]
         },
         {
@@ -1660,8 +1660,8 @@
             ]
           },
           "hints": [
-            "Suche den größten gemeinsamen Teiler",
-            "3 ist der gemeinsame Faktor von 3x und 6"
+            "3x = 3 · x, 6 = 3 · 2",
+            "= 3(x + 2)"
           ]
         },
         {
@@ -1680,8 +1680,8 @@
             ]
           },
           "hints": [
-            "3y ist der gemeinsame Faktor",
-            "3y² = 3y · y, 6y = 3y · 2"
+            "3y² = 3y · y, 6y = 3y · 2",
+            "= 3y(y - 2)"
           ]
         },
         {
@@ -1701,7 +1701,7 @@
           },
           "hints": [
             "a² - 36 = a² - 6²",
-            "Dritte binomische Formel rückwärts"
+            "a² - b² = (a + b)(a - b) = (a + 6)(a - 6)"
           ]
         },
         {
@@ -1721,7 +1721,7 @@
           },
           "hints": [
             "9x² = (3x)², 4 = 2²",
-            "Dritte binomische Formel: a² - b² = (a + b)(a - b)"
+            "(3x)² - 2² = (3x + 2)(3x - 2)"
           ]
         },
         {
@@ -1760,8 +1760,8 @@
             ]
           },
           "hints": [
-            "Suche nach (x - a)²",
-            "x² - 8x + 16 = x² - 2·4x + 4²"
+            "x² - 8x + 16 = x² - 2 · 4x + 4²",
+            "(a - b)² = (x - 4)²"
           ]
         },
         {
@@ -1781,7 +1781,7 @@
           },
           "hints": [
             "4y² = (2y)², 9 = 3²",
-            "Prüfe: 2·2y·3 = 12y ✓"
+            "2 · 2y · 3 = 12y ✓, also (2y + 3)²"
           ]
         },
         {
@@ -1800,8 +1800,8 @@
             ]
           },
           "hints": [
-            "Erkenne die erste binomische Formel rückwärts",
-            "a² + 10a + 25 = a² + 2·5a + 5² = (a + 5)²"
+            "a² + 10a + 25 = a² + 2 · 5a + 5²",
+            "(a + b)² = (a + 5)²"
           ]
         },
         {
@@ -1821,7 +1821,7 @@
           },
           "hints": [
             "25x² = (5x)², 4 = 2²",
-            "Prüfe: 2·5x·2 = 20x ✓"
+            "2 · 5x · 2 = 20x ✓, also (5x - 2)²"
           ]
         },
         {
@@ -1860,8 +1860,8 @@
             ]
           },
           "hints": [
-            "x⁴ - 16 = (x²)² - 4²",
-            "Wende die dritte binomische Formel zweimal an"
+            "x⁴ - 16 = (x²)² - 4² = (x² + 4)(x² - 4)",
+            "x² - 4 = (x + 2)(x - 2)"
           ]
         },
         {
@@ -1880,8 +1880,8 @@
             ]
           },
           "hints": [
-            "Klammere zuerst 2 aus",
-            "2x² - 8 = 2(x² - 4)"
+            "2x² - 8 = 2(x² - 4)",
+            "x² - 4 = (x + 2)(x - 2)"
           ]
         },
         {
@@ -1900,8 +1900,8 @@
             ]
           },
           "hints": [
-            "Klammere zuerst 3 aus",
-            "3a² + 6a + 3 = 3(a² + 2a + 1)"
+            "3a² + 6a + 3 = 3(a² + 2a + 1)",
+            "a² + 2a + 1 = (a + 1)²"
           ]
         },
         {
@@ -1941,7 +1941,7 @@
           },
           "hints": [
             "x³ - 8 = x³ - 2³",
-            "Verwende die Differenz von Kuben: a³ - b³ = (a - b)(a² + ab + b²)"
+            "a³ - b³ = (a - b)(a² + ab + b²) = (x - 2)(x² + 2x + 4)"
           ]
         },
         {
@@ -1961,7 +1961,7 @@
           },
           "hints": [
             "8y³ + 27 = (2y)³ + 3³",
-            "Verwende die Summe von Kuben: a³ + b³ = (a + b)(a² - ab + b²)"
+            "a³ + b³ = (a + b)(a² - ab + b²) = (2y + 3)(4y² - 6y + 9)"
           ]
         },
         {
@@ -1980,8 +1980,8 @@
             ]
           },
           "hints": [
-            "Setze u = x²",
-            "u² - 2u + 1 = (u - 1)² = (x² - 1)²"
+            "u = x²: u² - 2u + 1",
+            "(u - 1)² = (x² - 1)²"
           ]
         },
         {
@@ -1994,9 +1994,9 @@
             "correctSolution": "0",
             "options": [
               "0",
-              "Vereinfache x",
-              "6x",
-              "7x"
+              "4x²",
+              "2x²",
+              "8x²"
             ]
           },
           "hints": [
@@ -2020,8 +2020,8 @@
             ]
           },
           "hints": [
-            "Klammere zuerst 6x aus",
-            "6x³ - 24x = 6x(x² - 4)"
+            "6x³ - 24x = 6x(x² - 4)",
+            "x² - 4 = (x + 2)(x - 2)"
           ]
         }
       ]
