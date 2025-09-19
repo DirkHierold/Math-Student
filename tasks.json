@@ -10,7 +10,7 @@
           "difficulty": 1,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 3x + 2x",
+            "question": "3x + 2x",
             "correctSolution": "5x",
             "options": [
               "5x",
@@ -20,8 +20,7 @@
             ]
           },
           "hints": [
-            "3x + 2x = (3+2)x",
-            "= 5x"
+            "3x + 2x = (3+2)x"
           ]
         },
         {
@@ -30,7 +29,7 @@
           "difficulty": 1,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 7a - 3a",
+            "question": "7a - 3a",
             "correctSolution": "4a",
             "options": [
               "4a",
@@ -40,8 +39,7 @@
             ]
           },
           "hints": [
-            "7a - 3a = (7-3)a",
-            "= 4a"
+            "7a - 3a = (7-3)a"
           ]
         },
         {
@@ -50,7 +48,7 @@
           "difficulty": 2,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 4x + 3y - 2x + y",
+            "question": "4x + 3y - 2x + y",
             "correctSolution": "2x + 4y",
             "options": [
               "2x + 4y",
@@ -70,7 +68,7 @@
           "difficulty": 2,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 5a + 3b - 2a + b",
+            "question": "5a + 3b - 2a + b",
             "correctSolution": "3a + 4b",
             "options": [
               "3a + 4b",
@@ -90,7 +88,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 2(3x + 1) - 4x",
+            "question": "2(3x + 1) - 4x",
             "correctSolution": "2x + 2",
             "options": [
               "2x + 2",
@@ -100,8 +98,7 @@
             ]
           },
           "hints": [
-            "2(3x + 1) = 6x + 2",
-            "6x + 2 - 4x = 2x + 2"
+            "2(3x + 1) = 6x + 2"
           ]
         },
         {
@@ -110,7 +107,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 3(2x - 1) + 2(x + 3) - 5x",
+            "question": "3(2x - 1) + 2(x + 3) - 5x",
             "correctSolution": "3x + 3",
             "options": [
               "3x + 3",
@@ -130,7 +127,7 @@
           "difficulty": 1,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 8y - 5y",
+            "question": "8y - 5y",
             "correctSolution": "3y",
             "options": [
               "3y",
@@ -140,8 +137,7 @@
             ]
           },
           "hints": [
-            "8y - 5y = (8-5)y",
-            "= 3y"
+            "8y - 5y = (8-5)y"
           ]
         },
         {
@@ -150,7 +146,7 @@
           "difficulty": 1,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 2a + 3a + a",
+            "question": "2a + 3a + a",
             "correctSolution": "6a",
             "options": [
               "6a",
@@ -170,7 +166,7 @@
           "difficulty": 1,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 5x + 2x",
+            "question": "5x + 2x",
             "correctSolution": "7x",
             "options": [
               "7x",
@@ -180,8 +176,7 @@
             ]
           },
           "hints": [
-            "5x + 2x = (5+2)x",
-            "= 7x"
+            "5x + 2x = (5+2)x"
           ]
         },
         {
@@ -190,7 +185,7 @@
           "difficulty": 2,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 6x - 2y + 3x - y",
+            "question": "6x - 2y + 3x - y",
             "correctSolution": "9x - 3y",
             "options": [
               "9x - 3y",
@@ -210,7 +205,7 @@
           "difficulty": 2,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: a + 3b - 2a + 5b",
+            "question": "a + 3b - 2a + 5b",
             "correctSolution": "-a + 8b",
             "options": [
               "-a + 8b",
@@ -230,7 +225,7 @@
           "difficulty": 2,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 8m - 3m + 2n + 5n",
+            "question": "8m - 3m + 2n + 5n",
             "correctSolution": "5m + 7n",
             "options": [
               "5m + 7n",
@@ -250,7 +245,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 4(x - 2) + 3x",
+            "question": "4(x - 2) + 3x",
             "correctSolution": "7x - 8",
             "options": [
               "7x - 8",
@@ -270,7 +265,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: -3(2a + 1) + 5a",
+            "question": "-3(2a + 1) + 5a",
             "correctSolution": "-a - 3",
             "options": [
               "-a - 3",
@@ -290,7 +285,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 2(3x - 1) + 4x - 3",
+            "question": "2(3x - 1) + 4x - 3",
             "correctSolution": "10x - 5",
             "options": [
               "10x - 5",
@@ -300,8 +295,7 @@
             ]
           },
           "hints": [
-            "Multipliziere zuerst aus: 2(3x - 1) = 6x - 2",
-            "Sammle dann ähnliche Terme: 6x + 4x = 10x und -2 - 3 = -5"
+            "2(3x - 1) = 6x - 2"
           ]
         },
         {
@@ -310,7 +304,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 5(y + 2) - 2(y - 1)",
+            "question": "5(y + 2) - 2(y - 1)",
             "correctSolution": "3y + 12",
             "options": [
               "3y + 12",
@@ -330,7 +324,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 2(3x + 1) - 3(x - 2)",
+            "question": "2(3x + 1) - 3(x - 2)",
             "correctSolution": "3x + 8",
             "options": [
               "3x + 8",
@@ -350,7 +344,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 4(2a - 3) + 3(a + 1) - 5a",
+            "question": "4(2a - 3) + 3(a + 1) - 5a",
             "correctSolution": "6a - 9",
             "options": [
               "6a - 9",
@@ -360,8 +354,8 @@
             ]
           },
           "hints": [
-            "Multipliziere alle Klammern aus",
-            "4(2a - 3) = 8a - 12, 3(a + 1) = 3a + 3"
+            "4(2a - 3) = 8a - 12",
+            "3(a + 1) = 3a + 3"
           ]
         },
         {
@@ -370,7 +364,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: -2(3x - 4) + 5(x + 1) - 3x",
+            "question": "-2(3x - 4) + 5(x + 1) - 3x",
             "correctSolution": "-4x + 13",
             "options": [
               "-4x + 13",
@@ -390,7 +384,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: -3(x + 2) + 2(2x - 1) + x",
+            "question": "-3(x + 2) + 2(2x - 1) + x",
             "correctSolution": "2x - 8",
             "options": [
               "2x - 8",
@@ -410,7 +404,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 3(2x - 1) - 2(x + 3) + 4",
+            "question": "3(2x - 1) - 2(x + 3) + 4",
             "correctSolution": "4x - 5",
             "options": [
               "4x - 5",
@@ -420,8 +414,8 @@
             ]
           },
           "hints": [
-            "Multipliziere beide Klammern aus",
-            "3(2x - 1) = 6x - 3 und 2(x + 3) = 2x + 6"
+            "3(2x - 1) = 6x - 3",
+            "2(x + 3) = 2x + 6"
           ]
         },
         {
@@ -430,7 +424,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 4(3a - 2) - 2(2a + 1) - 3(a - 4)",
+            "question": "4(3a - 2) - 2(2a + 1) - 3(a - 4)",
             "correctSolution": "5a + 2",
             "options": [
               "5a + 2",
@@ -440,8 +434,9 @@
             ]
           },
           "hints": [
-            "Multipliziere alle drei Klammern aus",
-            "4(3a - 2) = 12a - 8"
+            "4(3a - 2) = 12a - 8",
+            "2(2a + 1) = 4a + 2",
+            "3(a - 4) = 3a - 12"
           ]
         },
         {
@@ -450,7 +445,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 2(x + 3) - 3(2x - 1) + 4(x - 2)",
+            "question": "2(x + 3) - 3(2x - 1) + 4(x - 2)",
             "correctSolution": "3x + 1",
             "options": [
               "3x + 1",
@@ -471,7 +466,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 4(3x - 2) - 2(2x + 3) + 3(x - 1) - 5x",
+            "question": "4(3x - 2) - 2(2x + 3) + 3(x - 1) - 5x",
             "correctSolution": "6x - 17",
             "options": [
               "6x - 17",
@@ -482,7 +477,8 @@
           },
           "hints": [
             "4(3x - 2) = 12x - 8",
-            "-2(2x + 3) = -4x - 6, 3(x - 1) = 3x - 3"
+            "-2(2x + 3) = -4x - 6",
+            "3(x - 1) = 3x - 3"
           ]
         },
         {
@@ -491,7 +487,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: -2(3y - 4) + 5(y + 1) - 3(2y - 3)",
+            "question": "-2(3y - 4) + 5(y + 1) - 3(2y - 3)",
             "correctSolution": "-7y + 22",
             "options": [
               "-7y + 22",
@@ -568,8 +564,8 @@
             ]
           },
           "hints": [
-            "x · x = x², x · 2 = 2x",
-            "3 · x = 3x, 3 · 2 = 6"
+            "x · x = x²",
+            "3 · x = 3x"
           ]
         },
         {
@@ -609,7 +605,8 @@
           },
           "hints": [
             "2x · x = 2x²",
-            "2x · 3 = 6x, -1 · x = -x, -1 · 3 = -3"
+            "2x · 3 = 6x",
+            "-1 · x = -x"
           ]
         },
         {
@@ -689,7 +686,8 @@
           },
           "hints": [
             "a · a = a²",
-            "a · 4 = 4a, (-1) · a = -a, (-1) · 4 = -4"
+            "a · 4 = 4a",
+            "(-1) · a = -a"
           ]
         },
         {
@@ -709,7 +707,7 @@
           },
           "hints": [
             "3y · y = 3y²",
-            "3y · (-2) = -6y, 1 · y = y, 1 · (-2) = -2"
+            "3y · (-2) = -6y"
           ]
         },
         {
@@ -718,7 +716,7 @@
           "difficulty": 2,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 3(x + 4) - 2x",
+            "question": "3(x + 4) - 2x",
             "correctSolution": "x + 12",
             "options": [
               "x + 12",
@@ -749,7 +747,7 @@
           },
           "hints": [
             "x · 2x = 2x²",
-            "x · 1 = x, (-3) · 2x = -6x, (-3) · 1 = -3"
+            "(-3) · 2x = -6x"
           ]
         },
         {
@@ -769,7 +767,7 @@
           },
           "hints": [
             "4a · a = 4a²",
-            "4a · 2 = 8a, (-3) · a = -3a, (-3) · 2 = -6"
+            "4a · 2 = 8a"
           ]
         },
         {
@@ -778,7 +776,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (2x + 1)(x - 3)",
+            "question": "(2x + 1)(x - 3)",
             "correctSolution": "2x² - 5x - 3",
             "options": [
               "2x² - 5x - 3",
@@ -808,8 +806,7 @@
             ]
           },
           "hints": [
-            "x · x = x², x · (-1) = -x",
-            "1 · x = x, 1 · (-1) = -1"
+            "x · x = x²"
           ]
         },
         {
@@ -818,7 +815,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 2x(3x - 4) - (x - 2)(x + 1)",
+            "question": "2x(3x - 4) - (x - 2)(x + 1)",
             "correctSolution": "5x² - 9x + 2",
             "options": [
               "5x² - 9x + 2",
@@ -849,7 +846,7 @@
           },
           "hints": [
             "3x · 2x = 6x²",
-            "3x · 5 = 15x, (-4) · 2x = -8x, (-4) · 5 = -20"
+            "3x · 2x = 6x²"
           ]
         },
         {
@@ -869,7 +866,7 @@
           },
           "hints": [
             "5a · 3a = 15a²",
-            "5a · (-1) = -5a, 2 · 3a = 6a, 2 · (-1) = -2"
+            "5a · 3a = 15a²"
           ]
         },
         {
@@ -898,7 +895,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 3x(2x + 1) - 2(x² - 3x + 4)",
+            "question": "3x(2x + 1) - 2(x² - 3x + 4)",
             "correctSolution": "4x² + 9x - 8",
             "options": [
               "4x² + 9x - 8",
@@ -958,7 +955,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x + 2)² - (x - 1)²",
+            "question": "(x + 2)² - (x - 1)²",
             "correctSolution": "6x + 3",
             "options": [
               "6x + 3",
@@ -978,7 +975,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (2x - 1)(3x + 2) - x(x + 4) + (x + 1)(x - 3)",
+            "question": "(2x - 1)(3x + 2) - x(x + 4) + (x + 1)(x - 3)",
             "correctSolution": "6x² - 3x - 5",
             "options": [
               "6x² - 3x - 5",
@@ -1035,7 +1032,7 @@
           },
           "hints": [
             "(a + b)² = a² + 2ab + b²",
-            "a = x, b = 3"
+            "(x + 3)² = x² + 6x + 9"
           ]
         },
         {
@@ -1075,7 +1072,7 @@
           },
           "hints": [
             "(a - b)² = a² - 2ab + b²",
-            "a = 2x, b = 1"
+            "(2x - 1)² = 4x² - 4x + 1"
           ]
         },
         {
@@ -1095,7 +1092,7 @@
           },
           "hints": [
             "(a + b)(a - b) = a² - b²",
-            "a = 3y, b = 2"
+            "(3y + 2)(3y - 2) = 9y² - 4"
           ]
         },
         {
@@ -1104,7 +1101,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x - 3)² + (x + 2)²",
+            "question": "(x - 3)² + (x + 2)²",
             "correctSolution": "2x² - 2x + 13",
             "options": [
               "2x² - 2x + 13",
@@ -1135,7 +1132,7 @@
           },
           "hints": [
             "(a - b)² = a² - 2ab + b²",
-            "a = y, b = 2"
+            "(y - 2)² = y² - 4y + 4"
           ]
         },
         {
@@ -1155,7 +1152,7 @@
           },
           "hints": [
             "(a + b)(a - b) = a² - b²",
-            "a = x, b = 5"
+            "(x + 5)(x - 5) = x² - 25"
           ]
         },
         {
@@ -1175,7 +1172,7 @@
           },
           "hints": [
             "(a + b)² = a² + 2ab + b²",
-            "a = a, b = 1"
+            "(a + 1)² = a² + 2a + 1"
           ]
         },
         {
@@ -1195,7 +1192,7 @@
           },
           "hints": [
             "(a + b)² = a² + 2ab + b²",
-            "a = 3a, b = 2"
+            "(3a + 2)² = 9a² + 12a + 4"
           ]
         },
         {
@@ -1235,7 +1232,7 @@
           },
           "hints": [
             "(a - b)² = a² - 2ab + b²",
-            "a = 4x, b = 3"
+            "(4x - 3)² = 16x² - 24x + 9"
           ]
         },
         {
@@ -1244,7 +1241,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x + 4)² - (x - 2)²",
+            "question": "(x + 4)² - (x - 2)²",
             "correctSolution": "12x + 12",
             "options": [
               "12x + 12",
@@ -1275,7 +1272,7 @@
           },
           "hints": [
             "(2a + b)(2a - b) = 4a² - b²",
-            "Dann addiere b²"
+            "= 4a² - 9b² + 9b² = 4a²"
           ]
         },
         {
@@ -1284,7 +1281,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (3x - 1)²",
+            "question": "(3x - 1)²",
             "correctSolution": "9x² - 6x + 1",
             "options": [
               "9x² - 6x + 1",
@@ -1304,7 +1301,7 @@
           "difficulty": 3,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (2x + 1)² - (x - 2)²",
+            "question": "(2x + 1)² - (x - 2)²",
             "correctSolution": "3x² + 8x - 3",
             "options": [
               "3x² + 8x - 3",
@@ -1324,7 +1321,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (2a + 3b)² - (2a - 3b)²",
+            "question": "(2a + 3b)² - (2a - 3b)²",
             "correctSolution": "24ab",
             "options": [
               "24ab",
@@ -1344,7 +1341,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (3x + 2y)² + (3x - 2y)²",
+            "question": "(3x + 2y)² + (3x - 2y)²",
             "correctSolution": "18x² + 8y²",
             "options": [
               "18x² + 8y²",
@@ -1384,7 +1381,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (3a + 2b)² - (3a - 2b)² + 4b²",
+            "question": "(3a + 2b)² - (3a - 2b)² + 4b²",
             "correctSolution": "24ab + 4b²",
             "options": [
               "24ab + 4b²",
@@ -1404,7 +1401,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (5a - 2)² - (3a + 1)²",
+            "question": "(5a - 2)² - (3a + 1)²",
             "correctSolution": "16a² - 26a + 3",
             "options": [
               "16a² - 26a + 3",
@@ -1424,7 +1421,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (2x + 3)³ - 27",
+            "question": "(2x + 3)³ - 27",
             "correctSolution": "8x³ + 36x² + 54x",
             "options": [
               "8x³ + 36x² + 54x",
@@ -1444,7 +1441,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (a + b + c)² - (a - b - c)²",
+            "question": "(a + b + c)² - (a - b - c)²",
             "correctSolution": "4ab + 4ac + 4bc",
             "options": [
               "4ab + 4ac + 4bc",
@@ -1464,7 +1461,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (3x + 2y)² - (3x - 2y)² - 8xy",
+            "question": "(3x + 2y)² - (3x - 2y)² - 8xy",
             "correctSolution": "16xy",
             "options": [
               "16xy",
@@ -1484,7 +1481,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x + y + z)² - (x - y - z)² - 4xz",
+            "question": "(x + y + z)² - (x - y - z)² - 4xz",
             "correctSolution": "4xy + 4yz",
             "options": [
               "4xy + 4yz",
@@ -1504,7 +1501,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x² + 1)² - (x² - 1)²",
+            "question": "(x² + 1)² - (x² - 1)²",
             "correctSolution": "4x²",
             "options": [
               "4x²",
@@ -1730,7 +1727,7 @@
           "difficulty": 2,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x + 3)(x - 3) + 9",
+            "question": "(x + 3)(x - 3) + 9",
             "correctSolution": "x²",
             "options": [
               "x²",
@@ -1781,7 +1778,7 @@
           },
           "hints": [
             "4y² = (2y)², 9 = 3²",
-            "2 · 2y · 3 = 12y ✓, also (2y + 3)²"
+            "= (2y + 3)²"
           ]
         },
         {
@@ -1821,7 +1818,7 @@
           },
           "hints": [
             "25x² = (5x)², 4 = 2²",
-            "2 · 5x · 2 = 20x ✓, also (5x - 2)²"
+            "= (5x - 2)²"
           ]
         },
         {
@@ -1830,7 +1827,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x - 2)² + (x + 2)² - 2x²",
+            "question": "(x - 2)² + (x + 2)² - 2x²",
             "correctSolution": "8",
             "options": [
               "8",
@@ -1910,7 +1907,7 @@
           "difficulty": 4,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: 3(x + 1)² - 3(x - 1)²",
+            "question": "3(x + 1)² - 3(x - 1)²",
             "correctSolution": "12x",
             "options": [
               "12x",
@@ -1990,7 +1987,7 @@
           "difficulty": 5,
           "taskType": "multiple_choice",
           "data": {
-            "question": "Vereinfache: (x² + 1)² - (x² - 1)² - 4x²",
+            "question": "(x² + 1)² - (x² - 1)² - 4x²",
             "correctSolution": "0",
             "options": [
               "0",

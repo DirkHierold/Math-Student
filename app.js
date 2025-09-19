@@ -388,8 +388,8 @@ class MathStudentApp {
         const interactionArea = document.getElementById('interaction-area');
 
         questionArea.innerHTML = `
-            <h2>${task.data.question}</h2>
-            <button id="hint-btn" class="hint-question-mark">?</button>
+            <h2>Vereinfache! <button id="hint-btn" class="hint-question-mark">?</button></h2>
+            <h3>${task.data.question}</h3>
         `;
 
         // Set up hint button event listener after creating it
