@@ -1,0 +1,393 @@
+{
+  "blocks": {
+    "1": {
+      "title": "Grundlagen & Definitionen",
+      "icon": "📚",
+      "tasks": [
+        {
+          "id": "I1L1T01",
+          "block": 1,
+          "difficulty": 1,
+          "taskType": "fill_in_the_blank",
+          "data": {
+            "instruction": "Definition Stammfunktion",
+            "text": "Gegeben sei eine auf einem Intervall I definierte Funktion f. Eine Funktion F heißt _____ von f im Intervall I, wenn für alle x ∈ I gilt: _____ = f(x).",
+            "blanks": [
+              {
+                "position": 0,
+                "correctAnswer": "Stammfunktion",
+                "options": ["Stammfunktion", "Ableitung", "Umkehrfunktion", "Grenzfunktion"]
+              },
+              {
+                "position": 1,
+                "correctAnswer": "F'(x)",
+                "options": ["F'(x)", "F(x)", "f'(x)", "F''(x)"]
+              }
+            ]
+          },
+          "hints": [
+            "📚 DEFINITION: Eine Funktion F heißt Stammfunktion von f, wenn die Ableitung von F gleich f ist.",
+            "🔗 ZUSAMMENHANG: Ableitung und Integration sind Umkehroperationen zueinander.",
+            "⚠️ WICHTIG: Nicht jede Funktion besitzt eine Stammfunktion, aber wenn eine existiert, gibt es unendlich viele."
+          ]
+        },
+        {
+          "id": "I1L1T02",
+          "block": 1,
+          "difficulty": 1,
+          "taskType": "fill_in_the_blank",
+          "data": {
+            "instruction": "Satz über Stammfunktionen",
+            "text": "Wenn eine Funktion eine Stammfunktion hat, dann hat sie auch _____ viele Stammfunktionen, die sich über ein Intervall nur um eine _____ Konstante c unterscheiden.",
+            "blanks": [
+              {
+                "position": 0,
+                "correctAnswer": "unendlich",
+                "options": ["unendlich", "endlich", "zwei", "drei"]
+              },
+              {
+                "position": 1,
+                "correctAnswer": "additive",
+                "options": ["additive", "multiplikative", "negative", "positive"]
+              }
+            ]
+          },
+          "hints": [
+            "📜 SATZ: Wenn eine Funktion eine Stammfunktion hat, dann hat sie unendlich viele Stammfunktionen.",
+            "➕ UNTERSCHIED: Alle Stammfunktionen derselben Funktion unterscheiden sich nur um eine additive Konstante c.",
+            "💡 MERKE: Zu F(x) ist auch F(x) + c eine Stammfunktion, wobei c ∈ ℝ beliebig ist."
+          ]
+        },
+        {
+          "id": "I1L1T03",
+          "block": 1,
+          "difficulty": 2,
+          "taskType": "fill_in_the_blank",
+          "data": {
+            "instruction": "Definition unbestimmtes Integral",
+            "text": "Die Menge aller Stammfunktionen F der Funktion f nennt man _____ der Funktion f. Man schreibt: ∫f(x)dx = _____ + c, wobei c ∈ ℝ.",
+            "blanks": [
+              {
+                "position": 0,
+                "correctAnswer": "unbestimmtes Integral",
+                "options": ["unbestimmtes Integral", "bestimmtes Integral", "Differentialgleichung", "Grenzwert"]
+              },
+              {
+                "position": 1,
+                "correctAnswer": "F(x)",
+                "options": ["F(x)", "f(x)", "f'(x)", "F'(x)"]
+              }
+            ]
+          },
+          "hints": [
+            "📚 DEFINITION: Das unbestimmte Integral ∫f(x)dx ist die Menge aller Stammfunktionen von f.",
+            "🔤 NOTATION: ∫f(x)dx = F(x) + c, wobei F eine Stammfunktion von f ist und c ∈ ℝ.",
+            "🔍 BESTANDTEILE: ∫ = Integralzeichen, f(x) = Integrand, dx = Differential (zeigt die Variable an)."
+          ]
+        },
+        {
+          "id": "I1L1T04",
+          "block": 1,
+          "difficulty": 2,
+          "taskType": "fill_in_the_blank",
+          "data": {
+            "instruction": "Definition bestimmtes Integral",
+            "text": "Es sei f eine im Intervall [a,b] _____ Funktion. Das bestimmte Integral versteht man als den _____ der Punktmenge, die vom Graphen der Funktion, der x-Achse und den Parallelen zur y-Achse durch a und b begrenzt wird.",
+            "blanks": [
+              {
+                "position": 0,
+                "correctAnswer": "stetige",
+                "options": ["stetige", "differenzierbare", "lineare", "quadratische"]
+              },
+              {
+                "position": 1,
+                "correctAnswer": "Flächeninhalt",
+                "options": ["Flächeninhalt", "Umfang", "Durchmesser", "Volumen"]
+              }
+            ]
+          },
+          "hints": [
+            "📚 DEFINITION: Das bestimmte Integral ∫ᵃᵇf(x)dx ist eine reelle Zahl, die den Flächeninhalt beschreibt.",
+            "📐 GEOMETRIE: Es berechnet die Fläche zwischen dem Graphen von f, der x-Achse und den Geraden x=a und x=b.",
+            "⚡ VORAUSSETZUNG: Die Funktion f muss im Intervall [a,b] stetig sein, damit das bestimmte Integral existiert."
+          ]
+        }
+      ]
+    },
+    "2": {
+      "title": "Grundregeln der Integration",
+      "icon": "⚡",
+      "tasks": [
+        {
+          "id": "I2L1T01",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Potenzregel",
+            "question": "∫x³ dx =",
+            "correctSolution": "¼x⁴ + c",
+            "options": [
+              "¼x⁴ + c",
+              "3x² + c",
+              "⅓x³ + c",
+              "x⁴ + c"
+            ]
+          },
+          "hints": [
+            "Bei der Potenzregel erhöht man den Exponenten um 1.",
+            "Dann teilt man durch den neuen Exponenten."
+          ]
+        },
+        {
+          "id": "I2L1T02",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Faktorregel",
+            "question": "∫5x² dx =",
+            "correctSolution": "⁵⁄₃x³ + c",
+            "options": [
+              "⁵⁄₃x³ + c",
+              "5x³ + c",
+              "10x + c",
+              "⅓x³ + c"
+            ]
+          },
+          "hints": [
+            "Konstante Faktoren bleiben vor dem Integral stehen.",
+            "5 · ∫x² dx = 5 · ⅓x³ + c"
+          ]
+        },
+        {
+          "id": "I2L1T03",
+          "block": 2,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Summenregel",
+            "question": "∫(x² + 3x) dx =",
+            "correctSolution": "⅓x³ + ³⁄₂x² + c",
+            "options": [
+              "⅓x³ + ³⁄₂x² + c",
+              "⅓x³ + 3x² + c",
+              "x³ + 3x² + c",
+              "2x + 3 + c"
+            ]
+          },
+          "hints": [
+            "Die Summenregel: ∫(f + g) dx = ∫f dx + ∫g dx",
+            "Jede Funktion wird einzeln integriert."
+          ]
+        },
+        {
+          "id": "I2L1T04",
+          "block": 2,
+          "difficulty": 2,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Kombinierte Regeln",
+            "question": "∫(2x³ - 4x + 7) dx =",
+            "correctSolution": "½x⁴ - 2x² + 7x + c",
+            "options": [
+              "½x⁴ - 2x² + 7x + c",
+              "2x⁴ - 4x² + 7x + c",
+              "6x² - 4 + c",
+              "½x⁴ - 4x² + 7x + c"
+            ]
+          },
+          "hints": [
+            "Wende alle drei Regeln an: Potenz-, Faktor- und Summenregel.",
+            "∫2x³ dx = 2 · ¼x⁴ = ½x⁴"
+          ]
+        }
+      ]
+    },
+    "3": {
+      "title": "Sonderfälle & spezielle Funktionen",
+      "icon": "🎯",
+      "tasks": [
+        {
+          "id": "I3L1T01",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Konstante",
+            "question": "∫5 dx =",
+            "correctSolution": "5x + c",
+            "options": [
+              "5x + c",
+              "5 + c",
+              "0",
+              "⅕x + c"
+            ]
+          },
+          "hints": [
+            "Eine Konstante wird zu einem linearen Term.",
+            "∫a dx = ax + c für jede Konstante a."
+          ]
+        },
+        {
+          "id": "I3L1T02",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "e-Funktion",
+            "question": "∫eˣ dx =",
+            "correctSolution": "eˣ + c",
+            "options": [
+              "eˣ + c",
+              "xeˣ + c",
+              "eˣ⁺¹ + c",
+              "e + c"
+            ]
+          },
+          "hints": [
+            "Die e-Funktion ist ihre eigene Stammfunktion.",
+            "d/dx(eˣ) = eˣ, also ∫eˣ dx = eˣ + c"
+          ]
+        },
+        {
+          "id": "I3L1T03",
+          "block": 3,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Sinus-Funktion",
+            "question": "∫sin(x) dx =",
+            "correctSolution": "-cos(x) + c",
+            "options": [
+              "-cos(x) + c",
+              "cos(x) + c",
+              "-sin(x) + c",
+              "sin(x) + c"
+            ]
+          },
+          "hints": [
+            "Die Ableitung von cos(x) ist -sin(x).",
+            "Also ist die Stammfunktion von sin(x) gleich -cos(x)."
+          ]
+        },
+        {
+          "id": "I3L1T04",
+          "block": 3,
+          "difficulty": 2,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Cosinus-Funktion",
+            "question": "∫cos(x) dx =",
+            "correctSolution": "sin(x) + c",
+            "options": [
+              "sin(x) + c",
+              "-sin(x) + c",
+              "cos(x) + c",
+              "-cos(x) + c"
+            ]
+          },
+          "hints": [
+            "Die Ableitung von sin(x) ist cos(x).",
+            "Also ist die Stammfunktion von cos(x) gleich sin(x)."
+          ]
+        }
+      ]
+    },
+    "4": {
+      "title": "Hauptsatz & bestimmte Integrale",
+      "icon": "🏆",
+      "tasks": [
+        {
+          "id": "I4L1T01",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "fill_in_the_blank",
+          "data": {
+            "instruction": "Hauptsatz der Differential- und Integralrechnung",
+            "text": "Hauptsatz: Ist F eine beliebige Stammfunktion von f im Intervall, dann gilt: ∫ᵃᵇ f(x)dx = _____ - _____",
+            "blanks": [
+              {
+                "position": 0,
+                "correctAnswer": "F(b)",
+                "options": ["F(b)", "F(a)", "f(b)", "f(a)"]
+              },
+              {
+                "position": 1,
+                "correctAnswer": "F(a)",
+                "options": ["F(a)", "F(b)", "f(a)", "f(b)"]
+              }
+            ]
+          },
+          "hints": [
+            "Obere Grenze minus untere Grenze.",
+            "F(b) - F(a) ist die Standardformel."
+          ]
+        },
+        {
+          "id": "I4L1T02",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Bestimmtes Integral",
+            "question": "∫₀² x² dx =",
+            "correctSolution": "8/3",
+            "options": [
+              "8/3",
+              "4/3",
+              "8",
+              "4"
+            ]
+          },
+          "hints": [
+            "Stammfunktion von x² ist ⅓x³.",
+            "Berechne ⅓ · 2³ - ⅓ · 0³"
+          ]
+        },
+        {
+          "id": "I4L1T03",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Bestimmtes Integral",
+            "question": "∫₁³ (2x + 1) dx =",
+            "correctSolution": "12",
+            "options": [
+              "12",
+              "8",
+              "10",
+              "6"
+            ]
+          },
+          "hints": [
+            "Stammfunktion von 2x + 1 ist x² + x.",
+            "Berechne (3² + 3) - (1² + 1)"
+          ]
+        },
+        {
+          "id": "I4L1T04",
+          "block": 4,
+          "difficulty": 1,
+          "taskType": "multiple_choice",
+          "data": {
+            "instruction": "Eigenschaften bestimmter Integrale",
+            "question": "Bestimmte Integrale sind _____ Zahlen, die positiv, negativ oder null sein können.",
+            "correctSolution": "reelle",
+            "options": [
+              "reelle",
+              "komplexe",
+              "natürliche",
+              "ganze"
+            ]
+          },
+          "hints": [
+            "Bestimmte Integrale ergeben konkrete Zahlenwerte.",
+            "Diese Werte gehören zu den reellen Zahlen ℝ."
+          ]
+        }
+      ]
+    }
+  }
+}

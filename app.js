@@ -6,13 +6,17 @@ class MathStudentApp {
         this.version = "5.0.0";
         this.currentView = "dashboard";
         this.currentBlock = null;
+
+        // Load saved topic or default to "termumformungen-9"
+        this.currentTopic = localStorage.getItem('mathStudentCurrentTopic') || "termumformungen-9";
+
         this.currentSession = {
             tasks: [],
             currentIndex: 0,
             correctCount: 0
         };
         this.tasks = {};
-        
+
         this.initializeApp();
     }
 
@@ -21,6 +25,7 @@ class MathStudentApp {
         await this.loadTasks();
         this.initializeStorage();
         this.bindEvents();
+        this.setTopicDropdownValue(); // Set dropdown to saved topic
         this.renderDashboard();
         this.showView('dashboard');
     }
@@ -28,9 +33,15 @@ class MathStudentApp {
     // Load tasks from JSON file
     async loadTasks() {
         try {
-            const response = await fetch('tasks.json');
-            const data = await response.json();
-            this.tasks = data.blocks;
+            if (this.currentTopic === 'integralrechnung-11') {
+                const response = await fetch('tasks-integralrechnung.json');
+                const data = await response.json();
+                this.tasks = data.blocks;
+            } else {
+                const response = await fetch('tasks.json');
+                const data = await response.json();
+                this.tasks = data.blocks;
+            }
         } catch (error) {
             console.error('Failed to load tasks:', error);
             this.tasks = {};
@@ -39,8 +50,9 @@ class MathStudentApp {
 
     // Initialize LocalStorage with default data
     initializeStorage() {
-        let stored = localStorage.getItem('mathStudentData');
-        
+        const storageKey = `mathStudentData_${this.currentTopic}`;
+        let stored = localStorage.getItem(storageKey);
+
         if (!stored) {
             // Create initial data structure
             const initialData = {
@@ -69,7 +81,8 @@ class MathStudentApp {
             if (!this.isCompatibleVersion(this.data.version)) {
                 this.showFeedback('Import fehlgeschlagen: Dieser Speicherstand stammt von einer inkompatiblen Programmversion und kann nicht geladen werden.', 'error');
                 // Reset to initial data
-                localStorage.removeItem('mathStudentData');
+                const storageKey = `mathStudentData_${this.currentTopic}`;
+                localStorage.removeItem(storageKey);
                 this.initializeStorage();
                 return;
             }
@@ -151,12 +164,24 @@ class MathStudentApp {
                 data.progress[blockKey].recentAnswers = data.progress[blockKey].recentAnswers.slice(-50);
             }
         }
-        
+
         data.lastSession = new Date().toISOString();
-        localStorage.setItem('mathStudentData', JSON.stringify(data));
+        const storageKey = `mathStudentData_${this.currentTopic}`;
+        localStorage.setItem(storageKey, JSON.stringify(data));
+
+        // Also save the current topic selection globally
+        localStorage.setItem('mathStudentCurrentTopic', this.currentTopic);
+
         this.data = data;
     }
 
+    // Set topic dropdown to current topic value
+    setTopicDropdownValue() {
+        const dropdown = document.getElementById('topic-dropdown');
+        if (dropdown) {
+            dropdown.value = this.currentTopic;
+        }
+    }
 
     // Bind event listeners
     bindEvents() {
@@ -164,6 +189,9 @@ class MathStudentApp {
         document.getElementById('settings-btn').onclick = () => this.showSettings();
         document.getElementById('settings-back-btn').onclick = () => this.showView('dashboard');
         document.getElementById('back-btn').onclick = () => this.showExitConfirmation();
+
+        // Topic selection
+        document.getElementById('topic-dropdown').onchange = (e) => this.handleTopicChange(e.target.value);
         
         // Settings
         document.getElementById('copy-btn').onclick = () => this.copyShareHash();
@@ -390,13 +418,28 @@ class MathStudentApp {
         // Ensure question area is visible when rendering a task
         questionArea.style.display = 'block';
 
-        // Use instruction if available, otherwise default to "Vereinfache!"
-        const instruction = task.data.instruction || "Vereinfache!";
-
-        questionArea.innerHTML = `
-            <h2>${instruction} <button id="hint-btn" class="hint-question-mark">?</button></h2>
-            <h3>${task.data.question}</h3>
-        `;
+        if (task.taskType === 'fill_in_the_blank') {
+            // For fill-in-the-blank tasks, show instruction if available
+            const instruction = task.data.instruction || "";
+            if (instruction) {
+                questionArea.innerHTML = `
+                    <h2>${instruction} <button id="hint-btn" class="hint-question-mark">?</button></h2>
+                `;
+            } else {
+                questionArea.innerHTML = `
+                    <div style="text-align: right;">
+                        <button id="hint-btn" class="hint-question-mark">?</button>
+                    </div>
+                `;
+            }
+        } else {
+            // For multiple choice tasks, use instruction or default
+            const instruction = task.data.instruction || "Vereinfache!";
+            questionArea.innerHTML = `
+                <h2>${instruction} <button id="hint-btn" class="hint-question-mark">?</button></h2>
+                <h3>${task.data.question}</h3>
+            `;
+        }
 
         // Set up hint button event listener after creating it
         document.getElementById('hint-btn').onclick = () => this.showHint();
@@ -430,8 +473,11 @@ class MathStudentApp {
     renderTaskInteraction(task, container) {
         container.innerHTML = '';
 
-        // All tasks are now multiple choice
-        this.renderMultipleChoice(task, container);
+        if (task.taskType === 'multiple_choice') {
+            this.renderMultipleChoice(task, container);
+        } else if (task.taskType === 'fill_in_the_blank') {
+            this.renderFillInTheBlank(task, container);
+        }
     }
 
 
@@ -574,6 +620,148 @@ class MathStudentApp {
         this.saveData();
     }
 
+    // Render fill in the blank task
+    renderFillInTheBlank(task, container) {
+        this.currentFillInTheBlankState = {
+            blanks: task.data.blanks,
+            userAnswers: new Array(task.data.blanks.length).fill(''),
+            isAnswered: false
+        };
+
+        // Create text with dropdowns
+        const textContainer = document.createElement('div');
+        textContainer.className = 'fill-in-text';
+
+        let text = task.data.text;
+        let blankIndex = 0;
+
+        // Replace each _____ with a dropdown
+        text = text.replace(/_____/g, () => {
+            const blank = task.data.blanks[blankIndex];
+            const selectId = `blank-${blankIndex}`;
+
+            let selectHtml = `<select id="${selectId}" class="blank-dropdown" data-blank-index="${blankIndex}">`;
+            selectHtml += '<option value="">-- Auswählen --</option>';
+
+            // Shuffle options for each blank
+            const shuffledOptions = [...blank.options].sort(() => Math.random() - 0.5);
+            shuffledOptions.forEach(option => {
+                selectHtml += `<option value="${option}">${option}</option>`;
+            });
+            selectHtml += '</select>';
+
+            blankIndex++;
+            return selectHtml;
+        });
+
+        textContainer.innerHTML = text;
+        container.appendChild(textContainer);
+
+        // Add event listeners to dropdowns
+        textContainer.querySelectorAll('.blank-dropdown').forEach(select => {
+            select.onchange = (e) => {
+                const blankIndex = parseInt(e.target.dataset.blankIndex);
+                this.currentFillInTheBlankState.userAnswers[blankIndex] = e.target.value;
+                this.checkFillInTheBlankComplete();
+            };
+        });
+
+        // Create submit button (initially disabled)
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'fill-in-buttons';
+
+        const submitBtn = document.createElement('button');
+        submitBtn.className = 'primary-btn';
+        submitBtn.textContent = 'Antwort prüfen';
+        submitBtn.disabled = true;
+        submitBtn.id = 'fill-submit-btn';
+        submitBtn.onclick = () => this.handleFillInTheBlankSubmit(container);
+
+        buttonContainer.appendChild(submitBtn);
+        container.appendChild(buttonContainer);
+    }
+
+    // Check if all blanks are filled
+    checkFillInTheBlankComplete() {
+        const state = this.currentFillInTheBlankState;
+        const allFilled = state.userAnswers.every(answer => answer !== '');
+        const submitBtn = document.getElementById('fill-submit-btn');
+        if (submitBtn) {
+            submitBtn.disabled = !allFilled;
+        }
+    }
+
+    // Handle fill in the blank submission
+    handleFillInTheBlankSubmit(container) {
+        const state = this.currentFillInTheBlankState;
+        if (state.isAnswered) return;
+
+        state.isAnswered = true;
+
+        let allCorrect = true;
+        const task = this.currentSession.tasks[this.currentSession.currentIndex];
+
+        // Check each answer and provide feedback
+        state.blanks.forEach((blank, index) => {
+            const userAnswer = state.userAnswers[index];
+            const isCorrect = userAnswer === blank.correctAnswer;
+            if (!isCorrect) allCorrect = false;
+
+            const dropdown = document.getElementById(`blank-${index}`);
+            dropdown.disabled = true;
+
+            if (isCorrect) {
+                dropdown.classList.add('correct');
+            } else {
+                dropdown.classList.add('incorrect');
+                // Show correct answer in tooltip or feedback
+                dropdown.title = `Richtig wäre: ${blank.correctAnswer}`;
+            }
+        });
+
+        // Show result feedback
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.className = `feedback ${allCorrect ? 'success' : 'error'}`;
+        feedbackDiv.innerHTML = allCorrect ?
+            '✅ Alle Antworten sind richtig!' :
+            '❌ Nicht alle Antworten sind richtig. Siehe die rot markierten Felder.';
+
+        container.appendChild(feedbackDiv);
+
+        // Replace submit button with next button
+        const buttonContainer = container.querySelector('.fill-in-buttons');
+        buttonContainer.innerHTML = '';
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'primary-btn';
+        const isLastTask = (this.currentSession.currentIndex + 1) >= this.currentSession.tasks.length;
+        nextBtn.textContent = isLastTask ? 'Auswertung' : 'Nächste Aufgabe';
+        nextBtn.onclick = () => this.nextTask();
+
+        buttonContainer.appendChild(nextBtn);
+
+        // Process the answer
+        this.processFillInTheBlankAnswer(task, allCorrect);
+    }
+
+    // Process fill in the blank answer
+    processFillInTheBlankAnswer(task, isCorrect) {
+        // Record answer for this session
+        this.currentSession.sessionResults.push({
+            taskId: task.id,
+            correct: isCorrect
+        });
+
+        // Update session progress
+        if (isCorrect) {
+            this.currentSession.correctCount++;
+        } else {
+            this.currentSession.errors++;
+        }
+
+        // Save progress
+        this.saveData();
+    }
 
     // Update session progress bar
     updateSessionProgress() {
@@ -789,8 +977,9 @@ class MathStudentApp {
     // Reset all progress
     resetProgress() {
         if (confirm('Bist du sicher, dass du deinen gesamten Fortschritt löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-            // Clear localStorage
-            localStorage.removeItem('mathStudentData');
+            // Clear localStorage for current topic
+            const storageKey = `mathStudentData_${this.currentTopic}`;
+            localStorage.removeItem(storageKey);
             
             // Reinitialize app data
             this.initializeStorage();
@@ -801,6 +990,23 @@ class MathStudentApp {
             
             this.showFeedback('Alle Daten wurden gelöscht. Du beginnst wieder bei 0!', 'success');
         }
+    }
+
+    // Handle topic change from dropdown
+    async handleTopicChange(topicValue) {
+        this.currentTopic = topicValue;
+
+        // Save the new topic selection immediately
+        localStorage.setItem('mathStudentCurrentTopic', this.currentTopic);
+
+        // Reload tasks for the selected topic
+        await this.loadTasks();
+
+        // Reinitialize storage for the new topic
+        this.initializeStorage();
+
+        // Re-render dashboard with new progress data
+        this.renderDashboard();
     }
 
     // Show feedback message
