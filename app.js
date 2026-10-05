@@ -84,7 +84,7 @@ class MathFeedApp {
             this.lastActiveTick = Date.now();
             if (document.visibilityState === 'hidden') this.saveState();
         });
-        window.addEventListener('resize', () => this.fitMathToWidth());
+        window.addEventListener('resize', () => this.fitRenderedMath());
         window.addEventListener('focus', () => {
             this.lastActiveTick = Date.now();
         });
@@ -137,11 +137,9 @@ class MathFeedApp {
 
     renderTask() {
         const task = this.currentTask;
-        document.getElementById('type-label').textContent = HEADER_TYPE_LABELS[task.type];
-        document.getElementById('task-step').textContent = `Schritt ${task.stage + 1}/${TASK_STEP_COUNTS[task.type]}`;
+        document.getElementById('type-label').textContent = `${HEADER_TYPE_LABELS[task.type]}: ${task.stage + 1}/${TASK_STEP_COUNTS[task.type]}`;
         this.renderActiveTime();
         this.renderMath(currentLine(task), document.getElementById('task-expression'), 'task');
-        document.getElementById('task-expression').classList.toggle('multiline', task.type === 'lgs');
         this.renderChoices();
     }
 
@@ -154,51 +152,57 @@ class MathFeedApp {
     renderMath(tex, container, kind) {
         container.replaceChildren();
         container.dataset.mathKind = kind;
+        container.classList.add('math-fitting');
         window.katex.render(tex, container, {
             displayMode: true,
             throwOnError: true,
             trust: false
         });
-        requestAnimationFrame(() => this.fitMathElement(container));
-        document.fonts?.ready.then(() => this.fitMathElement(container));
+        const fitAfterFontsLoad = () => {
+            requestAnimationFrame(() => {
+                this.fitMathElement(container);
+                container.classList.remove('math-fitting');
+            });
+        };
+        if (document.fonts?.ready) document.fonts.ready.then(fitAfterFontsLoad);
+        else fitAfterFontsLoad();
     }
 
     fitMathElement(container) {
         const math = container.querySelector('.katex');
-        if (!math || !container.clientWidth) return;
+        if (!math || !container.clientWidth || !container.clientHeight) return false;
 
-        const initialSize = container.dataset.mathKind === 'task' ? 40 : 21;
-        const minimumSize = container.dataset.mathKind === 'task' ? 17 : 13;
+        const baseSize = container.dataset.mathKind === 'task' ? 40 : 21;
         const styles = window.getComputedStyle(container);
-        const availableWidth = container.clientWidth
+        const availableWidth = Math.max(0, container.clientWidth
             - parseFloat(styles.paddingLeft)
-            - parseFloat(styles.paddingRight);
-        container.style.fontSize = `${initialSize}px`;
-        let size = initialSize;
-        while (size > minimumSize && math.getBoundingClientRect().width > availableWidth) {
-            size = Math.max(minimumSize, size * 0.9);
-            container.style.fontSize = `${size}px`;
-        }
+            - parseFloat(styles.paddingRight));
+        const availableHeight = Math.max(0, container.clientHeight
+            - parseFloat(styles.paddingTop)
+            - parseFloat(styles.paddingBottom));
+        container.style.fontSize = `${baseSize}px`;
+        const bounds = math.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) return false;
+        const scale = Math.min(1, availableWidth / bounds.width, availableHeight / bounds.height);
+        container.style.fontSize = `${Math.max(8, baseSize * scale)}px`;
+        return true;
     }
 
-    fitMathToWidth() {
+    fitRenderedMath() {
         document.querySelectorAll('[data-math-kind]').forEach(container => this.fitMathElement(container));
     }
 
-    renderChoices(selectedId = null) {
+    renderChoices() {
         const container = document.getElementById('answer-tiles');
         container.replaceChildren();
         for (const choice of this.currentStep.choices) {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'answer-tile';
+            button.dataset.choiceId = choice.id;
             this.renderMath(choice.tex, button, 'choice');
             button.disabled = this.answerLocked;
             button.addEventListener('click', () => this.chooseAnswer(choice.id));
-            if (selectedId !== null && choice.id === selectedId) {
-                button.classList.add(choice.id === this.currentStep.answerId ? 'is-correct' : 'is-wrong');
-            }
-            if (selectedId !== null && choice.id === this.currentStep.answerId) button.classList.add('is-correct');
             container.appendChild(button);
         }
     }
@@ -209,7 +213,13 @@ class MathFeedApp {
         const correct = choiceId === this.currentStep.answerId;
         if (!correct) this.taskHadError = true;
 
-        this.renderChoices(choiceId);
+        for (const button of document.getElementById('answer-tiles').children) {
+            const selected = button.dataset.choiceId === choiceId;
+            const isCorrect = button.dataset.choiceId === this.currentStep.answerId;
+            button.disabled = true;
+            button.classList.toggle('is-correct', isCorrect);
+            button.classList.toggle('is-wrong', selected && !correct);
+        }
         const app = document.getElementById('app');
         if (correct) {
             app.classList.remove('error-flash');
@@ -270,6 +280,7 @@ class MathFeedApp {
         this.currentView = 'feed';
         document.getElementById('stats-view').hidden = true;
         document.getElementById('feed-view').hidden = false;
+        this.fitRenderedMath();
     }
 
     renderStats() {

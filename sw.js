@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mathfeed-v6.3.0';
+const CACHE_NAME = 'mathfeed-v6.4.0';
 const KATEX_FONTS = [
     'KaTeX_AMS-Regular',
     'KaTeX_Caligraphic-Bold',
