@@ -1,145 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math-Student - Mathematik Lernen</title>
-    <meta name="description" content="Interactive mathematics learning platform for 8th grade students">
-    <meta name="theme-color" content="#4a90e2">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" media="(prefers-color-scheme: light)">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96-dark.png" media="(prefers-color-scheme: dark)">
-    <link rel="apple-touch-icon" href="/icon-192.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#020617">
+    <meta name="description" content="Mathe üben im schnellen Aufgaben-Feed.">
+    <title>MathFeed</title>
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon-96-dark.png">
+    <link rel="apple-touch-icon" href="/icon-192-dark.png">
+    <link rel="stylesheet" href="/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <div id="app">
-        <!-- Dashboard View -->
-        <div id="dashboard-view" class="view active">
-            <header class="header">
-                <h1>Math-Student</h1>
-                <div class="topic-selector">
-                    <select id="topic-dropdown" class="topic-dropdown">
-                        <option value="termumformungen-9">Termumformungen 9. Klasse</option>
-                        <option value="integralrechnung-11">Integralrechnung 11. Klasse</option>
-                    </select>
+    <main id="app" aria-live="polite">
+        <section id="feed-view" class="view feed-view">
+            <header class="topbar">
+                <div class="brand-mark" aria-label="MathFeed">M<span>F</span></div>
+                <div class="daily-summary">
+                    <span id="today-count">0 Aufgaben heute</span>
+                    <span id="type-label" class="type-label">Mathe-Feed</span>
                 </div>
-                <button id="settings-btn" class="icon-btn">⚙️</button>
+                <button id="stats-open" class="icon-button" type="button" aria-label="Statistik öffnen">▥</button>
             </header>
-            
-            
-            <div class="topic-blocks" id="topic-blocks">
-                <!-- Topic blocks will be rendered here -->
-            </div>
-        </div>
-        
-        <!-- Task View -->
-        <div id="task-view" class="view">
-            <div class="top-bar">
-                <button id="back-btn" class="icon-btn">←</button>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="session-progress"></div>
-                </div>
-                <span id="task-counter">0/10</span>
-            </div>
-            
-            <div class="task-content">
-                <div class="question-area" id="question-area">
-                    <!-- Question content -->
-                </div>
-                
-                <div class="interaction-area" id="interaction-area">
-                    <!-- Dynamic interaction elements -->
-                </div>
-            </div>
-            
-        </div>
-        
-        <!-- Settings View -->
-        <div id="settings-view" class="view">
-            <header class="header">
-                <button id="settings-back-btn" class="icon-btn">←</button>
-                <h2>Einstellungen</h2>
-            </header>
-            
-            <div class="settings-content">
-                <section class="settings-section">
-                    <h3>Fortschritt Sichern & Teilen</h3>
-                    <div class="share-section">
-                        <input type="text" id="share-hash" readonly placeholder="Dein Share-Code wird hier angezeigt">
-                        <button id="copy-btn" class="secondary-btn">Kopieren</button>
-                    </div>
-                    <div class="warning">
-                        ⚠️ Achtung: Dein Lernfortschritt wird nur in diesem Browser gespeichert. Wenn du die Browserdaten löschst, ist der Fortschritt verloren. Sichere deinen Code regelmäßig!
-                    </div>
-                </section>
-                
-                <section class="settings-section">
-                    <h3>Fortschritt Importieren</h3>
-                    <div class="import-section">
-                        <input type="text" id="import-hash" placeholder="Share-Code hier eingeben">
-                        <button id="load-btn" class="secondary-btn">Laden</button>
-                    </div>
-                </section>
-                
-                <section class="settings-section">
-                    <h3>Fortschritt Zurücksetzen</h3>
-                    <p>Lösche deinen gesamten Lernfortschritt und beginne von vorne.</p>
-                    <button id="reset-btn" class="danger-btn">Alle Daten löschen</button>
-                    <div class="warning" style="margin-top: 10px;">
-                        ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
-                    </div>
-                </section>
-            </div>
-        </div>
-        
-        <!-- Hint Modal -->
-        <div id="hint-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Hilfe</h3>
-                    <button id="close-hint" class="icon-btn">×</button>
-                </div>
-                <div class="modal-body" id="hint-content">
-                    <!-- Hint content -->
-                </div>
-            </div>
-        </div>
+            <section class="task-card" aria-label="Aktuelle Aufgabe">
+                <div id="task-expression" class="task-expression"></div>
+                <div id="answer-tiles" class="answer-tiles"></div>
+            </section>
+            <footer class="gesture-hint"><span>‹</span> Wische nach links für deine Statistik</footer>
+        </section>
 
-        <!-- Exit Confirmation Modal -->
-        <div id="exit-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Level verlassen?</h3>
+        <section id="stats-view" class="view stats-view" aria-label="Statistik" hidden>
+            <header class="stats-header">
+                <div>
+                    <p class="eyebrow">DEIN LERNFLOW</p>
+                    <h1>Statistik</h1>
                 </div>
-                <div class="modal-body">
-                    <p>Möchtest du das Level wirklich verlassen?</p>
-                    <p><strong>Achtung:</strong> Dein Fortschritt aus dieser Session wird nicht gespeichert!</p>
+                <button id="feed-open" class="icon-button" type="button" aria-label="Zurück zum Feed">×</button>
+            </header>
+            <section class="stats-section week-section">
+                <div class="section-heading">
+                    <h2>Übungszeit</h2>
+                    <span>Diese Woche</span>
                 </div>
-                <div class="modal-footer">
-                    <button id="exit-cancel" class="secondary-btn">Weitermachen</button>
-                    <button id="exit-confirm" class="danger-btn">Level verlassen</button>
+                <div id="week-chart" class="week-chart" aria-label="Übungszeit der letzten sieben Tage"></div>
+            </section>
+            <section class="stats-section">
+                <div class="section-heading">
+                    <h2>Aufgaben heute</h2>
+                    <span id="stats-total">0 gelöst</span>
                 </div>
-            </div>
-        </div>
-    </div>
-    
+                <div id="type-matrix" class="type-matrix"></div>
+            </section>
+            <div class="stats-footer">Deine Daten bleiben auf diesem Gerät.</div>
+        </section>
+        <div id="app-error" class="app-error" role="alert" hidden></div>
+        <section id="fatal-error" class="fatal-error" role="alert" hidden></section>
+    </main>
+    <script src="/vendor/katex/katex.min.js"></script>
+    <script type="module" src="/app.js"></script>
     <script>
-        // Register service worker for PWA support
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((registration) => {
-                        console.log('SW registered:', registration);
-                    })
-                    .catch((error) => {
-                        console.log('SW registration failed:', error);
-                    });
+                navigator.serviceWorker.register('/sw.js').catch(error => {
+                    console.error('Service worker registration failed:', error);
+                });
             });
         }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <script src="app.js"></script>
 </body>
 </html>

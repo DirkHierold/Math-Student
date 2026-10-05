@@ -1,75 +1,64 @@
-// Service Worker for Math-Student PWA
-const CACHE_NAME = 'math-student-v5.0.0';
+const CACHE_NAME = 'mathfeed-v6.1.0';
+const KATEX_FONTS = [
+    'KaTeX_AMS-Regular',
+    'KaTeX_Caligraphic-Bold',
+    'KaTeX_Caligraphic-Regular',
+    'KaTeX_Fraktur-Bold',
+    'KaTeX_Fraktur-Regular',
+    'KaTeX_Main-Bold',
+    'KaTeX_Main-BoldItalic',
+    'KaTeX_Main-Italic',
+    'KaTeX_Main-Regular',
+    'KaTeX_Math-BoldItalic',
+    'KaTeX_Math-Italic',
+    'KaTeX_SansSerif-Bold',
+    'KaTeX_SansSerif-Italic',
+    'KaTeX_SansSerif-Regular',
+    'KaTeX_Script-Regular',
+    'KaTeX_Size1-Regular',
+    'KaTeX_Size2-Regular',
+    'KaTeX_Size3-Regular',
+    'KaTeX_Size4-Regular',
+    'KaTeX_Typewriter-Regular'
+].map(font => `/vendor/katex/fonts/${font}.woff2`);
+
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/app.js',
-  '/styles.css',
-  '/tasks.json',
-  '/tasks-integralrechnung.json',
-  'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js'
+    '/',
+    '/index.html',
+    '/app.js',
+    '/math-engine.js',
+    '/progress.js',
+    '/styles.css',
+    '/manifest.json',
+    '/vendor/katex/katex.min.js',
+    '/vendor/katex/katex.min.css',
+    ...KATEX_FONTS
 ];
 
-// Install event - cache assets
-self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker...');
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Caching assets');
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
-  self.skipWaiting();
+self.addEventListener('install', event => {
+    event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS_TO_CACHE)));
+    self.skipWaiting();
 });
 
-// Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker...');
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('[SW] Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(names => Promise.all(
+            names.filter(name => name.startsWith('mathfeed-') && name !== CACHE_NAME)
+                .map(name => caches.delete(name))
+        ))
+    );
+    self.clients.claim();
+});
+
+self.addEventListener('fetch', event => {
+    if (event.request.method !== 'GET' || new URL(event.request.url).origin !== self.location.origin) return;
+    event.respondWith(
+        caches.match(event.request).then(cached => {
+            if (cached) return cached;
+            return fetch(event.request).catch(error => {
+                if (event.request.mode === 'navigate') return caches.match('/index.html');
+                throw error;
+            });
         })
-      );
-    })
-  );
-  self.clients.claim();
-});
-
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Return cached response if found
-      if (response) {
-        return response;
-      }
-
-      // Otherwise fetch from network
-      return fetch(event.request).then((response) => {
-        // Don't cache non-successful responses
-        if (!response || response.status !== 200 || response.type === 'error') {
-          return response;
-        }
-
-        // Cache successful responses for GET requests
-        if (event.request.method === 'GET') {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-
-        return response;
-      }).catch(() => {
-        // If network fails, try to return a cached fallback
-        return caches.match('/index.html');
-      });
-    })
-  );
+    );
 });
