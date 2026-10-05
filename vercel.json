@@ -1,7 +1,7 @@
 {
   "buildCommand": "echo 'No build process needed - static files only'",
   "outputDirectory": ".",
-  "installCommand": "npm install",
+  "installCommand": "echo 'No install needed - MathFeed is static and assets are vendored'",
   "framework": null,
   "rewrites": [
     {
