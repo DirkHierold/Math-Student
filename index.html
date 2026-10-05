@@ -16,27 +16,26 @@
     <main id="app" aria-live="polite">
         <section id="feed-view" class="view feed-view">
             <header class="topbar">
-                <div class="brand-mark" aria-label="MathFeed">M<span>F</span></div>
-                <div class="daily-summary">
-                    <span id="today-count">0 Aufgaben heute</span>
-                    <span id="type-label" class="type-label">Mathe-Feed</span>
+                <div class="task-header-info">
+                    <span id="type-label" class="header-title"></span>
+                    <span id="task-step" class="header-title"></span>
                 </div>
-                <button id="stats-open" class="icon-button" type="button" aria-label="Statistik öffnen">▥</button>
+                <span id="active-day-time" class="header-title active-day-time">0 Min aktiv</span>
+                <button id="stats-open" class="icon-button" type="button" aria-label="Statistik-Informationen öffnen"><span class="info-icon" aria-hidden="true">i</span></button>
             </header>
             <section class="task-card" aria-label="Aktuelle Aufgabe">
                 <div id="task-expression" class="task-expression"></div>
                 <div id="answer-tiles" class="answer-tiles"></div>
             </section>
-            <footer class="gesture-hint"><span>‹</span> Wische nach links für deine Statistik</footer>
         </section>
 
         <section id="stats-view" class="view stats-view" aria-label="Statistik" hidden>
-            <header class="stats-header">
-                <div>
-                    <p class="eyebrow">DEIN LERNFLOW</p>
-                    <h1>Statistik</h1>
+            <header class="topbar">
+                <div class="daily-summary">
+                    <h1 class="header-title">Statistik</h1>
+                    <span class="header-subtitle-spacer" aria-hidden="true"></span>
                 </div>
-                <button id="feed-open" class="icon-button" type="button" aria-label="Zurück zum Feed">×</button>
+                <button id="feed-open" class="icon-button" type="button" aria-label="Zurück zum Aufgaben-Feed">×</button>
             </header>
             <section class="stats-section week-section">
                 <div class="section-heading">

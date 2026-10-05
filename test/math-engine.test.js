@@ -9,6 +9,7 @@ import {
     getNextStep,
     isTaskComplete,
     rational,
+    TASK_STEP_COUNTS,
     TASK_TYPES
 } from '../math-engine.js';
 import { chooseNextType, createTypeProgress, recordReview } from '../progress.js';
@@ -64,7 +65,7 @@ test('every generated family has four distinct tile choices and terminates', () 
                 steps++;
                 assert.ok(steps <= 6, `${type} did not terminate`);
             }
-            assert.ok(steps > 0);
+            assert.equal(steps, TASK_STEP_COUNTS[type]);
         }
     }
 });

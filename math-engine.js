@@ -425,6 +425,13 @@ export const TASK_TYPES = Object.freeze({
     quadratic: 'Quadratische Gleichung'
 });
 
+export const TASK_STEP_COUNTS = Object.freeze({
+    linear: 2,
+    terms: 4,
+    lgs: 1,
+    quadratic: 6
+});
+
 export const generateTask = (type = pick(Object.keys(TASK_TYPES))) => {
     if (type === 'linear') return generateLinearEquation();
     if (type === 'terms') return generateTerm();

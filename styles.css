@@ -64,7 +64,6 @@ button:focus-visible {
     display: flex;
     flex-direction: column;
     padding: max(12px, env(safe-area-inset-top)) 18px max(14px, env(safe-area-inset-bottom));
-    touch-action: pan-y;
 }
 
 .topbar {
@@ -72,25 +71,11 @@ button:focus-visible {
     align-items: center;
     gap: 12px;
     min-height: 54px;
+    flex: 0 0 54px;
+    position: relative;
 }
 
-.brand-mark {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    flex: 0 0 40px;
-    border-radius: 13px;
-    background: linear-gradient(135deg, var(--violet), #a100ff);
-    box-shadow: 0 0 24px rgba(112, 0, 255, 0.3);
-    font-weight: 900;
-    letter-spacing: -2px;
-}
-
-.brand-mark span {
-    color: var(--cyan);
-}
-
+.task-header-info,
 .daily-summary {
     display: flex;
     flex: 1;
@@ -99,16 +84,41 @@ button:focus-visible {
     gap: 2px;
 }
 
-#today-count {
-    font-size: 0.82rem;
-    font-weight: 750;
+.task-header-info {
+    flex: 0 1 calc(50% - 30px);
 }
 
-.type-label,
-.eyebrow {
+.header-title {
+    margin: 0;
+    font-size: clamp(0.68rem, 3.2vw, 0.82rem);
+    font-weight: 750;
+    line-height: 1;
+}
+
+.task-header-info .header-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.active-day-time {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+.header-subtitle-spacer {
+    height: 0.7rem;
+    line-height: 1;
+}
+
+.type-label {
     color: var(--muted);
     font-size: 0.7rem;
     letter-spacing: 0.08em;
+    line-height: 1;
     text-transform: uppercase;
 }
 
@@ -123,6 +133,21 @@ button:focus-visible {
     color: var(--cyan);
     font-size: 1.5rem;
     cursor: pointer;
+    flex: 0 0 44px;
+    margin-left: auto;
+}
+
+.info-icon {
+    display: grid;
+    width: 21px;
+    height: 21px;
+    place-items: center;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    font-family: Georgia, serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .task-card {
@@ -144,31 +169,36 @@ button:focus-visible {
     place-items: center;
     padding: 16px 8px;
     color: #fff;
-    font-size: clamp(1.8rem, 8vw, 3.25rem);
-    font-weight: 800;
+    font-size: 40px;
     line-height: 1.35;
-    letter-spacing: -0.035em;
     text-align: center;
-    overflow-wrap: anywhere;
     text-shadow: 0 0 30px rgba(0, 242, 254, 0.12);
 }
 
 .task-expression.multiline {
-    white-space: pre-line;
-    font-size: clamp(1.35rem, 5.8vw, 2.25rem);
-    line-height: 1.8;
+    min-height: 150px;
+}
+
+.task-expression .katex-display,
+.answer-tile .katex-display {
+    margin: 0;
+}
+
+.task-expression .katex,
+.answer-tile .katex {
+    white-space: nowrap;
 }
 
 .answer-tiles {
     display: grid;
     width: 100%;
     max-width: 38rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
 }
 
 .answer-tile {
-    min-height: 66px;
+    min-height: 58px;
     min-width: 0;
     padding: 12px 10px;
     border: 1px solid rgba(0, 242, 254, 0.28);
@@ -183,26 +213,16 @@ button:focus-visible {
 }
 
 .answer-tile .katex {
-    font-size: clamp(1rem, 4.2vw, 1.35rem);
-    white-space: normal;
-}
-
-.answer-tile .katex-display {
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-.task-expression .katex {
-    max-width: 100%;
-}
-
-.task-expression .katex-display {
-    margin: 0.15em 0;
+    white-space: nowrap;
 }
 
 .answer-tile .katex-display {
     margin: 0;
+    overflow: visible;
+}
+
+.task-expression .katex {
+    max-width: none;
 }
 
 .answer-tile:active {
@@ -233,44 +253,17 @@ button:focus-visible {
     opacity: 1;
 }
 
-.gesture-hint {
-    padding: 10px 0 0;
-    color: #64748b;
-    font-size: 0.76rem;
-    text-align: center;
-}
-
-.gesture-hint span {
-    padding-right: 5px;
-    color: var(--cyan);
-    font-size: 1.1rem;
-}
-
 .stats-view {
     display: flex;
     flex-direction: column;
     gap: clamp(18px, 4vh, 32px);
-    padding: max(24px, env(safe-area-inset-top)) 22px max(20px, env(safe-area-inset-bottom));
-    touch-action: pan-y;
+    padding: max(12px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
 }
 
-.stats-header,
 .section-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.stats-header h1 {
-    margin: 2px 0 0;
-    font-size: clamp(2rem, 8vw, 3rem);
-    letter-spacing: -0.05em;
-}
-
-.eyebrow {
-    margin: 0;
-    color: var(--cyan);
-    font-weight: 750;
 }
 
 .stats-section {
@@ -297,26 +290,42 @@ button:focus-visible {
 
 .week-chart {
     display: grid;
-    height: clamp(110px, 20vh, 155px);
+    height: clamp(125px, 22vh, 170px);
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    align-items: end;
-    gap: 9px;
+    gap: 6px;
 }
 
 .chart-column {
-    display: flex;
+    display: grid;
     height: 100%;
     min-width: 0;
-    flex-direction: column;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: end;
-    gap: 7px;
+    justify-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.day-metrics {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    color: var(--muted);
+    font-size: 0.58rem;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.day-count {
+    color: #f8fafc;
+    font-weight: 700;
 }
 
 .bar-track {
     display: flex;
     width: min(100%, 32px);
-    height: calc(100% - 18px);
+    height: 100%;
+    min-height: 0;
     align-items: end;
     overflow: hidden;
     border-radius: 10px;
@@ -337,8 +346,9 @@ button:focus-visible {
 
 .chart-column > span {
     color: var(--muted);
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     text-transform: capitalize;
+    white-space: nowrap;
 }
 
 .type-matrix {
