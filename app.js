@@ -1,5 +1,5 @@
 import { TASK_STEP_COUNTS, TASK_TYPES, applyNextStep, currentLine, generateTask, getNextStep, isTaskComplete } from './math-engine.js';
-import { chooseNextType, createTypeProgress, recordReview } from './progress.js';
+import { chooseNextType, createTypeProgress, normalizeTypeProgress, recordReview } from './progress.js';
 import { formatCompactDuration, formatDuration } from './format.js';
 
 const STORAGE_KEY = 'mathfeed-state-v1';
@@ -7,7 +7,7 @@ const TYPE_KEYS = Object.keys(TASK_TYPES);
 const HEADER_TYPE_LABELS = Object.freeze({
     linear: 'Bruchgleichung',
     terms: 'Terme',
-    lgs: 'LGS',
+    powers: 'Potenzen & Wurzeln',
     quadratic: 'Quadratik'
 });
 
@@ -60,9 +60,8 @@ class MathFeedApp {
         if (state.version !== 1 || !state.types || !state.daily) {
             throw new Error('Der gespeicherte MathFeed-Fortschritt hat ein unbekanntes Format.');
         }
-        for (const type of TYPE_KEYS) {
-            state.types[type] = { ...createTypeProgress(), ...state.types[type] };
-        }
+        state.types = normalizeTypeProgress(state.types, TYPE_KEYS);
+        if (!TYPE_KEYS.includes(state.lastType)) state.lastType = null;
         return state;
     }
 
@@ -117,6 +116,9 @@ class MathFeedApp {
         if (!this.state.daily[dateKey]) this.state.daily[dateKey] = createDailyStats();
         const day = this.state.daily[dateKey];
         day.byType ||= Object.fromEntries(TYPE_KEYS.map(type => [type, { correct: 0, errors: 0 }]));
+        for (const type of Object.keys(day.byType)) {
+            if (!TYPE_KEYS.includes(type)) delete day.byType[type];
+        }
         for (const type of TYPE_KEYS) day.byType[type] ||= { correct: 0, errors: 0 };
         return day;
     }

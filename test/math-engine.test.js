@@ -12,7 +12,7 @@ import {
     TASK_STEP_COUNTS,
     TASK_TYPES
 } from '../math-engine.js';
-import { chooseNextType, createTypeProgress, recordReview } from '../progress.js';
+import { chooseNextType, createTypeProgress, normalizeTypeProgress, recordReview } from '../progress.js';
 
 const add = (a, b) => rational(a.n * b.d + b.n * a.d, a.d * b.d);
 const multiply = (a, b) => rational(a.n * b.n, a.d * b.d);
@@ -126,13 +126,50 @@ test('quadratic generator creates exact roots and explicitly adds the square on 
     }
 });
 
-test('LGS multiplier cancels the y coefficient exactly', () => {
-    for (let iteration = 0; iteration < 100; iteration++) {
-        const task = generateTask('lgs');
-        const { y1, y2, factor } = task.data;
-        assert.ok(equal(add(multiply(y1, factor), y2), rational(0)));
-        assert.match(currentLine(task), /\\begin\{aligned\}/);
+test('power and root exercises apply their laws with exact results', () => {
+    const seenKinds = new Set();
+    assert.ok(Object.hasOwn(TASK_TYPES, 'powers'));
+    assert.equal(Object.hasOwn(TASK_TYPES, 'lgs'), false);
+
+    for (let iteration = 0; iteration < 500; iteration++) {
+        const task = generateTask('powers');
+        const { kind } = task.data;
+        seenKinds.add(kind);
+        let expected;
+
+        if (kind === 'product') {
+            const { base, firstExponent, secondExponent } = task.data;
+            expected = `${base}^{${firstExponent + secondExponent}}`;
+        } else if (kind === 'quotient') {
+            const { base, firstExponent, secondExponent } = task.data;
+            expected = `${base}^{${firstExponent - secondExponent}}`;
+        } else if (kind === 'power') {
+            const { base, innerExponent, outerExponent } = task.data;
+            expected = `${base}^{${innerExponent * outerExponent}}`;
+        } else if (kind === 'negative') {
+            const { base, exponent } = task.data;
+            expected = `\\frac{1}{${base}^{${exponent}}}`;
+        } else if (kind === 'fractional') {
+            expected = String(task.data.root ** task.data.numerator);
+        } else if (kind === 'negative-fractional') {
+            expected = `\\frac{1}{${task.data.root ** task.data.numerator}}`;
+        } else {
+            assert.equal(kind, 'root');
+            expected = String(task.data.root);
+            assert.equal(task.data.root ** task.data.degree, task.data.radicand);
+        }
+
+        assert.equal(currentLine(task), task.data.question);
+        assert.equal(getNextStep(task).answerTex, expected, `${kind} should have the exact expected answer`);
+        assert.equal(TASK_STEP_COUNTS[task.type], 1);
+        assert.equal(isTaskComplete(applyNextStep(task)), true);
     }
+
+    assert.deepEqual(
+        [...seenKinds].sort(),
+        ['fractional', 'negative', 'negative-fractional', 'power', 'product', 'quotient', 'root'].sort()
+    );
+    assert.throws(() => generateTask('lgs'), RangeError);
 });
 
 test('an error schedules review after two correct tasks of other types', () => {
@@ -142,9 +179,20 @@ test('an error schedules review after two correct tasks of other types', () => {
     recordReview(types, 'terms', true);
     assert.equal(types.linear.otherCorrectCount, 1);
     assert.notEqual(chooseNextType(types, 'terms'), 'linear');
-    recordReview(types, 'lgs', true);
+    recordReview(types, 'powers', true);
     assert.equal(types.linear.otherCorrectCount, 2);
-    assert.equal(chooseNextType(types, 'lgs'), 'linear');
+    assert.equal(chooseNextType(types, 'powers'), 'linear');
+});
+
+test('obsolete task progress is dropped without inheriting it into replacement types', () => {
+    const types = normalizeTypeProgress({
+        linear: { correct: 3 },
+        lgs: { correct: 12, errors: 4 }
+    }, Object.keys(TASK_TYPES));
+
+    assert.deepEqual(Object.keys(types).sort(), Object.keys(TASK_TYPES).sort());
+    assert.equal(types.linear.correct, 3);
+    assert.deepEqual(types.powers, createTypeProgress());
 });
 
 test('successful reviews grow intervals and avoid immediate repetition when possible', () => {

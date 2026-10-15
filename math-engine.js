@@ -195,20 +195,144 @@ const quadraticLine = (task, stage) => {
     return `x = ${formatRational(firstRoot)}\\quad\\text{oder}\\quad x = ${formatRational(secondRoot)}`;
 };
 
-const lgsEquation = (x, y, result) =>
-    `${formatAffine(x, rational(0))} ${y.n < 0 ? '- ' : '+ '}${coefficientTerm(absolute(y), 'y')} = ${formatRational(result)}`;
+const integerPower = (base, exponent) => base ** exponent;
+const powerTex = (base, exponent) => `${base}^{${exponent}}`;
+const rootTex = (radicand, degree) => degree === 2
+    ? `\\sqrt{${radicand}}`
+    : `\\sqrt[${degree}]{${radicand}}`;
 
-const generateLgs = () => {
-    const x1 = rational(randomInt(1, 5));
-    const y1 = rational(pick([-5, -4, -3, -2, 2, 3, 4, 5]));
-    const x2 = rational(randomInt(1, 5));
-    const y2 = rational(pick([-5, -4, -3, -2, 2, 3, 4, 5]));
-    const solutionX = rational(randomInt(-5, 5));
-    const solutionY = rational(randomInt(-5, 5));
-    const result1 = add(multiply(x1, solutionX), multiply(y1, solutionY));
-    const result2 = add(multiply(x2, solutionX), multiply(y2, solutionY));
-    const factor = divide(negate(y2), y1);
-    return { type: 'lgs', stage: 0, data: { x1, y1, result1, x2, y2, result2, factor } };
+const generatePowerTask = () => {
+    const kind = pick(['product', 'quotient', 'power', 'negative', 'fractional', 'negative-fractional', 'root']);
+    if (kind === 'product') {
+        const base = randomInt(2, 9);
+        const firstExponent = randomInt(-5, 5);
+        const secondExponent = randomInt(-5, 5);
+        return {
+            type: 'powers',
+            stage: 0,
+            data: {
+                kind,
+                question: `${powerTex(base, firstExponent)} \\cdot ${powerTex(base, secondExponent)}`,
+                answer: powerTex(base, firstExponent + secondExponent),
+                distractors: [
+                    powerTex(base, firstExponent * secondExponent),
+                    powerTex(base, firstExponent - secondExponent),
+                    powerTex(base, firstExponent + secondExponent + 1)
+                ],
+                base,
+                firstExponent,
+                secondExponent
+            }
+        };
+    }
+    if (kind === 'quotient') {
+        const base = randomInt(2, 9);
+        const firstExponent = randomInt(-5, 5);
+        let secondExponent = randomInt(-5, 5);
+        while (secondExponent === firstExponent) secondExponent = randomInt(-5, 5);
+        return {
+            type: 'powers',
+            stage: 0,
+            data: {
+                kind,
+                question: `\\frac{${powerTex(base, firstExponent)}}{${powerTex(base, secondExponent)}}`,
+                answer: powerTex(base, firstExponent - secondExponent),
+                distractors: [
+                    powerTex(base, firstExponent + secondExponent),
+                    powerTex(base, secondExponent - firstExponent),
+                    powerTex(base, firstExponent - secondExponent + 1)
+                ],
+                base,
+                firstExponent,
+                secondExponent
+            }
+        };
+    }
+    if (kind === 'power') {
+        const base = randomInt(2, 9);
+        const innerExponent = randomInt(-4, 4);
+        const outerExponent = randomInt(-4, 4);
+        return {
+            type: 'powers',
+            stage: 0,
+            data: {
+                kind,
+                question: `\\left(${powerTex(base, innerExponent)}\\right)^{${outerExponent}}`,
+                answer: powerTex(base, innerExponent * outerExponent),
+                distractors: [
+                    powerTex(base, innerExponent + outerExponent),
+                    powerTex(base, innerExponent * outerExponent + 1),
+                    powerTex(base, innerExponent - outerExponent)
+                ],
+                base,
+                innerExponent,
+                outerExponent
+            }
+        };
+    }
+    if (kind === 'negative') {
+        const base = randomInt(2, 9);
+        const exponent = randomInt(1, 5);
+        return {
+            type: 'powers',
+            stage: 0,
+            data: {
+                kind,
+                question: powerTex(base, -exponent),
+                answer: `\\frac{1}{${powerTex(base, exponent)}}`,
+                distractors: [
+                    powerTex(base, exponent),
+                    `-\\frac{1}{${powerTex(base, exponent)}}`,
+                    `\\frac{1}{${powerTex(base, exponent + 1)}}`
+                ],
+                base,
+                exponent
+            }
+        };
+    }
+    if (kind === 'fractional' || kind === 'negative-fractional') {
+        const degree = pick([2, 3]);
+        const root = randomInt(2, 5);
+        const numerator = randomInt(1, 3);
+        const base = integerPower(root, degree);
+        const result = integerPower(root, numerator);
+        const isNegative = kind === 'negative-fractional';
+        const answer = isNegative ? `\\frac{1}{${result}}` : String(result);
+        return {
+            type: 'powers',
+            stage: 0,
+            data: {
+                kind,
+                question: powerTex(base, `${isNegative ? '-' : ''}\\frac{${numerator}}{${degree}}`),
+                answer,
+                distractors: isNegative
+                    ? [String(result), `-\\frac{1}{${result}}`, `\\frac{1}{${integerPower(root, numerator + 1)}}`]
+                    : [String(integerPower(root, numerator + 1)), String(integerPower(root, numerator - 1)), String(result + 1)],
+                base,
+                root,
+                numerator,
+                degree,
+                result
+            }
+        };
+    }
+
+    const degree = pick([2, 3]);
+    const root = randomInt(2, 9);
+    const radicand = integerPower(root, degree);
+    return {
+        type: 'powers',
+        stage: 0,
+        data: {
+            kind: 'root',
+            question: rootTex(radicand, degree),
+            answer: String(root),
+            distractors: [String(root + 1), String(root - 1), String(root + 2)],
+            root,
+            degree,
+            radicand
+        }
+    };
 };
 
 const linearLine = (task, stage) => {
@@ -402,40 +526,32 @@ const rules = [
         ]
     },
     {
-        type: 'lgs',
+        type: 'powers',
         stage: 0,
         apply: task => ({ ...task, stage: 1 }),
-        answer: task => formatRational(task.data.factor),
-        distractors: task => [
-            formatRational(negate(task.data.factor)),
-            formatRational(divide(rational(1), task.data.factor)),
-            '1',
-            formatRational(add(task.data.factor, rational(1))),
-            formatRational(subtract(task.data.factor, rational(1))),
-            formatRational(multiply(task.data.factor, rational(2))),
-            formatRational(divide(task.data.factor, rational(2)))
-        ]
+        answer: task => task.data.answer,
+        distractors: task => task.data.distractors
     }
 ];
 
 export const TASK_TYPES = Object.freeze({
     linear: 'Bruchgleichung',
     terms: 'Klammern & Terme',
-    lgs: 'Gleichungssystem',
+    powers: 'Potenzen & Wurzeln',
     quadratic: 'Quadratische Gleichung'
 });
 
 export const TASK_STEP_COUNTS = Object.freeze({
     linear: 2,
     terms: 4,
-    lgs: 1,
+    powers: 1,
     quadratic: 6
 });
 
 export const generateTask = (type = pick(Object.keys(TASK_TYPES))) => {
     if (type === 'linear') return generateLinearEquation();
     if (type === 'terms') return generateTerm();
-    if (type === 'lgs') return generateLgs();
+    if (type === 'powers') return generatePowerTask();
     if (type === 'quadratic') return generateQuadratic();
     throw new RangeError(`Unknown task type: ${type}`);
 };
@@ -444,8 +560,7 @@ export const currentLine = task => {
     if (task.type === 'linear') return linearLine(task, task.stage);
     if (task.type === 'terms') return termLine(task, task.stage);
     if (task.type === 'quadratic') return quadraticLine(task, task.stage);
-    const { x1, y1, result1, x2, y2, result2 } = task.data;
-    return `\\begin{aligned}${lgsEquation(x1, y1, result1)}\\\\${lgsEquation(x2, y2, result2)}\\end{aligned}`;
+    return task.data.question;
 };
 
 export const getNextStep = task => {

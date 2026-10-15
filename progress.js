@@ -10,6 +10,10 @@ export const createTypeProgress = () => ({
     errors: 0
 });
 
+export const normalizeTypeProgress = (storedTypes, typeNames) => Object.fromEntries(
+    typeNames.map(type => [type, { ...createTypeProgress(), ...storedTypes[type] }])
+);
+
 export const chooseNextType = (types, lastType) => {
     const keys = Object.keys(types);
     const unseen = keys.filter(type => !types[type].seen);
