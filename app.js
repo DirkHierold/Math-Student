@@ -1,6 +1,7 @@
 import { TASK_STEP_COUNTS, TASK_TYPES, applyNextStep, currentLine, generateTask, getNextStep, isTaskComplete } from './math-engine.js';
 import { chooseNextType, createTypeProgress, normalizeTypeProgress, recordReview } from './progress.js';
 import { formatCompactDuration, formatDuration } from './format.js';
+import { fittedFontSize } from './math-layout.js';
 
 const STORAGE_KEY = 'mathfeed-state-v1';
 const TYPE_KEYS = Object.keys(TASK_TYPES);
@@ -49,6 +50,7 @@ class MathFeedApp {
         this.lastActiveTick = Date.now();
         this.lastTimerSave = Date.now();
         this.bindEvents();
+        this.observeMathContainers();
         this.startTimer();
         this.startNextTask();
     }
@@ -184,10 +186,17 @@ class MathFeedApp {
             - parseFloat(styles.paddingBottom));
         container.style.fontSize = `${baseSize}px`;
         const bounds = math.getBoundingClientRect();
-        if (!bounds.width || !bounds.height) return false;
-        const scale = Math.min(1, availableWidth / bounds.width, availableHeight / bounds.height);
-        container.style.fontSize = `${Math.max(8, baseSize * scale)}px`;
+        const fontSize = fittedFontSize(baseSize, availableWidth, availableHeight, bounds.width, bounds.height);
+        if (fontSize === null) return false;
+        container.style.fontSize = `${fontSize}px`;
         return true;
+    }
+
+    observeMathContainers() {
+        if (!('ResizeObserver' in window)) return;
+        this.mathResizeObserver = new window.ResizeObserver(() => this.fitRenderedMath());
+        this.mathResizeObserver.observe(document.getElementById('task-expression'));
+        this.mathResizeObserver.observe(document.getElementById('answer-tiles'));
     }
 
     fitRenderedMath() {

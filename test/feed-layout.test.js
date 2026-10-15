@@ -34,10 +34,21 @@ test('formula and answer tiles share a one-column width and math is kept on one 
     assert.match(styles, /\.task-expression \{[\s\S]*?flex:\s*1 1 0;[\s\S]*?overflow:\s*hidden;/s);
     assert.match(styles, /\.answer-tile \{\s*height:\s*58px;[\s\S]*?overflow:\s*hidden;/s);
     assert.match(styles, /\.math-fitting \{\s*visibility:\s*hidden;/);
-    assert.match(app, /availableHeight[\s\S]*?availableWidth \/ bounds\.width, availableHeight \/ bounds\.height/s);
-    assert.match(app, /Math\.max\(8, baseSize \* scale\)/);
+    assert.match(app, /fittedFontSize\(baseSize, availableWidth, availableHeight, bounds\.width, bounds\.height\)/);
+    assert.match(app, /new window\.ResizeObserver\(\(\) => this\.fitRenderedMath\(\)\)/);
     assert.match(app, /document\.fonts\.ready\.then\(fitAfterFontsLoad\)/);
     assert.match(app, /window\.addEventListener\('resize', \(\) => this\.fitRenderedMath\(\)\)/);
+});
+
+test('fitted math scales below the previous minimum when a long expression needs it', async () => {
+    const { fittedFontSize } = await import('../math-layout.js');
+    const fontSize = fittedFontSize(40, 300, 250, 2400, 180);
+
+    assert.ok(fontSize < 8);
+    assert.ok(fontSize * 2400 / 40 <= 300);
+    assert.ok(fontSize * 180 / 40 <= 250);
+    assert.equal(fittedFontSize(40, 300, 250, 200, 100), 40);
+    assert.equal(fittedFontSize(40, 0, 250, 2400, 180), null);
 });
 
 test('answer feedback updates existing tiles without rerendering their KaTeX formulas', async () => {
@@ -64,4 +75,5 @@ test('weekly chart renders task count and duration labels for every day', async 
     assert.match(app, /formatCompactDuration\(item\.seconds\)/);
     assert.match(styles, /\.day-metrics \{\s*display:\s*flex;/);
     assert.match(serviceWorker, /'\/format\.js'/);
+    assert.match(serviceWorker, /'\/math-layout\.js'/);
 });
