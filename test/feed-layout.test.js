@@ -96,17 +96,41 @@ test('answer feedback updates existing tiles without rerendering their KaTeX for
     assert.match(chooseAnswer, /classList\.toggle\('is-wrong'/);
 });
 
-test('weekly chart renders task count and duration labels for every day', async () => {
+test('weekly chart renders grouped step counts and duration labels for every day', async () => {
     const [app, styles, serviceWorker] = await Promise.all([
         read('app.js'),
         read('styles.css'),
         read('sw.js')
     ]);
-    assert.match(app, /stats\.solved/);
-    assert.match(app, /className = 'day-count'/);
-    assert.match(app, /className = 'day-duration'/);
-    assert.match(app, /formatCompactDuration\(item\.seconds\)/);
-    assert.match(styles, /\.day-metrics \{\s*display:\s*flex;/);
+    assert.match(app, /recordStepAnswer\(this\.getDailyStats\(\), this\.currentTask\.type, correct\)/);
+    assert.match(app, /item\.steps\[type\]\.correct \+ item\.steps\[type\]\.errors/);
+    assert.match(app, /className = 'step-bar'/);
+    assert.match(app, /className = `day-duration \$\{getDurationColorClass\(item\.seconds\)\}`/);
+    assert.match(app, /getRollingDateKeys\(todayKey\)/);
+    assert.doesNotMatch(app, /today\.solved|today\.byType|stats\.solved/);
+    assert.match(styles, /\.chart-legend \{/);
+    assert.match(styles, /\.segment-correct \{\s*background:\s*#22c55e;/);
+    assert.match(styles, /\.segment-errors \{\s*background:\s*var\(--red\);/);
+    assert.match(styles, /\.duration-low \{\s*color:\s*var\(--red\)/);
+    assert.match(styles, /\.duration-high \{\s*color:\s*#4ade80/);
     assert.match(serviceWorker, /'\/format\.js'/);
+    assert.match(serviceWorker, /'\/stats-data\.js'/);
     assert.match(serviceWorker, /'\/math-layout\.js'/);
+});
+
+test('statistics show the active timer and an enlarged stacked chart for today', async () => {
+    const [html, app, styles] = await Promise.all([
+        read('index.html'),
+        read('app.js'),
+        read('styles.css')
+    ]);
+    assert.match(html, /id="active-day-time-stats" class="header-title active-day-time"/);
+    assert.match(html, /<h2>Aufgaben heute<\/h2>/);
+    assert.match(html, /id="day-chart" class="day-chart"/);
+    assert.ok(html.indexOf('id="week-chart"') < html.indexOf('class="chart-legend"'));
+    assert.ok(html.indexOf('class="chart-legend"') < html.indexOf('id="day-chart"'));
+    assert.match(app, /document\.getElementById\('active-day-time-stats'\)/);
+    assert.match(app, /this\.renderStepGroups\(chart, stats\.steps, maximum, true\)/);
+    assert.match(styles, /\.day-section \{[\s\S]*?flex:\s*1 1 auto;/);
+    assert.match(styles, /\.day-chart \{[\s\S]*?grid-template-columns:\s*repeat\(4,/);
 });

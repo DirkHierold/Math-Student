@@ -33,21 +33,27 @@
                 <div class="header-info">
                     <h1 class="header-title">Statistik</h1>
                 </div>
+                <span id="active-day-time-stats" class="header-title active-day-time">0 Min aktiv</span>
                 <button id="feed-open" class="icon-button" type="button" aria-label="Zurück zum Aufgaben-Feed">×</button>
             </header>
             <section class="stats-section week-section">
                 <div class="section-heading">
-                    <h2>Übungszeit</h2>
-                    <span>Diese Woche</span>
+                    <h2>Aufgaben</h2>
+                    <span>Letzte 7 Tage</span>
                 </div>
-                <div id="week-chart" class="week-chart" aria-label="Übungszeit der letzten sieben Tage"></div>
+                <div id="week-chart" class="week-chart" role="group" aria-label="Aufgaben und Übungszeit der letzten sieben Tage"></div>
             </section>
-            <section class="stats-section">
+            <div class="chart-legend" aria-label="Legende">
+                <span><i class="legend-swatch legend-correct" aria-hidden="true"></i>Richtig</span>
+                <span><i class="legend-swatch legend-errors" aria-hidden="true"></i>Fehler</span>
+                <span>B = Bruchgl. · T = Terme · P = Potenzen · Q = Quadratik</span>
+            </div>
+            <section class="stats-section day-section">
                 <div class="section-heading">
                     <h2>Aufgaben heute</h2>
-                    <span id="stats-total">0 gelöst</span>
+                    <span id="stats-total">0 Antworten</span>
                 </div>
-                <div id="type-matrix" class="type-matrix"></div>
+                <div id="day-chart" class="day-chart" role="group" aria-label="Heute gelöste und falsch beantwortete Aufgaben nach Typ"></div>
             </section>
             <div class="stats-footer">Deine Daten bleiben auf diesem Gerät.</div>
         </section>

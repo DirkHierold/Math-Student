@@ -2,9 +2,11 @@ import { TASK_STEP_COUNTS, TASK_TYPES, applyNextStep, currentLine, generateTask,
 import { chooseNextType, createTypeProgress, normalizeTypeProgress, recordReview } from './progress.js';
 import { formatCompactDuration, formatDuration } from './format.js';
 import { fittedMathScale, sharedMathScale } from './math-layout.js';
+import { createDailyStats, getDurationColorClass, getRollingDateKeys, normalizeDailyStats, pruneDailyStats, recordStepAnswer } from './stats-data.js';
 
 const STORAGE_KEY = 'mathfeed-state-v1';
 const TYPE_KEYS = Object.keys(TASK_TYPES);
+const TYPE_SHORT_LABELS = Object.freeze({ linear: 'B', terms: 'T', powers: 'P', quadratic: 'Q' });
 const HEADER_TYPE_LABELS = Object.freeze({
     linear: 'Bruchgleichung',
     terms: 'Terme',
@@ -23,17 +25,8 @@ const berlinDateKey = (date = new Date()) => {
     return `${values.year}-${values.month}-${values.day}`;
 };
 
-const createDailyStats = () => ({
-    seconds: 0,
-    solved: 0,
-    correct: 0,
-    errors: 0,
-    byType: Object.fromEntries(TYPE_KEYS.map(type => [type, { correct: 0, errors: 0 }]))
-});
-
 const createState = () => ({
     version: 1,
-    totalAnswered: 0,
     lastType: null,
     types: Object.fromEntries(TYPE_KEYS.map(type => [type, createTypeProgress()])),
     daily: {}
@@ -51,6 +44,8 @@ class MathFeedApp {
         this.lastTimerSave = Date.now();
         this.bindEvents();
         this.observeMathContainers();
+        this.renderActiveTime();
+        this.saveState();
         this.startTimer();
         this.startNextTask();
     }
@@ -64,6 +59,9 @@ class MathFeedApp {
         }
         state.types = normalizeTypeProgress(state.types, TYPE_KEYS);
         if (!TYPE_KEYS.includes(state.lastType)) state.lastType = null;
+        delete state.totalAnswered;
+        state.daily = normalizeDailyStats(state.daily, TYPE_KEYS);
+        pruneDailyStats(state.daily, berlinDateKey());
         return state;
     }
 
@@ -106,6 +104,7 @@ class MathFeedApp {
             this.lastActiveTick = now;
             if (!isActive) return;
 
+            pruneDailyStats(this.state.daily, berlinDateKey());
             const daily = this.getDailyStats();
             daily.seconds += Math.max(0, Math.min(elapsed, 3000)) / 1000;
             this.renderActiveTime();
@@ -118,14 +117,7 @@ class MathFeedApp {
     }
 
     getDailyStats(dateKey = berlinDateKey()) {
-        if (!this.state.daily[dateKey]) this.state.daily[dateKey] = createDailyStats();
-        const day = this.state.daily[dateKey];
-        day.byType ||= Object.fromEntries(TYPE_KEYS.map(type => [type, { correct: 0, errors: 0 }]));
-        for (const type of Object.keys(day.byType)) {
-            if (!TYPE_KEYS.includes(type)) delete day.byType[type];
-        }
-        for (const type of TYPE_KEYS) day.byType[type] ||= { correct: 0, errors: 0 };
-        return day;
+        return this.state.daily[dateKey] ||= createDailyStats(TYPE_KEYS);
     }
 
     chooseType() {
@@ -165,9 +157,16 @@ class MathFeedApp {
     }
 
     renderActiveTime() {
-        const time = document.getElementById('active-day-time');
-        time.textContent = formatDuration(this.getDailyStats().seconds);
-        time.setAttribute('aria-label', `Aktive Tageszeit: ${time.textContent}`);
+        const seconds = this.getDailyStats().seconds;
+        for (const time of [
+            document.getElementById('active-day-time'),
+            document.getElementById('active-day-time-stats')
+        ]) {
+            time.textContent = formatDuration(seconds);
+            time.classList.remove('duration-high', 'duration-low');
+            time.classList.add(getDurationColorClass(seconds));
+            time.setAttribute('aria-label', `Aktive Tageszeit: ${time.textContent}`);
+        }
     }
 
     renderMath(tex, container, kind) {
@@ -265,6 +264,7 @@ class MathFeedApp {
         if (this.answerLocked) return;
         this.answerLocked = true;
         const correct = choiceId === this.currentStep.answerId;
+        recordStepAnswer(this.getDailyStats(), this.currentTask.type, correct);
         if (!correct) this.taskHadError = true;
 
         for (const button of document.getElementById('answer-tiles').children) {
@@ -305,20 +305,12 @@ class MathFeedApp {
     }
 
     recordTaskResult() {
-        const today = this.getDailyStats();
-        const typeStats = today.byType[this.currentTask.type];
-        this.state.totalAnswered++;
         this.state.lastType = this.currentTask.type;
-        today.solved++;
 
         if (this.taskHadError) {
             recordReview(this.state.types, this.currentTask.type, false);
-            today.errors++;
-            typeStats.errors++;
         } else {
             recordReview(this.state.types, this.currentTask.type, true);
-            today.correct++;
-            typeStats.correct++;
         }
         this.saveState();
     }
@@ -339,75 +331,85 @@ class MathFeedApp {
 
     renderStats() {
         const today = this.getDailyStats();
-        document.getElementById('stats-total').textContent = `${today.solved} gelöst`;
+        const totalSteps = TYPE_KEYS.reduce((total, type) => {
+            const counts = today.steps[type];
+            return total + counts.correct + counts.errors;
+        }, 0);
+        document.getElementById('stats-total').textContent = `${totalSteps} Antworten`;
         this.renderWeekChart();
-
-        const matrix = document.getElementById('type-matrix');
-        matrix.replaceChildren();
-        for (const type of TYPE_KEYS) {
-            const counts = today.byType[type];
-            const total = counts.correct + counts.errors;
-            const card = document.createElement('article');
-            card.className = 'type-card';
-            const label = document.createElement('div');
-            label.className = 'type-card-title';
-            label.textContent = TASK_TYPES[type];
-            const ratio = document.createElement('div');
-            ratio.className = 'type-ratio';
-            const correct = document.createElement('span');
-            correct.className = 'ratio-correct';
-            correct.style.width = `${total ? counts.correct / total * 100 : 0}%`;
-            const errors = document.createElement('span');
-            errors.className = 'ratio-errors';
-            errors.style.width = `${total ? counts.errors / total * 100 : 0}%`;
-            ratio.append(correct, errors);
-            const detail = document.createElement('p');
-            detail.textContent = `${counts.correct} richtig · ${counts.errors} falsch`;
-            card.append(label, ratio, detail);
-            matrix.appendChild(card);
-        }
+        this.renderDayChart(today);
     }
 
     renderWeekChart() {
         const chart = document.getElementById('week-chart');
         chart.replaceChildren();
         const todayKey = berlinDateKey();
-        const [year, month, day] = todayKey.split('-').map(Number);
-        const today = new Date(Date.UTC(year, month - 1, day));
-        const days = [];
-        for (let offset = 6; offset >= 0; offset--) {
-            const date = new Date(today);
-            date.setUTCDate(today.getUTCDate() - offset);
-            const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
+        const days = getRollingDateKeys(todayKey).map(key => {
+            const [year, month, day] = key.split('-').map(Number);
             const stats = this.getDailyStats(key);
-            days.push({ key, date, seconds: stats.seconds, solved: stats.solved });
-        }
-        const maximum = Math.max(1, ...days.map(item => item.seconds));
+            return { key, date: new Date(Date.UTC(year, month - 1, day)), ...stats };
+        });
+        const maximum = Math.max(1, ...days.flatMap(item =>
+            TYPE_KEYS.map(type => item.steps[type].correct + item.steps[type].errors)
+        ));
         const formatter = new Intl.DateTimeFormat('de-DE', { weekday: 'short', timeZone: 'UTC' });
         for (const item of days) {
-            const column = document.createElement('div');
-            column.className = 'chart-column';
-            const metrics = document.createElement('div');
-            metrics.className = 'day-metrics';
-            metrics.title = `${item.solved} Aufgaben · ${formatDuration(item.seconds)}`;
-            const count = document.createElement('span');
-            count.className = 'day-count';
-            count.textContent = String(item.solved);
+            const column = document.createElement('section');
+            column.className = `chart-day${item.key === todayKey ? ' today' : ''}`;
+            column.setAttribute('role', 'group');
+            column.setAttribute('aria-label', formatter.format(item.date));
             const duration = document.createElement('span');
-            duration.className = 'day-duration';
+            duration.className = `day-duration ${getDurationColorClass(item.seconds)}`;
             duration.textContent = formatCompactDuration(item.seconds);
-            metrics.append(count, duration);
-            const barTrack = document.createElement('div');
-            barTrack.className = 'bar-track';
-            const bar = document.createElement('div');
-            bar.className = `bar${item.key === todayKey ? ' today' : ''}`;
-            bar.style.height = `${Math.max(item.seconds > 0 ? 7 : 0, item.seconds / maximum * 100)}%`;
-            bar.title = formatDuration(item.seconds);
+
+            const groups = document.createElement('div');
+            groups.className = 'day-type-groups';
+            this.renderStepGroups(groups, item.steps, maximum);
+
             const label = document.createElement('span');
+            label.className = 'chart-day-label';
             label.textContent = formatter.format(item.date).replace('.', '');
-            barTrack.appendChild(bar);
-            column.append(metrics, barTrack, label);
+            column.append(duration, groups, label);
             chart.appendChild(column);
+        }
+    }
+
+    renderDayChart(stats) {
+        const chart = document.getElementById('day-chart');
+        chart.replaceChildren();
+        const maximum = Math.max(1, ...TYPE_KEYS.map(type =>
+            stats.steps[type].correct + stats.steps[type].errors
+        ));
+        this.renderStepGroups(chart, stats.steps, maximum, true);
+    }
+
+    renderStepGroups(container, steps, maximum, detailed = false) {
+        for (const type of TYPE_KEYS) {
+            const counts = steps[type];
+            const total = counts.correct + counts.errors;
+            const group = document.createElement('div');
+            group.className = `type-bar-group${detailed ? ' detailed' : ''}`;
+            const totalLabel = document.createElement('span');
+            totalLabel.className = 'type-total';
+            totalLabel.textContent = String(total);
+            const bar = document.createElement('div');
+            bar.className = 'step-bar';
+            bar.title = `${TASK_TYPES[type]}: ${counts.correct} richtig · ${counts.errors} falsch`;
+            bar.setAttribute('role', 'img');
+            bar.setAttribute('aria-label', bar.title);
+            const errors = document.createElement('span');
+            errors.className = 'step-segment segment-errors';
+            errors.style.height = `${counts.errors / maximum * 100}%`;
+            const correct = document.createElement('span');
+            correct.className = 'step-segment segment-correct';
+            correct.style.height = `${counts.correct / maximum * 100}%`;
+            bar.append(errors, correct);
+            const typeLabel = document.createElement('span');
+            typeLabel.className = detailed ? 'type-full-label' : 'type-short-label';
+            typeLabel.textContent = detailed ? TASK_TYPES[type] : TYPE_SHORT_LABELS[type];
+            typeLabel.title = TASK_TYPES[type];
+            group.append(totalLabel, bar, typeLabel);
+            container.appendChild(group);
         }
     }
 }

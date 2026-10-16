@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mathfeed-v6.7.1';
+const CACHE_NAME = 'mathfeed-v6.7.2';
 const KATEX_FONTS = [
     'KaTeX_AMS-Regular',
     'KaTeX_Caligraphic-Bold',
@@ -30,6 +30,7 @@ const ASSETS_TO_CACHE = [
     '/math-layout.js',
     '/progress.js',
     '/format.js',
+    '/stats-data.js',
     '/styles.css',
     '/manifest.json',
     '/vendor/katex/katex.min.js',
