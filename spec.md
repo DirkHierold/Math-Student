@@ -9,7 +9,9 @@ MathFeed replaces the previous topic dashboard and level-based exercise sessions
 - Rational arithmetic is exact. Fractions are reduced and whole numbers are rendered without a denominator.
 - Tasks, intermediate lines, and answer choices are rendered as TeX using locally served KaTeX and its local fonts, including offline use.
 - Use the information button to open the fixed, non-scrollable statistics view; use the close control to return to the feed. The feed header shows the current exercise type and step, plus the active practice time for today.
-- The exercise type and step appear together on one line. Formulas stay unwrapped and scale to fit the task area's available width and height.
+- Feed and statistics headers share the same single-line title styling, vertical alignment, and button dimensions.
+- The exercise type and step appear together on one line. Formulas use fixed base font sizes (40 px for tasks, 21 px for answers) and an independent inner transform to shrink or enlarge them proportionally to the available width and height, without wrapping or changing the font size. All answers within a step share the same scale, limited by the answer that needs the most space; the task scales independently.
+- New formulas become visible together after their fonts have loaded and their initial scale has been applied. Subsequent container resizes update the scale without hiding formulas or changing button dimensions.
 - Answer feedback changes the selected tiles in place; it does not rerender the formula choices before moving to the next step.
 
 ## Step-rule engine

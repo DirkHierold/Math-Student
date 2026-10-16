@@ -1,7 +1,7 @@
 import { TASK_STEP_COUNTS, TASK_TYPES, applyNextStep, currentLine, generateTask, getNextStep, isTaskComplete } from './math-engine.js';
 import { chooseNextType, createTypeProgress, normalizeTypeProgress, recordReview } from './progress.js';
 import { formatCompactDuration, formatDuration } from './format.js';
-import { fittedFontSize } from './math-layout.js';
+import { fittedMathScale, sharedMathScale } from './math-layout.js';
 
 const STORAGE_KEY = 'mathfeed-state-v1';
 const TYPE_KEYS = Object.keys(TASK_TYPES);
@@ -86,6 +86,9 @@ class MathFeedApp {
             if (document.visibilityState === 'hidden') this.saveState();
         });
         window.addEventListener('resize', () => this.fitRenderedMath());
+        document.fonts?.addEventListener('loadingerror', () => {
+            this.reportMathError(new Error('Eine benötigte Formelschrift konnte nicht geladen werden.'));
+        });
         window.addEventListener('focus', () => {
             this.lastActiveTick = Date.now();
         });
@@ -140,11 +143,25 @@ class MathFeedApp {
     }
 
     renderTask() {
+        const revision = this.mathRevision = (this.mathRevision ?? 0) + 1;
+        this.mathFontsReady = false;
         const task = this.currentTask;
         document.getElementById('type-label').textContent = `${HEADER_TYPE_LABELS[task.type]}: ${task.stage + 1}/${TASK_STEP_COUNTS[task.type]}`;
         this.renderActiveTime();
         this.renderMath(currentLine(task), document.getElementById('task-expression'), 'task');
         this.renderChoices();
+        // Trigger font discovery for all formulas before waiting for their fonts.
+        document.getElementById('answer-tiles').getBoundingClientRect();
+        const fitAfterFontsLoad = () => {
+            if (revision !== this.mathRevision) return;
+            this.mathFontsReady = true;
+            this.fitRenderedMath();
+        };
+        if (document.fonts?.ready) {
+            document.fonts.ready.then(fitAfterFontsLoad).catch(error => this.reportMathError(error));
+        } else {
+            fitAfterFontsLoad();
+        }
     }
 
     renderActiveTime() {
@@ -157,26 +174,19 @@ class MathFeedApp {
         container.replaceChildren();
         container.dataset.mathKind = kind;
         container.classList.add('math-fitting');
-        window.katex.render(tex, container, {
+        const content = document.createElement('span');
+        content.className = 'math-content';
+        container.appendChild(content);
+        window.katex.render(tex, content, {
             displayMode: true,
             throwOnError: true,
             trust: false
         });
-        const fitAfterFontsLoad = () => {
-            requestAnimationFrame(() => {
-                this.fitMathElement(container);
-                container.classList.remove('math-fitting');
-            });
-        };
-        if (document.fonts?.ready) document.fonts.ready.then(fitAfterFontsLoad);
-        else fitAfterFontsLoad();
     }
 
-    fitMathElement(container) {
-        const math = container.querySelector('.katex');
-        if (!math || !container.clientWidth || !container.clientHeight) return false;
-
-        const baseSize = container.dataset.mathKind === 'task' ? 40 : 21;
+    measureMathElement(container) {
+        const content = container.querySelector('.math-content');
+        if (!content || !container.clientWidth || !container.clientHeight) return null;
         const styles = window.getComputedStyle(container);
         const availableWidth = Math.max(0, container.clientWidth
             - parseFloat(styles.paddingLeft)
@@ -184,12 +194,9 @@ class MathFeedApp {
         const availableHeight = Math.max(0, container.clientHeight
             - parseFloat(styles.paddingTop)
             - parseFloat(styles.paddingBottom));
-        container.style.fontSize = `${baseSize}px`;
-        const bounds = math.getBoundingClientRect();
-        const fontSize = fittedFontSize(baseSize, availableWidth, availableHeight, bounds.width, bounds.height);
-        if (fontSize === null) return false;
-        container.style.fontSize = `${fontSize}px`;
-        return true;
+        // Layout dimensions exclude transforms, including an active button's scale.
+        const scale = fittedMathScale(availableWidth, availableHeight, content.offsetWidth, content.offsetHeight);
+        return { container, content, scale };
     }
 
     observeMathContainers() {
@@ -200,7 +207,43 @@ class MathFeedApp {
     }
 
     fitRenderedMath() {
-        document.querySelectorAll('[data-math-kind]').forEach(container => this.fitMathElement(container));
+        if (this.mathFitFrame) return;
+        this.mathFitFrame = requestAnimationFrame(() => {
+            this.mathFitFrame = null;
+            if (!this.mathFontsReady || this.currentView !== 'feed') return;
+            try {
+                const measurements = [...document.querySelectorAll('[data-math-kind]')]
+                    .map(container => this.measureMathElement(container));
+                if (document.fonts?.status === 'loading') {
+                    document.fonts.ready.then(() => this.fitRenderedMath())
+                        .catch(error => this.reportMathError(error));
+                    return;
+                }
+                if (measurements.some(measurement => !measurement || measurement.scale === null)) {
+                    throw new Error('Der verfügbare Platz für die Formeln konnte nicht bestimmt werden.');
+                }
+                const answerScale = sharedMathScale(measurements
+                    .filter(({ container }) => container.dataset.mathKind === 'choice')
+                    .map(({ scale }) => scale));
+                if (answerScale === null) {
+                    throw new Error('Die gemeinsame Skalierung der Antworten konnte nicht bestimmt werden.');
+                }
+                for (const { container, content, scale } of measurements) {
+                    const fittedScale = container.dataset.mathKind === 'choice' ? answerScale : scale;
+                    content.style.setProperty('--math-scale', fittedScale);
+                    container.classList.remove('math-fitting');
+                }
+            } catch (error) {
+                this.reportMathError(error);
+            }
+        });
+    }
+
+    reportMathError(error) {
+        console.error('MathFeed-Formeln konnten nicht angepasst werden:', error);
+        const message = document.getElementById('app-error');
+        message.textContent = `Formeln konnten nicht angepasst werden: ${error.message}`;
+        message.hidden = false;
     }
 
     renderChoices() {

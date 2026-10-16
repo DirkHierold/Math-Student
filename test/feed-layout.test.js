@@ -13,7 +13,10 @@ test('feed and statistics use aligned information/back buttons without swipe UI'
     assert.match(app, /`\$\{HEADER_TYPE_LABELS\[task\.type\]\}: \$\{task\.stage \+ 1\}\/\$\{TASK_STEP_COUNTS\[task\.type\]\}`/);
     assert.match(app, /Aktive Tageszeit: \$\{time\.textContent\}/);
     const styles = await read('styles.css');
-    assert.match(styles, /\.task-header-info \.header-title \{[\s\S]*?white-space:\s*nowrap;/);
+    assert.equal((html.match(/class="header-info"/g) ?? []).length, 2);
+    assert.doesNotMatch(html, /header-subtitle-spacer|daily-summary|task-header-info/);
+    assert.match(styles, /\.header-info \{[\s\S]*?align-items:\s*center;/);
+    assert.match(styles, /\.header-info \.header-title \{[\s\S]*?white-space:\s*nowrap;/);
     assert.match(html, /aria-label="Statistik-Informationen öffnen"><span class="info-icon"/);
     assert.match(html, /aria-label="Zurück zum Aufgaben-Feed">×/);
     assert.doesNotMatch(html, /brand-mark|gesture-hint|Wische nach links/);
@@ -32,23 +35,53 @@ test('formula and answer tiles share a one-column width and math is kept on one 
     assert.match(styles, /\.task-expression \.katex,[\s\S]*?\.answer-tile \.katex \{\s*white-space:\s*nowrap/s);
     assert.match(styles, /\.active-day-time \{\s*position:\s*absolute;[\s\S]*?left:\s*50%;/s);
     assert.match(styles, /\.task-expression \{[\s\S]*?flex:\s*1 1 0;[\s\S]*?overflow:\s*hidden;/s);
-    assert.match(styles, /\.answer-tile \{\s*height:\s*58px;[\s\S]*?overflow:\s*hidden;/s);
-    assert.match(styles, /\.math-fitting \{\s*visibility:\s*hidden;/);
-    assert.match(app, /fittedFontSize\(baseSize, availableWidth, availableHeight, bounds\.width, bounds\.height\)/);
+    assert.match(styles, /\.answer-tile \{[\s\S]*?height:\s*58px;[\s\S]*?overflow:\s*hidden;/s);
+    assert.match(styles, /\.math-fitting \.math-content \{\s*visibility:\s*hidden;/);
+    assert.match(styles, /transform:\s*translate\(-50%, -50%\) scale\(var\(--math-scale, 1\)\)/);
+    assert.match(styles, /\.math-content \{[\s\S]*?width:\s*max-content;/);
+    assert.match(styles, /\.task-expression \{[\s\S]*?font-size:\s*40px;/);
+    assert.match(styles, /\.answer-tile \{[\s\S]*?font-size:\s*21px;/);
+    assert.doesNotMatch(app, /style\.fontSize|fittedFontSize/);
+    assert.match(app, /fittedMathScale\(availableWidth, availableHeight, content\.offsetWidth, content\.offsetHeight\)/);
+    assert.match(app, /sharedMathScale\(measurements/);
     assert.match(app, /new window\.ResizeObserver\(\(\) => this\.fitRenderedMath\(\)\)/);
     assert.match(app, /document\.fonts\.ready\.then\(fitAfterFontsLoad\)/);
     assert.match(app, /window\.addEventListener\('resize', \(\) => this\.fitRenderedMath\(\)\)/);
+    assert.match(app, /if \(this\.mathFitFrame\) return/);
+    assert.match(app, /if \(revision !== this\.mathRevision\) return/);
 });
 
-test('fitted math scales below the previous minimum when a long expression needs it', async () => {
-    const { fittedFontSize } = await import('../math-layout.js');
-    const fontSize = fittedFontSize(40, 300, 250, 2400, 180);
+test('math scales down without a minimum, scales up, and respects both dimensions with a margin', async () => {
+    const { fittedMathScale } = await import('../math-layout.js');
+    const scale = fittedMathScale(300, 250, 2400, 180);
 
-    assert.ok(fontSize < 8);
-    assert.ok(fontSize * 2400 / 40 <= 300);
-    assert.ok(fontSize * 180 / 40 <= 250);
-    assert.equal(fittedFontSize(40, 300, 250, 200, 100), 40);
-    assert.equal(fittedFontSize(40, 0, 250, 2400, 180), null);
+    assert.ok(scale * 40 < 8);
+    assert.equal(scale * 2400, 288);
+    assert.ok(scale * 180 < 250);
+    assert.equal(fittedMathScale(300, 250, 200, 100), 1.44);
+    assert.equal(fittedMathScale(300, 30, 200, 100), 0.288);
+    assert.equal(fittedMathScale(200, 100, 200, 100), 0.96);
+    for (const invalid of [0, -1, NaN, Infinity, undefined]) {
+        for (let index = 0; index < 4; index++) {
+            const sizes = [300, 250, 200, 100];
+            sizes[index] = invalid;
+            assert.equal(fittedMathScale(...sizes), null);
+        }
+    }
+});
+
+test('all answers share the most restrictive valid scale', async () => {
+    const { fittedMathScale, sharedMathScale } = await import('../math-layout.js');
+    const sizes = [[200, 30], [600, 100], [300, 120], [100, 20]];
+    const scale = sharedMathScale(sizes.map(([width, height]) => fittedMathScale(300, 32, width, height)));
+    for (const [width, height] of sizes) {
+        assert.ok(width * scale < 300);
+        assert.ok(height * scale < 32);
+    }
+    assert.equal(sharedMathScale([2, 3, 4]), 2);
+    for (const scales of [[], [1, null], [1, 0], [NaN], [Infinity], [-1]]) {
+        assert.equal(sharedMathScale(scales), null);
+    }
 });
 
 test('answer feedback updates existing tiles without rerendering their KaTeX formulas', async () => {

@@ -75,16 +75,9 @@ button:focus-visible {
     position: relative;
 }
 
-.task-header-info,
-.daily-summary {
+.header-info {
     display: flex;
-    flex: 1;
     min-width: 0;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.task-header-info {
     flex: 0 1 calc(50% - 30px);
     flex-direction: row;
     align-items: center;
@@ -97,7 +90,7 @@ button:focus-visible {
     line-height: 1;
 }
 
-.task-header-info .header-title {
+.header-info .header-title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -110,11 +103,6 @@ button:focus-visible {
     top: 50%;
     transform: translate(-50%, -50%);
     white-space: nowrap;
-}
-
-.header-subtitle-spacer {
-    height: 0.7rem;
-    line-height: 1;
 }
 
 .type-label {
@@ -164,6 +152,7 @@ button:focus-visible {
 }
 
 .task-expression {
+    position: relative;
     width: 100%;
     max-width: 38rem;
     min-width: 0;
@@ -180,8 +169,22 @@ button:focus-visible {
     text-shadow: 0 0 30px rgba(0, 242, 254, 0.12);
 }
 
-.math-fitting {
+.math-fitting .math-content {
     visibility: hidden;
+}
+
+.math-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: max-content;
+    padding: 2px;
+    line-height: 1.35;
+    white-space: nowrap;
+    transform: translate(-50%, -50%) scale(var(--math-scale, 1));
+    transform-origin: center;
+    pointer-events: none;
 }
 
 .task-expression .katex-display,
@@ -203,6 +206,7 @@ button:focus-visible {
 }
 
 .answer-tile {
+    position: relative;
     height: 58px;
     min-width: 0;
     overflow: hidden;
@@ -212,6 +216,7 @@ button:focus-visible {
     background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(17, 28, 50, 0.96));
     color: #f8fafc;
     font-weight: 700;
+    font-size: 21px;
     line-height: 1.35;
     cursor: pointer;
     transition: transform 100ms ease, border-color 120ms ease, background 120ms ease;
