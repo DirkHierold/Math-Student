@@ -96,6 +96,16 @@ test('answer feedback updates existing tiles without rerendering their KaTeX for
     assert.match(chooseAnswer, /classList\.toggle\('is-wrong'/);
 });
 
+test('wrong answers hold the current step until the next pointer interaction', async () => {
+    const app = await read('app.js');
+    const start = app.indexOf('    chooseAnswer(choiceId) {');
+    const end = app.indexOf('\n    recordTaskResult()', start);
+    const chooseAnswer = app.slice(start, end);
+    assert.ok(start >= 0 && end > start);
+    assert.match(chooseAnswer, /if \(correct\) \{\s*window\.setTimeout\(advance, 450\);\s*\} else \{\s*this\.pendingErrorAdvance = advance;\s*document\.addEventListener\('pointerdown', this\.pendingErrorAdvance\);/);
+    assert.match(chooseAnswer, /document\.removeEventListener\('pointerdown', this\.pendingErrorAdvance\)/);
+});
+
 test('weekly chart renders grouped step counts and duration labels for every day', async () => {
     const [app, styles, serviceWorker] = await Promise.all([
         read('app.js'),

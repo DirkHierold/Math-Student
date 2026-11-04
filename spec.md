@@ -5,7 +5,7 @@ MathFeed replaces the previous topic dashboard and level-based exercise sessions
 ## Learning flow
 
 - The app opens directly on a generated exercise and starts with a random mix of four exercise families: fractional linear equations, expanding/simplifying terms, powers and roots (including negative and fractional exponents), and quadratic equations.
-- Students select the next valid line from mathematical answer tiles. A short visual response automatically advances to the next line; no explanatory text or extra continue tap interrupts the flow. A wrong choice schedules that exercise type for review after two correct exercises of other types.
+- Students select the next valid line from mathematical answer tiles. A correct answer automatically advances to the next line after a short visual response. A wrong choice keeps the current line and answer tiles visible, with the correct tile green and selected tile red, until the student taps or clicks elsewhere; then the feed advances. A wrong choice schedules that exercise type for review after two correct exercises of other types.
 - Rational arithmetic is exact. Fractions are reduced and whole numbers are rendered without a denominator.
 - Tasks, intermediate lines, and answer choices are rendered as TeX using locally served KaTeX and its local fonts, including offline use.
 - Use the information button to open the fixed, non-scrollable statistics view; use the close control to return to the feed. The feed header shows the current exercise type and step, plus the active practice time for today.

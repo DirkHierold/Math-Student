@@ -294,14 +294,24 @@ class MathFeedApp {
             this.currentStep = getNextStep(this.currentTask);
         }
 
-        window.setTimeout(() => {
+        const advance = () => {
+            if (this.pendingErrorAdvance) {
+                document.removeEventListener('pointerdown', this.pendingErrorAdvance);
+                this.pendingErrorAdvance = null;
+            }
             if (taskComplete) {
                 this.startNextTask({ showFeed: this.currentView !== 'stats' });
             } else {
                 this.answerLocked = false;
                 this.renderTask();
             }
-        }, 450);
+        };
+        if (correct) {
+            window.setTimeout(advance, 450);
+        } else {
+            this.pendingErrorAdvance = advance;
+            document.addEventListener('pointerdown', this.pendingErrorAdvance);
+        }
     }
 
     recordTaskResult() {
