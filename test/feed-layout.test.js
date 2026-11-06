@@ -1,60 +1,88 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { fittedMathScale, sharedMathScale } from '../math-layout.js';
 
 const read = file => readFile(new URL(`../${file}`, import.meta.url), 'utf8');
 
-test('feed and statistics use aligned information/back buttons without swipe UI', async () => {
-    const [html, app] = await Promise.all([read('index.html'), read('app.js')]);
-    assert.equal((html.match(/class="topbar"/g) ?? []).length, 2);
-    assert.match(html, /id="type-label" class="header-title"/);
-    assert.doesNotMatch(html, /id="task-step"/);
-    assert.match(html, /id="active-day-time" class="header-title active-day-time"/);
-    assert.match(app, /`\$\{HEADER_TYPE_LABELS\[task\.type\]\}: \$\{task\.stage \+ 1\}\/\$\{TASK_STEP_COUNTS\[task\.type\]\}`/);
-    assert.match(app, /Aktive Tageszeit: \$\{time\.textContent\}/);
-    const styles = await read('styles.css');
-    assert.equal((html.match(/class="header-info"/g) ?? []).length, 2);
-    assert.doesNotMatch(html, /header-subtitle-spacer|daily-summary|task-header-info/);
-    assert.match(styles, /\.header-info \{[\s\S]*?align-items:\s*center;/);
-    assert.match(styles, /\.header-info \.header-title \{[\s\S]*?white-space:\s*nowrap;/);
-    assert.match(html, /aria-label="Statistik-Informationen öffnen"><span class="info-icon"/);
-    assert.match(html, /aria-label="Zurück zum Aufgaben-Feed">×/);
-    assert.doesNotMatch(html, /brand-mark|gesture-hint|Wische nach links/);
-    assert.doesNotMatch(app, /touchstart|touchend|touchStartX|deltaX/);
-});
-
-test('formula and answer tiles share a one-column width and math is kept on one line', async () => {
-    const [html, styles, app] = await Promise.all([
-        read('index.html'),
-        read('styles.css'),
-        read('app.js')
+test('UI is built from original shadcn/ui components and the existing math domain modules', async () => {
+    const [config, feed, stats, state, hook, main, css] = await Promise.all([
+        read('components.json'),
+        read('src/components/feed-view.tsx'),
+        read('src/components/stats-view.tsx'),
+        read('src/lib/mathfeed-state.ts'),
+        read('src/hooks/use-mathfeed.ts'),
+        read('src/main.tsx'),
+        read('src/index.css')
     ]);
-    assert.match(html, /id="task-expression" class="task-expression"/);
-    assert.match(html, /id="answer-tiles" class="answer-tiles"/);
-    assert.match(styles, /grid-template-columns:\s*minmax\(0,\s*1fr\)/);
-    assert.match(styles, /\.task-expression \.katex,[\s\S]*?\.answer-tile \.katex \{\s*white-space:\s*nowrap/s);
-    assert.match(styles, /\.active-day-time \{\s*position:\s*absolute;[\s\S]*?left:\s*50%;/s);
-    assert.match(styles, /\.task-expression \{[\s\S]*?flex:\s*1 1 0;[\s\S]*?overflow:\s*hidden;/s);
-    assert.match(styles, /\.answer-tile \{[\s\S]*?height:\s*58px;[\s\S]*?overflow:\s*hidden;/s);
-    assert.match(styles, /\.math-fitting \.math-content \{\s*visibility:\s*hidden;/);
-    assert.match(styles, /transform:\s*translate\(-50%, -50%\) scale\(var\(--math-scale, 1\)\)/);
-    assert.match(styles, /\.math-content \{[\s\S]*?width:\s*max-content;/);
-    assert.match(styles, /\.task-expression \{[\s\S]*?font-size:\s*40px;/);
-    assert.match(styles, /\.answer-tile \{[\s\S]*?font-size:\s*21px;/);
-    assert.doesNotMatch(app, /style\.fontSize|fittedFontSize/);
-    assert.match(app, /fittedMathScale\(availableWidth, availableHeight, content\.offsetWidth, content\.offsetHeight\)/);
-    assert.match(app, /sharedMathScale\(measurements/);
-    assert.match(app, /new window\.ResizeObserver\(\(\) => this\.fitRenderedMath\(\)\)/);
-    assert.match(app, /document\.fonts\.ready\.then\(fitAfterFontsLoad\)/);
-    assert.match(app, /window\.addEventListener\('resize', \(\) => this\.fitRenderedMath\(\)\)/);
-    assert.match(app, /if \(this\.mathFitFrame\) return/);
-    assert.match(app, /if \(revision !== this\.mathRevision\) return/);
+    assert.match(config, /"\$schema": "https:\/\/ui\.shadcn\.com\/schema\.json"/);
+    assert.match(config, /"baseColor": "neutral"/);
+    assert.match(config, /"ui": "@\/components\/ui"/);
+    for (const component of ['button', 'card']) {
+        assert.match(feed, new RegExp(`from "@/components/ui/${component}"`));
+        await read(`src/components/ui/${component}.tsx`);
+    }
+    assert.match(stats, /from "@\/components\/ui\/chart"/);
+    assert.match(stats, /from "@\/components\/ui\/toggle-group"/);
+    assert.match(stats, /from "\.\.\/\.\.\/stats-data\.js"/);
+    assert.match(feed, /from "\.\.\/\.\.\/math-engine\.js"/);
+    assert.match(state, /STORAGE_KEY = "mathfeed-state-v1"/);
+    assert.match(hook, /recordStepAnswer/);
+    assert.match(main, /<ThemeProvider storageKey=\{THEME_STORAGE_KEY\}>/);
+    assert.match(css, /@import "tw-animate-css"/);
+    assert.match(css, /\.dark \{/);
+    assert.doesNotMatch(css, /\.(button|card|badge|alert|progress)\b/);
 });
 
-test('math scales down without a minimum, scales up, and respects both dimensions with a margin', async () => {
-    const { fittedMathScale } = await import('../math-layout.js');
-    const scale = fittedMathScale(300, 250, 2400, 180);
+test('the app fills the viewport and cannot scroll or rubber-band', async () => {
+    const [css, html, app, nav] = await Promise.all([
+        read('src/index.css'),
+        read('index.html'),
+        read('src/App.tsx'),
+        read('src/components/bottom-nav.tsx')
+    ]);
+    assert.match(css, /html,\s*body,\s*#root \{[^}]*height: 100dvh;[^}]*overflow: hidden;[^}]*overscroll-behavior: none;/);
+    assert.match(css, /touch-action: manipulation/);
+    assert.match(css, /@custom-variant short \(@media \(max-height: 500px\)\)/);
+    assert.match(html, /viewport-fit=cover/);
+    assert.match(html, /apple-mobile-web-app-capable/);
+    assert.match(app, /h-dvh/);
+    assert.match(app, /<BottomNav /);
+    assert.match(nav, /aria-current/);
+});
 
+test('UI texts live only in i18n.ts and every message exists in German and English', async () => {
+    const { dictionaries, detectLanguage, translate } = await import('../src/lib/i18n.ts');
+    assert.deepEqual(Object.keys(dictionaries.de).sort(), Object.keys(dictionaries.en).sort());
+    for (const lang of ['de', 'en']) {
+        for (const [key, value] of Object.entries(dictionaries[lang])) assert.ok(value.trim(), `${lang}.${key}`);
+    }
+    assert.equal(detectLanguage(['de-AT', 'en']), 'de');
+    assert.equal(detectLanguage(['de']), 'de');
+    assert.equal(detectLanguage(['en-US', 'de']), 'en');
+    assert.equal(detectLanguage(['fr']), 'en');
+    assert.equal(detectLanguage([]), 'en');
+    assert.equal(translate('en', 'stepLabel', { step: 2, total: 4 }), 'Step 2 of 4');
+    assert.equal(translate('de', 'stepLabel', { step: 2, total: 4 }), 'Schritt 2 von 4');
+
+    const files = ['App.tsx', 'components/feed-view.tsx', 'components/stats-view.tsx', 'components/bottom-nav.tsx',
+        'components/task-types.tsx', 'hooks/use-mathfeed.ts', 'hooks/use-math-fit.ts', 'lib/mathfeed-state.ts'];
+    for (const file of files) {
+        const source = await read(`src/${file}`);
+        assert.doesNotMatch(source, /["'`][^"'`\n]*[äöüÄÖÜß][^"'`\n]*["'`]/, `${file} contains hardcoded German text`);
+        assert.doesNotMatch(source, />\s*[A-ZÄÖÜ][a-zäöü]{3,}[^<>{}]*</, `${file} contains hardcoded JSX text`);
+    }
+});
+
+test('wrong answers keep the current step visible until the next tap', async () => {
+    const hook = await read('src/hooks/use-mathfeed.ts');
+    assert.match(hook, /pendingTask\.current = nextTask/);
+    assert.match(hook, /document\.addEventListener\("pointerdown", advance\)/);
+    assert.match(hook, /window\.setTimeout\(advance, 450\)/);
+});
+
+test('math fitting scales down, scales up, and respects both available dimensions', () => {
+    const scale = fittedMathScale(300, 250, 2400, 180);
     assert.ok(scale * 40 < 8);
     assert.equal(scale * 2400, 288);
     assert.ok(scale * 180 < 250);
@@ -70,8 +98,7 @@ test('math scales down without a minimum, scales up, and respects both dimension
     }
 });
 
-test('all answers share the most restrictive valid scale', async () => {
-    const { fittedMathScale, sharedMathScale } = await import('../math-layout.js');
+test('answer formulas share the most restrictive valid scale', () => {
     const sizes = [[200, 30], [600, 100], [300, 120], [100, 20]];
     const scale = sharedMathScale(sizes.map(([width, height]) => fittedMathScale(300, 32, width, height)));
     for (const [width, height] of sizes) {
@@ -84,63 +111,15 @@ test('all answers share the most restrictive valid scale', async () => {
     }
 });
 
-test('answer feedback updates existing tiles without rerendering their KaTeX formulas', async () => {
-    const app = await read('app.js');
-    const start = app.indexOf('    chooseAnswer(choiceId) {');
-    const end = app.indexOf('\n    recordTaskResult()', start);
-    const chooseAnswer = app.slice(start, end);
-    assert.ok(start >= 0 && end > start);
-    assert.doesNotMatch(chooseAnswer, /renderChoices|renderMath|katex\.render/);
-    assert.match(chooseAnswer, /document\.getElementById\('answer-tiles'\)\.children/);
-    assert.match(chooseAnswer, /classList\.toggle\('is-correct'/);
-    assert.match(chooseAnswer, /classList\.toggle\('is-wrong'/);
-});
-
-test('wrong answers hold the current step until the next pointer interaction', async () => {
-    const app = await read('app.js');
-    const start = app.indexOf('    chooseAnswer(choiceId) {');
-    const end = app.indexOf('\n    recordTaskResult()', start);
-    const chooseAnswer = app.slice(start, end);
-    assert.ok(start >= 0 && end > start);
-    assert.match(chooseAnswer, /if \(correct\) \{\s*window\.setTimeout\(advance, 450\);\s*\} else \{\s*this\.pendingErrorAdvance = advance;\s*document\.addEventListener\('pointerdown', this\.pendingErrorAdvance\);/);
-    assert.match(chooseAnswer, /document\.removeEventListener\('pointerdown', this\.pendingErrorAdvance\)/);
-});
-
-test('weekly chart renders grouped step counts and duration labels for every day', async () => {
-    const [app, styles, serviceWorker] = await Promise.all([
-        read('app.js'),
-        read('styles.css'),
-        read('sw.js')
+test('PWA build uses offline precaching and Vercel publishes the Vite dist directory', async () => {
+    const [config, vercel, html] = await Promise.all([
+        read('vite.config.ts'),
+        read('vercel.json'),
+        read('index.html')
     ]);
-    assert.match(app, /recordStepAnswer\(this\.getDailyStats\(\), this\.currentTask\.type, correct\)/);
-    assert.match(app, /item\.steps\[type\]\.correct \+ item\.steps\[type\]\.errors/);
-    assert.match(app, /className = 'step-bar'/);
-    assert.match(app, /className = `day-duration \$\{getDurationColorClass\(item\.seconds\)\}`/);
-    assert.match(app, /getRollingDateKeys\(todayKey\)/);
-    assert.doesNotMatch(app, /today\.solved|today\.byType|stats\.solved/);
-    assert.match(styles, /\.chart-legend \{/);
-    assert.match(styles, /\.segment-correct \{\s*background:\s*#22c55e;/);
-    assert.match(styles, /\.segment-errors \{\s*background:\s*var\(--red\);/);
-    assert.match(styles, /\.duration-low \{\s*color:\s*var\(--red\)/);
-    assert.match(styles, /\.duration-high \{\s*color:\s*#4ade80/);
-    assert.match(serviceWorker, /'\/format\.js'/);
-    assert.match(serviceWorker, /'\/stats-data\.js'/);
-    assert.match(serviceWorker, /'\/math-layout\.js'/);
-});
-
-test('statistics show the active timer and an enlarged stacked chart for today', async () => {
-    const [html, app, styles] = await Promise.all([
-        read('index.html'),
-        read('app.js'),
-        read('styles.css')
-    ]);
-    assert.match(html, /id="active-day-time-stats" class="header-title active-day-time"/);
-    assert.match(html, /<h2>Aufgaben heute<\/h2>/);
-    assert.match(html, /id="day-chart" class="day-chart"/);
-    assert.ok(html.indexOf('id="week-chart"') < html.indexOf('class="chart-legend"'));
-    assert.ok(html.indexOf('class="chart-legend"') < html.indexOf('id="day-chart"'));
-    assert.match(app, /document\.getElementById\('active-day-time-stats'\)/);
-    assert.match(app, /this\.renderStepGroups\(chart, stats\.steps, maximum, true\)/);
-    assert.match(styles, /\.day-section \{[\s\S]*?flex:\s*1 1 auto;/);
-    assert.match(styles, /\.day-chart \{[\s\S]*?grid-template-columns:\s*repeat\(4,/);
+    assert.match(config, /VitePWA/);
+    assert.match(config, /globPatterns/);
+    assert.match(vercel, /"outputDirectory": "dist"/);
+    assert.match(vercel, /"buildCommand": "npm run build"/);
+    assert.match(html, /src="\/src\/main\.tsx"/);
 });

@@ -1,75 +1,20 @@
 <!doctype html>
-<html lang="de">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#020617">
-    <meta name="description" content="Mathe üben im schnellen Aufgaben-Feed.">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="MathFeed" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="Practice math in a fast task feed." />
     <title>MathFeed</title>
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/favicon-96-dark.png">
-    <link rel="apple-touch-icon" href="/icon-192-dark.png">
-    <link rel="stylesheet" href="/vendor/katex/katex.min.css">
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-    <main id="app" aria-live="polite">
-        <section id="feed-view" class="view feed-view">
-            <header class="topbar">
-                <div class="header-info">
-                    <span id="type-label" class="header-title"></span>
-                </div>
-                <span id="active-day-time" class="header-title active-day-time">0 Min aktiv</span>
-                <button id="stats-open" class="icon-button" type="button" aria-label="Statistik-Informationen öffnen"><span class="info-icon" aria-hidden="true">i</span></button>
-            </header>
-            <section class="task-card" aria-label="Aktuelle Aufgabe">
-                <div id="task-expression" class="task-expression"></div>
-                <div id="answer-tiles" class="answer-tiles"></div>
-            </section>
-        </section>
-
-        <section id="stats-view" class="view stats-view" aria-label="Statistik" hidden>
-            <header class="topbar">
-                <div class="header-info">
-                    <h1 class="header-title">Statistik</h1>
-                </div>
-                <span id="active-day-time-stats" class="header-title active-day-time">0 Min aktiv</span>
-                <button id="feed-open" class="icon-button" type="button" aria-label="Zurück zum Aufgaben-Feed">×</button>
-            </header>
-            <section class="stats-section week-section">
-                <div class="section-heading">
-                    <h2>Aufgaben</h2>
-                    <span>Letzte 7 Tage</span>
-                </div>
-                <div id="week-chart" class="week-chart" role="group" aria-label="Aufgaben und Übungszeit der letzten sieben Tage"></div>
-            </section>
-            <div class="chart-legend" aria-label="Legende">
-                <span><i class="legend-swatch legend-correct" aria-hidden="true"></i>Richtig</span>
-                <span><i class="legend-swatch legend-errors" aria-hidden="true"></i>Fehler</span>
-                <span>B = Bruchgl. · T = Terme · P = Potenzen · Q = Quadratik</span>
-            </div>
-            <section class="stats-section day-section">
-                <div class="section-heading">
-                    <h2>Aufgaben heute</h2>
-                    <span id="stats-total">0 Antworten</span>
-                </div>
-                <div id="day-chart" class="day-chart" role="group" aria-label="Heute gelöste und falsch beantwortete Aufgaben nach Typ"></div>
-            </section>
-            <div class="stats-footer">Deine Daten bleiben auf diesem Gerät.</div>
-        </section>
-        <div id="app-error" class="app-error" role="alert" hidden></div>
-        <section id="fatal-error" class="fatal-error" role="alert" hidden></section>
-    </main>
-    <script src="/vendor/katex/katex.min.js"></script>
-    <script type="module" src="/app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(error => {
-                    console.error('Service worker registration failed:', error);
-                });
-            });
-        }
-    </script>
-</body>
+    <link rel="icon" href="/favicon-96.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
