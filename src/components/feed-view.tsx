@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils"
 type Feed = ReturnType<typeof useMathFeed>
 
 export function FeedView({ feed }: { feed: Feed }) {
-  const { task, currentStep, locked, selected, daily, answer, mathError } = feed
+  const { task, currentStep, locked, selected, daily, answer, advance, mathError } =
+    feed
   const practiceRef = useRef<HTMLElement>(null)
   useMathFit(practiceRef, true, [task, currentStep], mathError)
 
@@ -31,6 +32,15 @@ export function FeedView({ feed }: { feed: Feed }) {
   return (
     <section
       ref={practiceRef}
+      // The click ends the tap; consuming it keeps it from answering the next step.
+      onClickCapture={
+        answeredWrong
+          ? (event) => {
+              event.stopPropagation()
+              advance()
+            }
+          : undefined
+      }
       className="grid h-full min-h-0 grid-rows-[auto_minmax(0,3fr)_auto_minmax(0,4fr)] gap-2 px-4 pt-2 pb-3 short:grid-cols-2 short:grid-rows-[auto_auto_minmax(0,1fr)] short:gap-x-4"
     >
       <header className="flex h-9 items-center justify-between gap-3 short:col-span-2">

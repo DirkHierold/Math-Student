@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 
 import {
   applyNextStep,
@@ -56,7 +56,6 @@ export function useMathFeed(timerEnabled: boolean) {
   const taskHadError = useRef(false)
   const completion = useRef(false)
   const pendingTask = useRef<typeof task>(null)
-  const advanceHandler = useRef<(() => void) | null>(null)
 
   const reportError = useCallback((message: string, error: unknown) => {
     console.error(message, error)
@@ -89,10 +88,6 @@ export function useMathFeed(timerEnabled: boolean) {
   }, [])
 
   const advance = useCallback(() => {
-    if (advanceHandler.current) {
-      document.removeEventListener("pointerdown", advanceHandler.current)
-      advanceHandler.current = null
-    }
     if (completion.current) {
       startNext()
     } else {
@@ -103,15 +98,6 @@ export function useMathFeed(timerEnabled: boolean) {
       setFlash("")
     }
   }, [startNext])
-
-  useEffect(
-    () => () => {
-      if (advanceHandler.current) {
-        document.removeEventListener("pointerdown", advanceHandler.current)
-      }
-    },
-    []
-  )
 
   const answer = useCallback(
     (choiceId: string) => {
@@ -138,8 +124,6 @@ export function useMathFeed(timerEnabled: boolean) {
       if (correct) {
         window.setTimeout(advance, 450)
       } else {
-        advanceHandler.current = advance
-        document.addEventListener("pointerdown", advance)
         if (navigator.vibrate) navigator.vibrate(80)
       }
     },
@@ -158,6 +142,7 @@ export function useMathFeed(timerEnabled: boolean) {
     appError,
     startupError,
     answer,
+    advance,
     mathError,
   }
 }

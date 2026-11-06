@@ -77,8 +77,11 @@ test('UI texts live only in i18n.ts and every message exists in German and Engli
 test('wrong answers keep the current step visible until the next tap', async () => {
     const hook = await read('src/hooks/use-mathfeed.ts');
     assert.match(hook, /pendingTask\.current = nextTask/);
-    assert.match(hook, /document\.addEventListener\("pointerdown", advance\)/);
     assert.match(hook, /window\.setTimeout\(advance, 450\)/);
+    assert.doesNotMatch(hook, /pointerdown/);
+    const feed = await read('src/components/feed-view.tsx');
+    assert.match(feed, /onClickCapture/);
+    assert.match(feed, /event\.stopPropagation\(\)/);
 });
 
 test('math fitting scales down, scales up, and respects both available dimensions', () => {
