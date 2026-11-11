@@ -1,12 +1,12 @@
-import { BarChart3, Sigma } from "lucide-react"
+import { BarChart3, Home } from "lucide-react"
 
 import { t } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
-export type View = "feed" | "stats"
+export type View = "home" | "stats"
 
 const ITEMS = [
-  { view: "feed", icon: Sigma, label: () => t("navFeed") },
+  { view: "home", icon: Home, label: () => t("navHome") },
   { view: "stats", icon: BarChart3, label: () => t("navStats") },
 ] as const
 

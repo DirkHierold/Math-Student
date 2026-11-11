@@ -4,15 +4,15 @@ import katex from 'katex';
 import {
     applyNextStep,
     currentLine,
+    explanationKey,
     formatRational,
     generateTask,
     getNextStep,
     isTaskComplete,
+    MAX_LEVEL,
     rational,
-    TASK_STEP_COUNTS,
     TASK_TYPES
 } from '../math-engine.js';
-import { chooseNextType, createTypeProgress, normalizeTypeProgress, recordReview } from '../progress.js';
 
 const add = (a, b) => rational(a.n * b.d + b.n * a.d, a.d * b.d);
 const multiply = (a, b) => rational(a.n * b.n, a.d * b.d);
@@ -65,7 +65,7 @@ test('every generated family has four distinct tile choices and terminates', () 
                 steps++;
                 assert.ok(steps <= 6, `${type} did not terminate`);
             }
-            assert.equal(steps, TASK_STEP_COUNTS[type]);
+            assert.equal(steps, 1, `${type} tasks are a single step`);
         }
     }
 });
@@ -84,46 +84,62 @@ test('choice identity is stable and independent of randomized visual order', () 
     }
 });
 
-test('linear equation generator creates an exact solution', () => {
-    for (let iteration = 0; iteration < 100; iteration++) {
-        const task = generateTask('linear');
-        const { a, b, c, solution } = task.data;
+test('linear equation generator creates an exact solution and asks one step only', () => {
+    const starts = new Set();
+    for (let iteration = 0; iteration < 200; iteration++) {
+        const task = generateTask('linear', 1 + (iteration % MAX_LEVEL));
+        const { a, b, c, solution, start } = task.data;
+        starts.add(start);
         assert.ok(equal(add(multiply(a, solution), b), c));
+        const answer = getNextStep(task).answerTex;
+        assert.equal(answer, start === 0
+            ? currentLine(applyNextStep(task))
+            : `x = ${format(solution)}`);
+        assert.equal(isTaskComplete(applyNextStep(task)), true);
     }
+    assert.deepEqual([...starts].sort(), [0, 1]);
 });
 
-test('term simplification rule reaches the exact generated polynomial', () => {
-    for (let iteration = 0; iteration < 100; iteration++) {
-        let task = generateTask('terms');
-        while (!isTaskComplete(task)) task = applyNextStep(task);
-        const { a, b, c, d, e, f } = task.data;
-        const expectedX = add(add(multiply(a, b), d), f);
-        const expectedConstant = add(multiply(a, c), multiply(d, e));
-        assert.equal(currentLine(task), formatAffine(expectedX, expectedConstant));
-        assert.equal(task.stage, 4);
-    }
-});
+// Evaluates the generated TeX numerically, so lines and distractors can be checked without a CAS.
+const evaluate = (tex, x) => {
+    const js = tex
+        .replace(/\\left\(/g, '(').replace(/\\right\)/g, ')')
+        .replace(/\\,\\%/g, '/100').replace(/\\cdot/g, '*').replace(/\\div/g, '/')
+        .replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, '(($1)/($2))')
+        .replace(/\\sqrt\{(\d+)\}/g, 'Math.sqrt($1)')
+        .replace(/\^\{(-?\d+)\}/g, '**($1)')
+        .replace(/(\d|\))\s*(x|\()/g, '$1*$2')
+        .replace(/\)\s*(\d)/g, ')*$1');
+    return Function('x', `return (${js})`)(x);
+};
+const sameValue = (left, right) => [3, 7].every(x => Math.abs(evaluate(left, x) - evaluate(right, x)) < 1e-9);
 
-test('quadratic generator creates exact roots and explicitly adds the square on both sides', () => {
-    for (let iteration = 0; iteration < 100; iteration++) {
-        let task = generateTask('quadratic');
-        const { firstRoot, secondRoot, p, q, halfPSquare, discriminant, squareRoot } = task.data;
-        assert.ok(equal(multiply(squareRoot, squareRoot), discriminant));
-        for (const root of [firstRoot, secondRoot]) {
-            const value = add(add(multiply(root, root), multiply(p, root)), q);
-            assert.ok(equal(value, rational(0)));
+test('fixed-line families keep every line equivalent and every distractor wrong', () => {
+    for (const type of ['terms', 'fractions', 'squares']) {
+        for (let level = 1; level <= MAX_LEVEL; level++) {
+            for (let run = 0; run < 40; run++) {
+                let task = generateTask(type, level);
+                while (!isTaskComplete(task)) {
+                    const step = getNextStep(task);
+                    assert.ok(sameValue(currentLine(task), step.answerTex), `${type}: ${currentLine(task)} != ${step.answerTex}`);
+                    for (const choice of step.choices.filter(entry => entry.id !== step.answerId)) {
+                        assert.ok(!sameValue(choice.tex, step.answerTex), `${type}: distractor ${choice.tex} equals ${step.answerTex}`);
+                    }
+                    task = applyNextStep(task);
+                }
+            }
         }
-        task = applyNextStep(task);
-        task = applyNextStep(task);
-        const completionLine = currentLine(task);
-        assert.ok(completionLine.includes(`x^2`));
-        assert.ok(completionLine.includes(`+ ${formatRational(halfPSquare)}`));
-        assert.ok(completionLine.endsWith(`= ${formatRational(discriminant)}`));
-        const completion = getNextStep(task);
-        assert.ok(completion.choices.some(choice => choice.id === completion.answerId));
-        task = applyNextStep(task);
-        assert.ok(currentLine(task).includes('\\left(') && currentLine(task).includes('\\right)^2'));
     }
+});
+
+test('terms stay short: a single step with at most one bracket, no bracket at easy levels', () => {
+    for (let run = 0; run < 200; run++) {
+        assert.ok(!currentLine(generateTask('terms', 2)).includes('\\left('));
+        const hard = generateTask('terms', MAX_LEVEL);
+        assert.ok((currentLine(hard).match(/\\left\(/g) ?? []).length <= 1);
+        assert.equal(hard.data.lines.length, 2);
+    }
+    assert.equal(Object.hasOwn(TASK_TYPES, 'quadratic'), false);
 });
 
 test('power and root exercises apply their laws with exact results', () => {
@@ -161,7 +177,6 @@ test('power and root exercises apply their laws with exact results', () => {
 
         assert.equal(currentLine(task), task.data.question);
         assert.equal(getNextStep(task).answerTex, expected, `${kind} should have the exact expected answer`);
-        assert.equal(TASK_STEP_COUNTS[task.type], 1);
         assert.equal(isTaskComplete(applyNextStep(task)), true);
     }
 
@@ -172,35 +187,53 @@ test('power and root exercises apply their laws with exact results', () => {
     assert.throws(() => generateTask('lgs'), RangeError);
 });
 
-test('an error schedules review after two correct tasks of other types', () => {
-    const types = Object.fromEntries(Object.keys(TASK_TYPES).map(type => [type, { ...createTypeProgress(), seen: true, dueAt: 100 }]));
-    recordReview(types, 'linear', false);
-    assert.notEqual(chooseNextType(types, 'linear'), 'linear');
-    recordReview(types, 'terms', true);
-    assert.equal(types.linear.otherCorrectCount, 1);
-    assert.notEqual(chooseNextType(types, 'terms'), 'linear');
-    recordReview(types, 'powers', true);
-    assert.equal(types.linear.otherCorrectCount, 2);
-    assert.equal(chooseNextType(types, 'powers'), 'linear');
+test('every difficulty level yields complete, rendering tasks and low levels stay simple', () => {
+    for (const type of Object.keys(TASK_TYPES)) {
+        for (let level = 1; level <= MAX_LEVEL; level++) {
+            for (let run = 0; run < 25; run++) {
+                let task = generateTask(type, level);
+                let steps = 0;
+                while (!isTaskComplete(task)) {
+                    const step = getNextStep(task);
+                    assert.equal(step.choices.length, 4);
+                    assert.ok(step.choices.some(choice => choice.id === step.answerId));
+                    for (const choice of step.choices) katex.renderToString(choice.tex, { throwOnError: true });
+                    task = applyNextStep(task);
+                    steps++;
+                }
+                assert.equal(steps, 1);
+            }
+        }
+    }
+
+    for (let run = 0; run < 100; run++) {
+        const easyLinear = generateTask('linear', 1).data;
+        for (const value of [easyLinear.a, easyLinear.b, easyLinear.solution]) assert.equal(value.d, 1);
+        const easyPower = generateTask('powers', 1).data;
+        assert.ok(['product', 'root'].includes(easyPower.kind));
+        assert.ok(['simplify', 'add'].includes(generateTask('fractions', 1).data.kinds[0]));
+        assert.ok(['square', 'root'].includes(generateTask('squares', 1).data.kinds[0]));
+    }
 });
 
-test('obsolete task progress is dropped without inheriting it into replacement types', () => {
-    const types = normalizeTypeProgress({
-        linear: { correct: 3 },
-        lgs: { correct: 12, errors: 4 }
-    }, Object.keys(TASK_TYPES));
-
-    assert.deepEqual(Object.keys(types).sort(), Object.keys(TASK_TYPES).sort());
-    assert.equal(types.linear.correct, 3);
-    assert.deepEqual(types.powers, createTypeProgress());
-});
-
-test('successful reviews grow intervals and avoid immediate repetition when possible', () => {
-    const types = Object.fromEntries(Object.keys(TASK_TYPES).map(type => [type, { ...createTypeProgress(), seen: true, dueAt: 0 }]));
-    recordReview(types, 'linear', true);
-    assert.equal(types.linear.dueAt - types.linear.otherCorrectCount, 2);
-    recordReview(types, 'terms', true);
-    recordReview(types, 'linear', true);
-    assert.equal(types.linear.dueAt - types.linear.otherCorrectCount, 4);
-    assert.notEqual(chooseNextType(types, 'linear'), 'linear');
+test('every task offers a matching explanation key for wrong answers', () => {
+    const keys = new Set();
+    for (const type of Object.keys(TASK_TYPES)) {
+        for (let level = 1; level <= MAX_LEVEL; level++) {
+            for (let run = 0; run < 40; run++) {
+                let task = generateTask(type, level);
+                while (!isTaskComplete(task)) {
+                    keys.add(explanationKey(task));
+                    task = applyNextStep(task);
+                }
+            }
+        }
+    }
+    assert.deepEqual([...keys].sort(), [
+        'fractions-add', 'fractions-divide', 'fractions-multiply', 'fractions-percent', 'fractions-simplify',
+        'linear-0', 'linear-1',
+        'powers-fractional', 'powers-negative', 'powers-negative-fractional', 'powers-power', 'powers-product', 'powers-quotient', 'powers-root',
+        'squares-binomial', 'squares-product', 'squares-root', 'squares-square',
+        'terms-collect', 'terms-expand'
+    ]);
 });

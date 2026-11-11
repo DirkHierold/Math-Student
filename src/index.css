@@ -133,26 +133,24 @@
 /* MathFeed additions */
 :root {
   --success: oklch(0.627 0.194 149.214);
-  --type-linear: oklch(0.546 0.245 262.881);
-  --type-terms: oklch(0.541 0.281 293.009);
-  --type-powers: oklch(0.555 0.163 48.998);
-  --type-quadratic: oklch(0.52 0.105 223.128);
+  --series-1: oklch(0.58 0.14 255);
+  --series-2: oklch(0.62 0.12 185);
+  --series-3: oklch(0.68 0.14 70);
+  --series-4: oklch(0.56 0.15 315);
+  --series-5: oklch(0.62 0.15 25);
 }
 
 .dark {
   --success: oklch(0.723 0.219 149.579);
-  --type-linear: oklch(0.707 0.165 254.624);
-  --type-terms: oklch(0.702 0.183 293.541);
-  --type-powers: oklch(0.828 0.189 84.429);
-  --type-quadratic: oklch(0.789 0.154 211.53);
+  --series-1: oklch(0.72 0.12 255);
+  --series-2: oklch(0.76 0.11 185);
+  --series-3: oklch(0.8 0.13 70);
+  --series-4: oklch(0.72 0.13 315);
+  --series-5: oklch(0.74 0.13 25);
 }
 
 @theme inline {
   --color-success: var(--success);
-  --color-type-linear: var(--type-linear);
-  --color-type-terms: var(--type-terms);
-  --color-type-powers: var(--type-powers);
-  --color-type-quadratic: var(--type-quadratic);
 }
 
 /* The app never scrolls: it fills the viewport and blocks rubber-banding. */
@@ -189,8 +187,41 @@
   animation: shake 0.35s ease;
 }
 
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pop {
+  animation: pop 0.3s ease-out;
+}
+
+@keyframes invite {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 45%, transparent);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+.animate-invite {
+  animation: invite 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-shake {
+  .animate-shake,
+  .animate-pop,
+  .animate-invite {
     animation: none;
   }
 }
@@ -234,24 +265,4 @@
   .math-fit.math-choice .katex {
     font-size: 19px;
   }
-}
-
-@keyframes flash-success {
-  50% {
-    background-color: color-mix(in oklch, var(--success) 8%, var(--background));
-  }
-}
-
-@keyframes flash-error {
-  50% {
-    background-color: color-mix(in oklch, var(--destructive) 8%, var(--background));
-  }
-}
-
-.flash-success {
-  animation: flash-success 0.35s ease;
-}
-
-.flash-error {
-  animation: flash-error 0.4s ease;
 }

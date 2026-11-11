@@ -1,7 +1,7 @@
 import * as React from "react"
 
-type Theme = "dark" | "light" | "system"
-type ResolvedTheme = "dark" | "light"
+type Theme = "dark" | "light"
+type ResolvedTheme = Theme
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -16,7 +16,7 @@ type ThemeProviderState = {
 }
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)"
-const THEME_VALUES: Theme[] = ["dark", "light", "system"]
+const THEME_VALUES: Theme[] = ["dark", "light"]
 
 const ThemeProviderContext = React.createContext<
   ThemeProviderState | undefined
@@ -78,7 +78,7 @@ function isEditableTarget(target: EventTarget | null) {
 
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme,
   storageKey = "theme",
   disableTransitionOnChange = true,
   ...props
@@ -89,7 +89,8 @@ export function ThemeProvider({
       return storedTheme
     }
 
-    return defaultTheme
+    // Also covers the legacy "system" value
+    return defaultTheme ?? getSystemTheme()
   })
 
   const setTheme = React.useCallback(
@@ -103,8 +104,7 @@ export function ThemeProvider({
   const applyTheme = React.useCallback(
     (nextTheme: Theme) => {
       const root = document.documentElement
-      const resolvedTheme =
-        nextTheme === "system" ? getSystemTheme() : nextTheme
+      const resolvedTheme = nextTheme
       const restoreTransitions = disableTransitionOnChange
         ? disableTransitionsTemporarily()
         : null
@@ -121,21 +121,6 @@ export function ThemeProvider({
 
   React.useEffect(() => {
     applyTheme(theme)
-
-    if (theme !== "system") {
-      return undefined
-    }
-
-    const mediaQuery = window.matchMedia(COLOR_SCHEME_QUERY)
-    const handleChange = () => {
-      applyTheme("system")
-    }
-
-    mediaQuery.addEventListener("change", handleChange)
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleChange)
-    }
   }, [theme, applyTheme])
 
   React.useEffect(() => {
@@ -157,14 +142,7 @@ export function ThemeProvider({
       }
 
       setThemeState((currentTheme) => {
-        const nextTheme =
-          currentTheme === "dark"
-            ? "light"
-            : currentTheme === "light"
-              ? "dark"
-              : getSystemTheme() === "dark"
-                ? "light"
-                : "dark"
+        const nextTheme = currentTheme === "dark" ? "light" : "dark"
 
         localStorage.setItem(storageKey, nextTheme)
         return nextTheme
@@ -193,7 +171,7 @@ export function ThemeProvider({
         return
       }
 
-      setThemeState(defaultTheme)
+      setThemeState(defaultTheme ?? getSystemTheme())
     }
 
     window.addEventListener("storage", handleStorageChange)

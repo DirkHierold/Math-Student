@@ -22,7 +22,6 @@ test('UI is built from original shadcn/ui components and the existing math domai
         assert.match(feed, new RegExp(`from "@/components/ui/${component}"`));
         await read(`src/components/ui/${component}.tsx`);
     }
-    assert.match(stats, /from "@\/components\/ui\/chart"/);
     assert.match(stats, /from "@\/components\/ui\/toggle-group"/);
     assert.match(stats, /from "\.\.\/\.\.\/stats-data\.js"/);
     assert.match(feed, /from "\.\.\/\.\.\/math-engine\.js"/);
@@ -62,10 +61,8 @@ test('UI texts live only in i18n.ts and every message exists in German and Engli
     assert.equal(detectLanguage(['en-US', 'de']), 'en');
     assert.equal(detectLanguage(['fr']), 'en');
     assert.equal(detectLanguage([]), 'en');
-    assert.equal(translate('en', 'stepLabel', { step: 2, total: 4 }), 'Step 2 of 4');
-    assert.equal(translate('de', 'stepLabel', { step: 2, total: 4 }), 'Schritt 2 von 4');
 
-    const files = ['App.tsx', 'components/feed-view.tsx', 'components/stats-view.tsx', 'components/bottom-nav.tsx',
+    const files = ['App.tsx', 'components/feed-view.tsx', 'components/stats-view.tsx', 'components/level-card.tsx', 'components/bottom-nav.tsx',
         'components/task-types.tsx', 'hooks/use-mathfeed.ts', 'hooks/use-math-fit.ts', 'lib/mathfeed-state.ts'];
     for (const file of files) {
         const source = await read(`src/${file}`);

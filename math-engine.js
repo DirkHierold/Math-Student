@@ -34,10 +34,21 @@ export const formatRational = value => {
 
 const randomInt = (minimum, maximum) => Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 const pick = items => items[randomInt(0, items.length - 1)];
-const randomRational = ({ nonzero = false } = {}) => {
-    let numerator = randomInt(-8, 8);
-    if (nonzero && numerator === 0) numerator = pick([-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]);
-    return rational(numerator, pick([1, 1, 2, 3, 4, 5]));
+export const MAX_LEVEL = 100;
+
+// Levels 1..100: every ten levels unlock a new tier of task kinds, and within and across tiers the numbers keep growing.
+const tierOf = level => Math.min(10, Math.max(1, Math.ceil(level / 10)));
+const grow = (level, from, to) => Math.round(from + (to - from) * (Math.min(MAX_LEVEL, Math.max(1, level)) - 1) / (MAX_LEVEL - 1));
+
+const profileFor = tier => ({
+    max: tier <= 3 ? 4 : tier <= 6 ? 6 : 8,
+    denominators: tier <= 2 ? [1] : tier <= 4 ? [1, 1, 2] : tier <= 6 ? [1, 1, 2, 3] : [1, 1, 2, 3, 4, 5]
+});
+
+const randomRational = ({ nonzero = false, profile = profileFor(tierOf(MAX_LEVEL)) } = {}) => {
+    let numerator = randomInt(-profile.max, profile.max);
+    if (nonzero && numerator === 0) numerator = randomInt(1, profile.max) * pick([-1, 1]);
+    return rational(numerator, pick(profile.denominators));
 };
 
 const coefficientTerm = (coefficient, variable) => {
@@ -73,11 +84,6 @@ const formatAffine = (coefficient, constant) => joinTerms([
     { coefficient: constant, body: '' }
 ]);
 
-const formatShift = value => {
-    if (value.n === 0) return 'x';
-    return `x ${value.n < 0 ? '- ' : '+ '}${formatRational(absolute(value))}`;
-};
-
 const shuffled = items => {
     const result = [...items];
     for (let i = result.length - 1; i > 0; i--) {
@@ -87,112 +93,224 @@ const shuffled = items => {
     return result;
 };
 
-const generateLinearEquation = () => {
-    let a = randomRational({ nonzero: true });
-    if (same(absolute(a), rational(1))) a = rational(2);
-    const b = randomRational({ nonzero: true });
-    const solution = randomRational();
+// Numbers a reader can handle without a calculator: integers first, halves later.
+const generateLinearEquation = level => {
+    const tier = tierOf(level);
+    const profile = {
+        max: grow(level, 5, 20),
+        denominators: tier <= 6 ? [1] : tier <= 8 ? [1, 1, 2] : [1, 1, 2, 3]
+    };
+    let a = randomRational({ nonzero: true, profile: { ...profile, denominators: [1] } });
+    if (same(absolute(a), rational(1))) a = rational(tier <= 3 ? 2 : -2);
+    if (tier <= 3 && a.n < 0) a = negate(a);
+    const b = randomRational({ nonzero: true, profile });
+    const solution = randomRational({ profile });
     const c = add(multiply(a, solution), b);
+    // One micro step per task: either move the constant or divide by the coefficient.
+    const start = tier <= 2 || Math.random() < 0.5 ? 1 : 0;
     return {
         type: 'linear',
-        stage: 0,
-        data: { a, b, c, solution }
+        stage: start,
+        data: { a, b, c, solution, start }
     };
 };
 
-const positiveRational = () => absolute(randomRational({ nonzero: true }));
+// Fixed-line tasks (terms, fractions, squares) carry their lines and distractors precomputed.
+// Every task is exactly one micro step, so the whole task is a single choice.
+const fixedTask = (type, kinds, lines, wrong) => ({
+    type,
+    stage: 0,
+    data: { kinds, lines, wrong }
+});
 
-const termParameters = () => {
-    const rawD = randomRational({ nonzero: true });
-    const d = same(absolute(rawD), rational(1)) ? rational(rawD.n < 0 ? -2 : 2) : rawD;
-    return {
-        a: positiveRational(),
-        b: positiveRational(),
-        c: positiveRational(),
-        d,
-        e: positiveRational(),
-        f: randomRational({ nonzero: true })
-    };
+const uniqueTex = (answerTex, candidates) => {
+    const result = [];
+    for (const candidate of candidates) {
+        if (candidate !== answerTex && !result.includes(candidate)) result.push(candidate);
+    }
+    return result;
 };
 
-const termLine = (task, stage) => {
-    const { a, b, c, d, e, f } = task.data;
-    const ab = multiply(a, b);
-    const ac = multiply(a, c);
-    const de = multiply(d, e);
-    const xCoefficient = add(add(ab, d), f);
-    const constant = add(ac, de);
-    const firstBracket = formatAffine(b, c);
-    const secondBracket = formatAffine(rational(1), e);
+const intTex = value => String(value);
 
-    if (stage === 0) {
-        return `${formatRational(a)}\\left(${firstBracket}\\right)${termWithSign(d, `\\left(${secondBracket}\\right)`)}${termWithSign(f, 'x')}`;
-    }
-    if (stage === 1) {
-        return joinTerms([
-            { coefficient: ab, body: 'x' },
-            { coefficient: ac, body: '' },
-            { coefficient: d, body: `\\left(${secondBracket}\\right)` },
-            { coefficient: f, body: 'x' }
+const generateTermTask = level => {
+    const tier = tierOf(level);
+    const signed = tier >= 4;
+    const small = () => randomInt(2, grow(level, 5, 15));
+    const constant = () => randomInt(1, grow(level, 9, 30));
+    const sign = () => signed ? pick([-1, 1]) : 1;
+    const kinds = tier <= 2 ? ['collect'] : ['expand', 'collect'];
+    const kind = pick(kinds);
+    const affine = (x, c) => formatAffine(rational(x), rational(c));
+
+    if (kind === 'collect') {
+        const withConstants = tier >= 3;
+        const p = small() * sign();
+        const r = small() * sign();
+        const q = withConstants ? constant() * sign() : 0;
+        const s = withConstants ? constant() * sign() : 0;
+        const question = joinTerms([
+            { coefficient: rational(p), body: 'x' },
+            { coefficient: rational(q), body: '' },
+            { coefficient: rational(r), body: 'x' },
+            { coefficient: rational(s), body: '' }
         ]);
+        const answer = affine(p + r, q + s);
+        return fixedTask('terms', ['collect'], [question, answer], [uniqueTex(answer, [
+            affine(p - r, q + s),
+            affine(p * r, q + s),
+            affine(p + r, q - s),
+            affine(p + r, p * r),
+            withConstants ? affine(p + r + q + s, 0) : `${p + r}x^{2}`
+        ])]);
     }
-    if (stage === 2) {
-        return joinTerms([
-            { coefficient: ab, body: 'x' },
-            { coefficient: ac, body: '' },
-            { coefficient: d, body: 'x' },
-            { coefficient: de, body: '' },
-            { coefficient: f, body: 'x' }
-        ]);
-    }
-    if (stage === 3) {
-        return joinTerms([
-            { coefficient: xCoefficient, body: 'x' },
-            { coefficient: ac, body: '' },
-            { coefficient: de, body: '' }
-        ]);
-    }
-    return formatAffine(xCoefficient, constant);
+
+    const a = small() * sign();
+    const b = tier <= 4 ? 1 : small() * sign();
+    const c = constant() * sign();
+    const bracket = `${intTex(a)}\\left(${affine(b, c)}\\right)`;
+    const expanded = affine(a * b, a * c);
+    const expandWrong = uniqueTex(expanded, [
+        affine(a * b, c),
+        affine(a * b, a + c),
+        affine(a * b, -a * c),
+        affine(a + b, a * c),
+        affine(-a * b, a * c)
+    ]);
+    return fixedTask('terms', ['expand'], [bracket, expanded], [expandWrong]);
 };
 
-const generateTerm = () => ({ type: 'terms', stage: 0, data: termParameters() });
+const gcdInt = (a, b) => (b === 0 ? Math.abs(a) : gcdInt(b, a % b));
 
-const generateQuadratic = () => {
-    const firstRoot = randomRational({ nonzero: true });
-    let offset = pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-    let secondRoot = add(firstRoot, rational(offset));
-    while (secondRoot.n === 0 || add(firstRoot, secondRoot).n === 0) {
-        offset++;
-        secondRoot = add(firstRoot, rational(offset));
+const generateFractionTask = level => {
+    const tier = tierOf(level);
+    const fraction = (n, d) => formatRational(rational(n, d));
+    const kinds = tier <= 2 ? ['simplify', 'add'] : tier <= 5 ? ['simplify', 'add', 'multiply', 'percent'] : ['add', 'multiply', 'divide', 'percent'];
+    const kind = pick(kinds);
+    const maxDenominator = grow(level, 6, 20);
+
+    if (kind === 'simplify') {
+        const base = rational(randomInt(1, 5), randomInt(2, 7));
+        const factor = randomInt(2, grow(level, 4, 12));
+        const question = `\\frac{${base.n * factor}}{${base.d * factor}}`;
+        const answer = formatRational(base);
+        if (base.d === 1) return generateFractionTask(level);
+        const candidates = [
+            `\\frac{${base.n * factor}}{${base.d}}`,
+            `\\frac{${base.n}}{${base.d * factor}}`,
+            `\\frac{${base.n + 1}}{${base.d}}`,
+            `\\frac{${base.n}}{${base.d + 1}}`,
+            `\\frac{${base.d}}{${base.n}}`
+        ];
+        return fixedTask('fractions', ['simplify'], [question, answer], [uniqueTex(answer, candidates)]);
     }
-    const p = negate(add(firstRoot, secondRoot));
-    const q = multiply(firstRoot, secondRoot);
-    const halfP = divide(p, rational(2));
-    const halfPSquare = multiply(halfP, halfP);
-    const discriminant = subtract(halfPSquare, q);
-    const squareRoot = absolute(divide(subtract(firstRoot, secondRoot), rational(2)));
-    return {
-        type: 'quadratic',
-        stage: 0,
-        data: { firstRoot, secondRoot, p, q, halfP, halfPSquare, discriminant, squareRoot }
-    };
+
+    if (kind === 'percent') {
+        const percents = tier <= 3 ? [10, 50, 25, 20] : tier <= 6 ? [10, 20, 25, 5, 15, 75] : [12, 15, 35, 45, 60, 8];
+        const percent = pick(percents);
+        const unit = 100 / gcdInt(percent, 100);
+        const amount = unit * randomInt(1, grow(level, 4, 12));
+        const result = amount * percent / 100;
+        const answer = intTex(result);
+        return fixedTask('fractions', ['percent'], [`${percent}\\,\\%\\cdot ${amount}`, answer], [uniqueTex(answer, [
+            intTex(amount - result),
+            intTex(result * 10),
+            intTex(Math.round(amount / percent)),
+            intTex(result + percent),
+            intTex(Math.max(1, result - 1)),
+            intTex(result + 1)
+        ])]);
+    }
+
+    let a = rational(randomInt(1, maxDenominator - 1), randomInt(2, maxDenominator));
+    let b = rational(randomInt(1, maxDenominator - 1), randomInt(2, maxDenominator));
+    if (kind === 'add' && tier <= 3) b = rational(randomInt(1, 9), a.d);
+    if (a.d === 1 || b.d === 1) return generateFractionTask(level);
+
+    if (kind === 'add') {
+        const answer = add(a, b);
+        return fixedTask('fractions', ['add'], [`\\frac{${a.n}}{${a.d}} + \\frac{${b.n}}{${b.d}}`, formatRational(answer)], [uniqueTex(formatRational(answer), [
+            fraction(a.n + b.n, a.d + b.d),
+            fraction(a.n + b.n, a.d * b.d),
+            formatRational(multiply(a, b)),
+            fraction(a.n * b.d + b.n, a.d * b.d),
+            formatRational(subtract(answer, rational(1, a.d * b.d)))
+        ])]);
+    }
+    if (kind === 'multiply') {
+        const answer = multiply(a, b);
+        return fixedTask('fractions', ['multiply'], [`\\frac{${a.n}}{${a.d}} \\cdot \\frac{${b.n}}{${b.d}}`, formatRational(answer)], [uniqueTex(formatRational(answer), [
+            formatRational(add(a, b)),
+            fraction(a.n * b.n, a.d + b.d),
+            fraction(a.n + b.n, a.d * b.d),
+            formatRational(divide(a, b)),
+            formatRational(add(answer, rational(1, answer.d)))
+        ])]);
+    }
+    const answer = divide(a, b);
+    return fixedTask('fractions', ['divide'], [`\\frac{${a.n}}{${a.d}} \\div \\frac{${b.n}}{${b.d}}`, formatRational(answer)], [uniqueTex(formatRational(answer), [
+        formatRational(multiply(a, b)),
+        formatRational(divide(b, a)),
+        fraction(a.n * b.n, a.d * b.n),
+        formatRational(subtract(a, b)),
+        formatRational(add(answer, rational(1, answer.d)))
+    ])]);
 };
 
-const quadraticExpression = (p, q) => joinTerms([
-    { coefficient: rational(1), body: 'x^2' },
-    { coefficient: p, body: 'x' },
-    { coefficient: q, body: '' }
-]);
+const generateSquareTask = level => {
+    const tier = tierOf(level);
+    const kinds = tier <= 3 ? ['square', 'root'] : tier <= 6 ? ['square', 'root', 'binomial'] : ['square', 'root', 'binomial', 'product'];
+    const kind = pick(kinds);
+    const maxRoot = grow(level, 9, 35);
 
-const quadraticLine = (task, stage) => {
-    const { p, q, halfP, halfPSquare, discriminant, squareRoot, firstRoot, secondRoot } = task.data;
-    if (stage === 0) return `${quadraticExpression(p, q)} = 0`;
-    if (stage === 1) return `${quadraticExpression(p, rational(0))} = ${formatRational(negate(q))}`;
-    if (stage === 2) return `${quadraticExpression(p, halfPSquare)} = ${formatRational(add(negate(q), halfPSquare))}`;
-    if (stage === 3) return `\\left(${formatShift(halfP)}\\right)^2 = ${formatRational(discriminant)}`;
-    if (stage === 4) return `${formatShift(halfP)} = \\pm\\sqrt{${formatRational(discriminant)}}`;
-    if (stage === 5) return `x = ${formatRational(negate(halfP))} \\pm ${formatRational(squareRoot)}`;
-    return `x = ${formatRational(firstRoot)}\\quad\\text{oder}\\quad x = ${formatRational(secondRoot)}`;
+    if (kind === 'square') {
+        const n = randomInt(tier <= 3 ? 3 : 6, maxRoot);
+        const answer = intTex(n * n);
+        return fixedTask('squares', ['square'], [`${n}^{2}`, answer], [uniqueTex(answer, [
+            intTex(2 * n),
+            intTex(n * n + n),
+            intTex(n * n - n),
+            intTex((n + 1) * (n + 1)),
+            intTex((n - 1) * (n - 1))
+        ])]);
+    }
+    if (kind === 'root') {
+        const n = randomInt(tier <= 3 ? 3 : 6, maxRoot);
+        const answer = intTex(n);
+        return fixedTask('squares', ['root'], [`\\sqrt{${n * n}}`, answer], [uniqueTex(answer, [
+            intTex(n + 1),
+            intTex(n - 1),
+            intTex(Math.floor(n * n / 2)),
+            intTex(n + 2),
+            intTex(n * 2)
+        ])]);
+    }
+    const a = randomInt(2, grow(level, 7, 20));
+    const affine = (x, c) => formatAffine(rational(x), rational(c));
+    const quad = (middle, constant) => joinTerms([
+        { coefficient: rational(1), body: 'x^{2}' },
+        { coefficient: rational(middle), body: 'x' },
+        { coefficient: rational(constant), body: '' }
+    ]);
+    if (kind === 'binomial') {
+        const s = pick([-1, 1]);
+        const answer = quad(2 * s * a, a * a);
+        return fixedTask('squares', ['binomial'], [`\\left(${affine(1, s * a)}\\right)^{2}`, answer], [uniqueTex(answer, [
+            quad(0, a * a),
+            quad(s * a, a * a),
+            quad(2 * s * a, -a * a),
+            quad(2 * s * a, 0),
+            quad(-2 * s * a, a * a)
+        ])]);
+    }
+    const answer = quad(0, -a * a);
+    return fixedTask('squares', ['product'], [`\\left(${affine(1, a)}\\right)\\left(${affine(1, -a)}\\right)`, answer], [uniqueTex(answer, [
+        quad(0, a * a),
+        quad(-2 * a, -a * a),
+        quad(2 * a, a * a),
+        quad(0, -2 * a),
+        quad(a, -a * a)
+    ])]);
 };
 
 const integerPower = (base, exponent) => base ** exponent;
@@ -201,12 +319,24 @@ const rootTex = (radicand, degree) => degree === 2
     ? `\\sqrt{${radicand}}`
     : `\\sqrt[${degree}]{${radicand}}`;
 
-const generatePowerTask = () => {
-    const kind = pick(['product', 'quotient', 'power', 'negative', 'fractional', 'negative-fractional', 'root']);
+const powerKindsFor = tier => tier <= 2
+    ? ['product', 'root']
+    : tier <= 4 ? ['product', 'quotient', 'power', 'negative', 'root']
+        : tier <= 6 ? ['product', 'quotient', 'power', 'negative', 'fractional', 'root']
+            : ['product', 'quotient', 'power', 'negative', 'fractional', 'negative-fractional', 'root'];
+
+const generatePowerTask = level => {
+    const tier = tierOf(level);
+    const kind = pick(powerKindsFor(tier));
+    const maxBase = grow(level, 5, 12);
+    const maxExponent = grow(level, 3, 7);
+    const minExponent = tier >= 4 ? -maxExponent : 0;
+    const randomBase = () => randomInt(2, maxBase);
+    const randomExponent = () => randomInt(minExponent, maxExponent);
     if (kind === 'product') {
-        const base = randomInt(2, 9);
-        const firstExponent = randomInt(-5, 5);
-        const secondExponent = randomInt(-5, 5);
+        const base = randomBase();
+        const firstExponent = randomExponent();
+        const secondExponent = randomExponent();
         return {
             type: 'powers',
             stage: 0,
@@ -226,10 +356,10 @@ const generatePowerTask = () => {
         };
     }
     if (kind === 'quotient') {
-        const base = randomInt(2, 9);
-        const firstExponent = randomInt(-5, 5);
-        let secondExponent = randomInt(-5, 5);
-        while (secondExponent === firstExponent) secondExponent = randomInt(-5, 5);
+        const base = randomBase();
+        const firstExponent = randomExponent();
+        let secondExponent = randomExponent();
+        while (secondExponent === firstExponent) secondExponent = randomExponent();
         return {
             type: 'powers',
             stage: 0,
@@ -249,9 +379,9 @@ const generatePowerTask = () => {
         };
     }
     if (kind === 'power') {
-        const base = randomInt(2, 9);
-        const innerExponent = randomInt(-4, 4);
-        const outerExponent = randomInt(-4, 4);
+        const base = randomBase();
+        const innerExponent = randomInt(Math.max(minExponent, -4), Math.min(maxExponent, 4));
+        const outerExponent = randomInt(Math.max(minExponent, -4), Math.min(maxExponent, 4));
         return {
             type: 'powers',
             stage: 0,
@@ -271,8 +401,8 @@ const generatePowerTask = () => {
         };
     }
     if (kind === 'negative') {
-        const base = randomInt(2, 9);
-        const exponent = randomInt(1, 5);
+        const base = randomBase();
+        const exponent = randomInt(1, maxExponent);
         return {
             type: 'powers',
             stage: 0,
@@ -318,7 +448,7 @@ const generatePowerTask = () => {
     }
 
     const degree = pick([2, 3]);
-    const root = randomInt(2, 9);
+    const root = randomInt(2, grow(level, 5, 15));
     const radicand = integerPower(root, degree);
     return {
         type: 'powers',
@@ -375,157 +505,6 @@ const rules = [
         }
     },
     {
-        type: 'terms',
-        stage: 0,
-        apply: task => ({ ...task, stage: 1 }),
-        answer: task => termLine(task, 1),
-        distractors: task => {
-            const { a, b, c, d, e, f } = task.data;
-            return [
-                joinTerms([
-                    { coefficient: multiply(a, b), body: 'x' },
-                    { coefficient: add(a, c), body: '' },
-                    { coefficient: d, body: `\\left(${formatAffine(rational(1), e)}\\right)` },
-                    { coefficient: f, body: 'x' }
-                ]),
-                joinTerms([
-                    { coefficient: multiply(a, b), body: 'x' },
-                    { coefficient: multiply(a, c), body: '' },
-                    { coefficient: d, body: 'x' },
-                    { coefficient: e, body: '' },
-                    { coefficient: f, body: 'x' }
-                ])
-            ];
-        }
-    },
-    {
-        type: 'terms',
-        stage: 1,
-        apply: task => ({ ...task, stage: 2 }),
-        answer: task => termLine(task, 2),
-        distractors: task => {
-            const { a, b, c, d, e, f } = task.data;
-            return [
-                joinTerms([
-                    { coefficient: multiply(a, b), body: 'x' },
-                    { coefficient: multiply(a, c), body: '' },
-                    { coefficient: d, body: 'x' },
-                    { coefficient: e, body: '' },
-                    { coefficient: f, body: 'x' }
-                ]),
-                joinTerms([
-                    { coefficient: multiply(a, b), body: 'x' },
-                    { coefficient: multiply(a, c), body: '' },
-                    { coefficient: d, body: 'x' },
-                    { coefficient: multiply(d, e), body: '' }
-                ])
-            ];
-        }
-    },
-    {
-        type: 'terms',
-        stage: 2,
-        apply: task => ({ ...task, stage: 3 }),
-        answer: task => termLine(task, 3),
-        distractors: task => {
-            const { a, b, c, d, e, f } = task.data;
-            const wrongX = subtract(add(multiply(a, b), f), d);
-            return [
-                joinTerms([
-                    { coefficient: wrongX, body: 'x' },
-                    { coefficient: multiply(a, c), body: '' },
-                    { coefficient: multiply(d, e), body: '' }
-                ]),
-                joinTerms([
-                    { coefficient: add(add(multiply(a, b), d), f), body: 'x' },
-                    { coefficient: multiply(a, c), body: '' },
-                    { coefficient: multiply(d, e), body: '' },
-                    { coefficient: rational(1), body: '' }
-                ])
-            ];
-        }
-    },
-    {
-        type: 'terms',
-        stage: 3,
-        apply: task => ({ ...task, stage: 4 }),
-        answer: task => termLine(task, 4),
-        distractors: task => {
-            const { a, b, c, d, e, f } = task.data;
-            const xCoefficient = add(add(multiply(a, b), d), f);
-            const constant = subtract(multiply(a, c), multiply(d, e));
-            return [
-                formatAffine(xCoefficient, constant),
-                formatAffine(negate(xCoefficient), add(multiply(a, c), multiply(d, e)))
-            ];
-        }
-    },
-    {
-        type: 'quadratic',
-        stage: 0,
-        apply: task => ({ ...task, stage: 1 }),
-        answer: task => quadraticLine(task, 1),
-        distractors: task => [
-            `${quadraticExpression(task.data.p, task.data.q)} = ${formatRational(task.data.q)}`,
-            `${quadraticExpression(task.data.p, task.data.q)} = 1`
-        ]
-    },
-    {
-        type: 'quadratic',
-        stage: 1,
-        apply: task => ({ ...task, stage: 2 }),
-        answer: task => quadraticLine(task, 2),
-        distractors: task => {
-            const { p, halfPSquare, q } = task.data;
-            return [
-                `${quadraticExpression(p, rational(0))} + ${formatRational(halfPSquare)} = ${formatRational(negate(q))}`,
-                `${quadraticExpression(p, halfPSquare)} = ${formatRational(add(negate(q), negate(halfPSquare)))}`,
-                `${quadraticExpression(p, multiply(halfPSquare, rational(2)))} = ${formatRational(add(negate(q), halfPSquare))}`
-            ];
-        }
-    },
-    {
-        type: 'quadratic',
-        stage: 2,
-        apply: task => ({ ...task, stage: 3 }),
-        answer: task => quadraticLine(task, 3),
-        distractors: task => [
-            `\\left(${formatShift(task.data.halfP)}\\right)^2 = ${formatRational(add(task.data.discriminant, task.data.q))}`,
-            `\\left(${formatShift(negate(task.data.halfP))}\\right)^2 = ${formatRational(task.data.discriminant)}`,
-            `\\left(${formatShift(task.data.halfP)}\\right)^2 = ${formatRational(task.data.halfPSquare)}`
-        ]
-    },
-    {
-        type: 'quadratic',
-        stage: 3,
-        apply: task => ({ ...task, stage: 4 }),
-        answer: task => quadraticLine(task, 4),
-        distractors: task => [
-            `${formatShift(task.data.halfP)} = \\sqrt{${formatRational(task.data.discriminant)}}`,
-            `${formatShift(task.data.halfP)} = \\pm ${formatRational(task.data.discriminant)}`
-        ]
-    },
-    {
-        type: 'quadratic',
-        stage: 4,
-        apply: task => ({ ...task, stage: 5 }),
-        answer: task => quadraticLine(task, 5),
-        distractors: task => [
-            `x = ${formatRational(task.data.halfP)} \\pm ${formatRational(task.data.squareRoot)}`,
-            `x = ${formatRational(negate(task.data.halfP))} + ${formatRational(task.data.squareRoot)}`
-        ]
-    },
-    {
-        type: 'quadratic',
-        stage: 5,
-        apply: task => ({ ...task, stage: 6 }),
-        answer: task => quadraticLine(task, 6),
-        distractors: task => [
-            `x = ${formatRational(task.data.firstRoot)}\\quad\\text{und}\\quad x = ${formatRational(task.data.firstRoot)}`,
-            `x = ${formatRational(negate(task.data.firstRoot))}\\quad\\text{oder}\\quad x = ${formatRational(negate(task.data.secondRoot))}`
-        ]
-    },
-    {
         type: 'powers',
         stage: 0,
         apply: task => ({ ...task, stage: 1 }),
@@ -535,36 +514,50 @@ const rules = [
 ];
 
 export const TASK_TYPES = Object.freeze({
-    linear: 'Bruchgleichung',
+    fractions: 'Brüche & Prozent',
     terms: 'Klammern & Terme',
     powers: 'Potenzen & Wurzeln',
-    quadratic: 'Quadratische Gleichung'
+    linear: 'Gleichungen',
+    squares: 'Quadrate & Binome'
 });
 
-export const TASK_STEP_COUNTS = Object.freeze({
-    linear: 2,
-    terms: 4,
-    powers: 1,
-    quadratic: 6
-});
-
-export const generateTask = (type = pick(Object.keys(TASK_TYPES))) => {
-    if (type === 'linear') return generateLinearEquation();
-    if (type === 'terms') return generateTerm();
-    if (type === 'powers') return generatePowerTask();
-    if (type === 'quadratic') return generateQuadratic();
+export const generateTask = (type = pick(Object.keys(TASK_TYPES)), level = MAX_LEVEL) => {
+    if (type === 'linear') return generateLinearEquation(level);
+    if (type === 'terms') return generateTermTask(level);
+    if (type === 'fractions') return generateFractionTask(level);
+    if (type === 'powers') return generatePowerTask(level);
+    if (type === 'squares') return generateSquareTask(level);
     throw new RangeError(`Unknown task type: ${type}`);
+};
+
+// Identifies the rule family of the current line, so the UI can explain a wrong answer.
+export const explanationKey = task => {
+    if (task.type === 'powers') return `powers-${task.data.kind}`;
+    if (task.type === 'linear') return `linear-${task.stage}`;
+    return `${task.type}-${task.data.kinds[task.stage]}`;
 };
 
 export const currentLine = task => {
     if (task.type === 'linear') return linearLine(task, task.stage);
-    if (task.type === 'terms') return termLine(task, task.stage);
-    if (task.type === 'quadratic') return quadraticLine(task, task.stage);
-    return task.data.question;
+    if (task.type === 'powers') return task.data.question;
+    return task.data.lines[task.stage];
+};
+
+const ruleFor = task => {
+    if (task.data.lines) {
+        if (task.stage >= task.data.lines.length - 1) return null;
+        return {
+            apply: current => ({ ...current, stage: current.stage + 1 }),
+            answer: current => current.data.lines[current.stage + 1],
+            distractors: current => current.data.wrong[current.stage]
+        };
+    }
+    if (task.type === 'linear' && task.stage > task.data.start) return null;
+    return rules.find(candidate => candidate.type === task.type && candidate.stage === task.stage);
 };
 
 export const getNextStep = task => {
-    const rule = rules.find(candidate => candidate.type === task.type && candidate.stage === task.stage);
+    const rule = ruleFor(task);
     if (!rule) return null;
     const answerTex = rule.answer(task);
     const distractorTex = rule.distractors(task);
@@ -590,7 +583,7 @@ export const getNextStep = task => {
 };
 
 export const applyNextStep = task => {
-    const rule = rules.find(candidate => candidate.type === task.type && candidate.stage === task.stage);
+    const rule = ruleFor(task);
     return rule ? rule.apply(task) : task;
 };
 

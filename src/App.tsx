@@ -3,6 +3,7 @@ import { TriangleAlert } from "lucide-react"
 
 import { BottomNav, type View } from "@/components/bottom-nav"
 import { FeedView } from "@/components/feed-view"
+import { HomeView } from "@/components/home-view"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useMathFeed } from "@/hooks/use-mathfeed"
 import { useThemeColorMeta } from "@/hooks/use-theme-color-meta"
@@ -29,8 +30,8 @@ function Shell({
 
 export function App() {
   useThemeColorMeta()
-  const [view, setView] = useState<View>("feed")
-  const feed = useMathFeed(true)
+  const [view, setView] = useState<View>("home")
+  const feed = useMathFeed()
 
   if (feed.startupError) {
     return (
@@ -47,7 +48,7 @@ export function App() {
   }
 
   return (
-    <Shell className={feed.flash ? `flash-${feed.flash}` : undefined}>
+    <Shell>
       {feed.appError && (
         <Alert variant="destructive" className="mx-4 mt-2 w-auto shrink-0">
           <TriangleAlert />
@@ -56,15 +57,17 @@ export function App() {
         </Alert>
       )}
       <main className="min-h-0 flex-1">
-        {view === "feed" ? (
+        {feed.mode === "run" ? (
           <FeedView feed={feed} />
+        ) : view === "home" ? (
+          <HomeView feed={feed} />
         ) : (
           <Suspense fallback={null}>
             <StatsView feed={feed} />
           </Suspense>
         )}
       </main>
-      <BottomNav view={view} onChange={setView} />
+      {feed.mode === "idle" && <BottomNav view={view} onChange={setView} />}
     </Shell>
   )
 }
