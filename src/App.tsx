@@ -21,7 +21,7 @@ function Shell({
 }) {
   return (
     <div className={cn("h-dvh w-full overflow-hidden", className)}>
-      <div className="mx-auto flex h-full w-full max-w-3xl flex-col pt-[env(safe-area-inset-top)]">
+      <div className="mx-auto flex h-full w-full max-w-3xl flex-col pt-[max(env(safe-area-inset-top),0.75rem)]">
         {children}
       </div>
     </div>

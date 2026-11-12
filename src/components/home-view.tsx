@@ -1,19 +1,23 @@
 import { Check } from "lucide-react"
 import { useEffect } from "react"
 
-import { overallLevel } from "../../skills.js"
+import { overallLevel, topicLevel } from "../../skills.js"
 import { buildChart, levelChange } from "../../level-series.js"
 import { Button } from "@/components/ui/button"
 import { celebrate } from "@/lib/celebrate"
 import { type useMathFeed } from "@/hooks/use-mathfeed"
 import { berlinDateKey, TYPE_KEYS } from "@/lib/mathfeed-state"
 import { signed, t } from "@/lib/i18n"
+import { topicName } from "@/lib/series"
 import { cn } from "@/lib/utils"
 
 type Feed = ReturnType<typeof useMathFeed>
 
 const RADIUS = 52
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
+
+// Centre distance of the topic rings from the middle, in % of the flower's width.
+const PETAL_DISTANCE = 34
 
 const celebrated = new WeakSet<object>()
 
@@ -26,9 +30,15 @@ export function HomeView({ feed }: { feed: Feed }) {
   const inProgress = !!session && session.index > 0
   const level = overallLevel(skills) as number
   const fraction = Math.min(1, level / (TYPE_KEYS.length * 100))
-  const change = levelChange(
-    buildChart(rewards.levelHistory, {}, today).total.slice(-2)
-  )
+  const chart = buildChart(
+    rewards.levelHistory,
+    rewards.topicHistory as Record<string, { day: string; level: number }[]>,
+    today
+  ) as {
+    total: { level: number }[]
+    topics: Record<string, { level: number }[]>
+  }
+  const change = levelChange(chart.total.slice(-2))
   useEffect(() => {
     if (!summary || celebrated.has(summary)) return
     celebrated.add(summary)
@@ -62,64 +72,80 @@ export function HomeView({ feed }: { feed: Feed }) {
             {t("sumChallenge")}
           </p>
         </header>
-        <div className="relative grid aspect-square w-[min(75vw,18rem)] place-items-center short:w-[min(calc(100dvh-10rem),16rem)]">
-          <svg
-            viewBox="0 0 120 120"
-            className="absolute inset-0 size-full -rotate-90"
-            role="img"
-            aria-label={t("homeRingLabel", {
-              level,
-            })}
-          >
-            <circle
-              cx="60"
-              cy="60"
-              r={RADIUS}
-              fill="none"
-              strokeWidth="9"
-              className="stroke-muted"
+        <div className="relative aspect-square w-[min(92vw,22rem)] short:w-[min(calc(100dvh-8rem),20rem)]">
+          <div className="absolute top-1/2 left-1/2 grid aspect-square w-[40%] -translate-x-1/2 -translate-y-1/2 place-items-center">
+            <Ring
+              fraction={fraction}
+              label={t("homeRingLabel", { level })}
             />
-            <circle
-              cx="60"
-              cy="60"
-              r={RADIUS}
-              fill="none"
-              strokeWidth="9"
-              strokeLinecap="round"
-              strokeDasharray={CIRCUMFERENCE}
-              strokeDashoffset={CIRCUMFERENCE * (1 - fraction)}
-              className={cn(
-                "transition-[stroke-dashoffset] duration-500",
-                "stroke-foreground/70"
-              )}
-            />
-          </svg>
-          <div className="text-center">
-            <p className="text-xs text-muted-foreground">
-              {t("homeRechenLevel")}
-            </p>
-            <p className="relative inline-block text-6xl leading-none font-semibold tabular-nums short:text-5xl">
-              {level}
-              {change && change.delta !== 0 && (
-                <span
-                  className={cn(
-                    "absolute bottom-1 left-full ml-1 text-2xl font-semibold short:text-xl",
-                    change.delta > 0 ? "text-success" : "text-destructive"
-                  )}
-                >
-                  {signed(change.delta)}
-                </span>
-              )}
-            </p>
-            <p
-              className={cn(
-                "mt-2 text-xs text-muted-foreground tabular-nums",
-                !(inProgress && session) && "invisible"
-              )}
-            >
-              {session ? `${session.index}/${session.length}` : "0/0"}
-            </p>
+            <div className="text-center">
+              <p className="text-[10px] text-muted-foreground sm:text-xs">
+                {t("homeRechenLevel")}
+              </p>
+              <p className="relative inline-block text-4xl leading-none font-semibold tabular-nums">
+                {level}
+                {change && change.delta !== 0 && (
+                  <span
+                    className={cn(
+                      "absolute bottom-0.5 left-full ml-0.5 text-sm font-semibold",
+                      change.delta > 0 ? "text-success" : "text-destructive"
+                    )}
+                  >
+                    {signed(change.delta)}
+                  </span>
+                )}
+              </p>
+              <p
+                className={cn(
+                  "mt-1 text-[10px] text-muted-foreground tabular-nums",
+                  !(inProgress && session) && "invisible"
+                )}
+              >
+                {session ? `${session.index}/${session.length}` : "0/0"}
+              </p>
+            </div>
           </div>
+          {TYPE_KEYS.map((type, index) => {
+            const angle = (index * 2 * Math.PI) / TYPE_KEYS.length
+            const topic = topicLevel(skills[type]) as number
+            const topicChange = levelChange((chart.topics[type] ?? []).slice(-2))
+            return (
+              <div
+                key={type}
+                className="absolute grid aspect-square w-[24%] -translate-x-1/2 -translate-y-1/2 place-items-center"
+                style={{
+                  left: `${50 + PETAL_DISTANCE * Math.sin(angle)}%`,
+                  top: `${50 - PETAL_DISTANCE * Math.cos(angle)}%`,
+                }}
+              >
+                <Ring
+                  fraction={Math.min(1, topic / 100)}
+                  label={t("homeTopicRingLabel", {
+                    topic: topicName(type),
+                    level: topic,
+                  })}
+                />
+                <div className="text-center">
+                  <p className="relative inline-block text-lg leading-none font-semibold tabular-nums">
+                    {topic}
+                    {topicChange && topicChange.delta !== 0 && (
+                      <span
+                        className={cn(
+                          "absolute bottom-0 left-full ml-0.5 text-[10px] font-semibold",
+                          topicChange.delta > 0 ? "text-success" : "text-destructive"
+                        )}
+                      >
+                        {signed(topicChange.delta)}
+                      </span>
+                    )}
+                  </p>
+                  <p className="mt-0.5 max-w-[4.5rem] truncate text-[9px] leading-none text-muted-foreground">
+                    {topicName(type)}
+                  </p>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
 
@@ -134,5 +160,36 @@ export function HomeView({ feed }: { feed: Feed }) {
         </Button>
       </div>
     </section>
+  )
+}
+
+function Ring({ fraction, label }: { fraction: number; label: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 120"
+      className="absolute inset-0 size-full -rotate-90"
+      role="img"
+      aria-label={label}
+    >
+      <circle
+        cx="60"
+        cy="60"
+        r={RADIUS}
+        fill="none"
+        strokeWidth="9"
+        className="stroke-muted"
+      />
+      <circle
+        cx="60"
+        cy="60"
+        r={RADIUS}
+        fill="none"
+        strokeWidth="9"
+        strokeLinecap="round"
+        strokeDasharray={CIRCUMFERENCE}
+        strokeDashoffset={CIRCUMFERENCE * (1 - fraction)}
+        className="stroke-foreground/70 transition-[stroke-dashoffset] duration-500"
+      />
+    </svg>
   )
 }

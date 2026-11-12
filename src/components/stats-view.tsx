@@ -1,8 +1,6 @@
 import { Moon, Sun } from "lucide-react";
 
-import { topicLevel } from "../../skills.js";
 import { getRollingDateKeys } from "../../stats-data.js";
-import { LevelCard, type LevelPoint } from "@/components/level-card";
 import { useTheme } from "@/components/theme-provider";
 import { Card, CardContent } from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -23,7 +21,6 @@ const dayLabel = (key: string) => weekday.format(new Date(`${key}T12:00:00Z`));
 // The level card is one shared time chart; below it come the answers of the last seven days, coloured by topic.
 export default function StatsView({ feed }: { feed: Feed }) {
   const { state } = feed;
-  const { rewards } = state;
   const today = berlinDateKey();
 
   const sumSteps = (
@@ -49,17 +46,6 @@ export default function StatsView({ feed }: { feed: Feed }) {
         <h1 className="text-lg font-semibold">{t("navStats")}</h1>
         <ThemeToggle />
       </header>
-
-      <LevelCard
-        history={rewards.levelHistory}
-        topics={TYPE_KEYS.map((type) => ({
-          type,
-          level: topicLevel(state.skills[type]) as number,
-          history:
-            (rewards.topicHistory as Record<string, LevelPoint[]>)[type] ?? [],
-        }))}
-        today={today}
-      />
 
       <Card className="min-h-0 flex-1 gap-0 py-0 short:col-start-2 short:row-start-2">
         <CardContent className="flex min-h-0 flex-1 flex-col gap-2 p-4 short:p-3">

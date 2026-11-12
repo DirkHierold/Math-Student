@@ -218,14 +218,6 @@
   animation: invite 1.8s ease-in-out infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-shake,
-  .animate-pop,
-  .animate-invite {
-    animation: none;
-  }
-}
-
 /* KaTeX formulas stay hidden until they have been fitted to their container. */
 .math-fit {
   position: relative;

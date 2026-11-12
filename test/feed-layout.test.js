@@ -62,7 +62,7 @@ test('UI texts live only in i18n.ts and every message exists in German and Engli
     assert.equal(detectLanguage(['fr']), 'en');
     assert.equal(detectLanguage([]), 'en');
 
-    const files = ['App.tsx', 'components/feed-view.tsx', 'components/stats-view.tsx', 'components/level-card.tsx', 'components/bottom-nav.tsx',
+    const files = ['App.tsx', 'components/feed-view.tsx', 'components/stats-view.tsx', 'components/bottom-nav.tsx',
         'components/task-types.tsx', 'hooks/use-mathfeed.ts', 'hooks/use-math-fit.ts', 'lib/mathfeed-state.ts'];
     for (const file of files) {
         const source = await read(`src/${file}`);
