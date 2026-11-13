@@ -44,17 +44,14 @@ const validSession = (value: Session | null, today: string): Session | null => {
   const known = (type: string) => TYPE_KEYS.includes(type)
   const ok =
     value.date === today &&
-    (value.kind === "main" || value.kind === "bonus") &&
+    (value.focus === null || known(value.focus)) &&
     Number.isInteger(value.index) &&
     value.index >= 0 &&
-    value.index < value.length &&
     Array.isArray(value.results) &&
-    Array.isArray(value.rematches) &&
     Array.isArray(value.recentTypes) &&
     !!value.levelBefore &&
     value.recentTypes.every(known) &&
-    value.results.every((entry: { type: string }) => known(entry.type)) &&
-    value.rematches.every((entry: { type: string }) => known(entry.type))
+    value.results.every((entry: { type: string }) => known(entry.type))
   return ok ? value : null
 }
 

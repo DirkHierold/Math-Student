@@ -202,20 +202,19 @@
   animation: pop 0.3s ease-out;
 }
 
-@keyframes invite {
-  0%,
-  100% {
+@keyframes halo {
+  0% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 45%, transparent);
+    opacity: 0.45;
   }
-  50% {
-    transform: scale(1.04);
-    box-shadow: 0 0 0 10px transparent;
+  100% {
+    transform: scale(var(--halo-scale, 1.14));
+    opacity: 0;
   }
 }
 
-.animate-invite {
-  animation: invite 1.8s ease-in-out infinite;
+.animate-halo {
+  animation: halo 2s ease-out infinite;
 }
 
 /* KaTeX formulas stay hidden until they have been fitted to their container. */
@@ -256,5 +255,11 @@
 
   .math-fit.math-choice .katex {
     font-size: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-halo {
+    animation: none;
   }
 }

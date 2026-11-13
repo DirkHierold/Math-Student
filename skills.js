@@ -25,7 +25,7 @@ export const normalizeSkills = (stored, typeNames) => Object.fromEntries(
             tasks: Math.max(0, Math.floor(finite(skill.tasks, 0))),
             days: Math.max(0, Math.floor(finite(skill.days, 0))),
             lastDay: typeof skill.lastDay === 'string' ? skill.lastDay : null,
-            streak: Math.min(STREAK_LENGTH - 1, Math.max(0, Math.floor(finite(skill.streak, 0)))),
+            streak: Math.max(0, Math.floor(finite(skill.streak, 0))),
             stability: Math.max(1, finite(skill.stability, base.stability)),
             recent: Array.isArray(skill.recent) ? skill.recent.filter(Number.isFinite).slice(-RECENT_LIMIT) : []
         }];
@@ -46,10 +46,7 @@ export const recordTaskResult = (skill, { errors, day }) => {
     const firstReviewToday = skill.lastDay !== day;
     skill.level = nextLevel(skill.level, errors);
     skill.streak = errors === 0 ? skill.streak + 1 : 0;
-    if (skill.streak >= STREAK_LENGTH) {
-        skill.level = clampLevel(skill.level + STREAK_BONUS);
-        skill.streak = 0;
-    }
+    if (skill.streak > 0 && skill.streak % STREAK_LENGTH === 0) skill.level = clampLevel(skill.level + STREAK_BONUS);
     skill.stability = nextStability(skill.stability, score >= 0.7, firstReviewToday);
     if (firstReviewToday) skill.days++;
     skill.lastDay = day;

@@ -1,9 +1,6 @@
-import { Moon, Sun } from "lucide-react";
-
 import { getRollingDateKeys } from "../../stats-data.js";
-import { useTheme } from "@/components/theme-provider";
+import { AppHeader, ThemeToggle } from "@/components/app-header";
 import { Card, CardContent } from "@/components/ui/card";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { type useMathFeed } from "@/hooks/use-mathfeed";
 import { locale, t } from "@/lib/i18n";
 import { TYPE_KEYS, berlinDateKey, dailyFor } from "@/lib/mathfeed-state";
@@ -41,18 +38,19 @@ export default function StatsView({ feed }: { feed: Feed }) {
   });
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3 px-4 pt-2 pb-3 short:grid short:grid-cols-[1.5fr_1fr] short:grid-rows-[auto_minmax(0,1fr)] short:gap-x-3 short:gap-y-2">
-      <header className="flex h-11 shrink-0 items-center justify-between short:col-span-2 short:h-9">
+    <div className="flex h-full min-h-0 flex-col">
+      <AppHeader>
         <h1 className="text-lg font-semibold">{t("navStats")}</h1>
         <ThemeToggle />
-      </header>
-
-      <Card className="min-h-0 flex-1 gap-0 py-0 short:col-start-2 short:row-start-2">
+      </AppHeader>
+      <div className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-2 pb-3 short:grid short:grid-cols-[1.5fr_1fr] short:grid-rows-[minmax(0,1fr)] short:gap-x-3">
+        <Card className="min-h-0 flex-1 gap-0 py-0 short:col-start-2">
         <CardContent className="flex min-h-0 flex-1 flex-col gap-2 p-4 short:p-3">
           <h2 className="text-sm font-medium">{t("statsWeek")}</h2>
           <Bars entries={last7} today={today} />
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }
@@ -127,34 +125,5 @@ function Bars({
         </div>
       ))}
     </div>
-  );
-}
-
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const options = [
-    { value: "light", icon: Sun, label: t("themeLight") },
-    { value: "dark", icon: Moon, label: t("themeDark") },
-  ] as const;
-  return (
-    <ToggleGroup
-      type="single"
-      variant="outline"
-      spacing={0}
-      value={theme}
-      onValueChange={(value) => value && setTheme(value as typeof theme)}
-      aria-label={t("themeLabel")}
-    >
-      {options.map(({ value, icon: Icon, label }) => (
-        <ToggleGroupItem
-          key={value}
-          value={value}
-          aria-label={label}
-          className="size-11"
-        >
-          <Icon className="size-5" />
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
   );
 }

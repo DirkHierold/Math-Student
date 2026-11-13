@@ -22,7 +22,6 @@ test('UI is built from original shadcn/ui components and the existing math domai
         assert.match(feed, new RegExp(`from "@/components/ui/${component}"`));
         await read(`src/components/ui/${component}.tsx`);
     }
-    assert.match(stats, /from "@\/components\/ui\/toggle-group"/);
     assert.match(stats, /from "\.\.\/\.\.\/stats-data\.js"/);
     assert.match(feed, /from "\.\.\/\.\.\/math-engine\.js"/);
     assert.match(state, /STORAGE_KEY = "mathfeed-state-v1"/);
@@ -71,14 +70,14 @@ test('UI texts live only in i18n.ts and every message exists in German and Engli
     }
 });
 
-test('wrong answers keep the current step visible until the next tap', async () => {
+test('wrong answers keep the current step visible until the Weiter button is pressed', async () => {
     const hook = await read('src/hooks/use-mathfeed.ts');
     assert.match(hook, /pendingTask\.current = nextTask/);
     assert.match(hook, /window\.setTimeout\(advance, 450\)/);
     assert.doesNotMatch(hook, /pointerdown/);
     const feed = await read('src/components/feed-view.tsx');
-    assert.match(feed, /onClickCapture/);
-    assert.match(feed, /event\.stopPropagation\(\)/);
+    assert.doesNotMatch(feed, /onClickCapture/);
+    assert.match(feed, /onClick=\{advance\}/);
 });
 
 test('math fitting scales down, scales up, and respects both available dimensions', () => {

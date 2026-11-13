@@ -1,14 +1,16 @@
 import { useEffect, useRef } from "react"
-import { Check, Flame, Pause, RotateCcw, X } from "lucide-react"
+import { Check, Flame, X } from "lucide-react"
 
 import { currentLine, explanationKey } from "../../math-engine.js"
+import { AppHeader } from "@/components/app-header"
 import { MathBlock } from "@/components/math-block"
 import { EXPLAIN } from "@/components/task-types"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useMathFit } from "@/hooks/use-math-fit"
 import { type useMathFeed } from "@/hooks/use-mathfeed"
-import { STREAK_BONUS, STREAK_LENGTH } from "../../adaptive.js"
+import { MAX_LEVEL } from "../../math-engine.js"
+import { STREAK_BONUS } from "../../adaptive.js"
 import { celebrate } from "@/lib/celebrate"
 import { t } from "@/lib/i18n"
 import { topicName } from "@/lib/series"
@@ -17,7 +19,7 @@ import { cn } from "@/lib/utils"
 type Feed = ReturnType<typeof useMathFeed>
 
 export function FeedView({ feed }: { feed: Feed }) {
-  const { state, streakBonus, task, slot, currentStep, locked, selected, answer, advance, mathError, exitRun } =
+  const { state, streakBonus, startLevels, task, slot, currentStep, locked, selected, answer, advance, mathError, exitRun } =
     feed
   const practiceRef = useRef<HTMLElement>(null)
   useMathFit(practiceRef, true, [task, currentStep], mathError)
@@ -32,77 +34,66 @@ export function FeedView({ feed }: { feed: Feed }) {
 
   if (!task || !currentStep || !slot) return null
   const answeredWrong = locked && selected !== currentStep.answerId
-  const streak = streakBonus ? STREAK_LENGTH : (state.skills[slot.type].streak as number)
+  const streak = state.skills[slot.type].streak as number
+  const level = state.skills[slot.type].level as number
+  const startLevel = startLevels[slot.type] ?? level
+  const pct = (value: number) => `${(Math.min(MAX_LEVEL, Math.max(0, value)) / MAX_LEVEL) * 100}%`
   const explanation = EXPLAIN[explanationKey(task)]
 
   return (
     <section
       ref={practiceRef}
-      // The click ends the tap; consuming it keeps it from answering the next step.
-      onClickCapture={
-        answeredWrong || streakBonus
-          ? (event) => {
-              event.stopPropagation()
-              advance()
-            }
-          : undefined
-      }
-      className="relative grid h-full min-h-0 grid-rows-[auto_minmax(0,3fr)_auto_minmax(0,4fr)] gap-2 px-4 pt-2 pb-3 short:grid-cols-2 short:grid-rows-[auto_auto_minmax(0,1fr)] short:gap-x-4"
+      className="relative grid h-full min-h-0 grid-rows-[auto_minmax(0,3fr)_auto_minmax(0,4fr)_auto] gap-2 px-4 pt-0 pb-3 short:grid-cols-2 short:grid-rows-[auto_auto_minmax(0,1fr)_auto] short:gap-x-4"
     >
       <div className="short:col-span-2">
-        <header className="grid h-9 grid-cols-[2.25rem_minmax(0,1fr)_3.5rem] items-center gap-2">
+        <AppHeader className="grid grid-cols-[2.25rem_minmax(0,1fr)_3.5rem] px-0">
           <button
             type="button"
             onClick={exitRun}
             aria-label={t("runExit")}
             className="grid size-9 shrink-0 place-items-center rounded-full text-muted-foreground outline-none focus-visible:bg-accent"
           >
-            <Pause className="size-5" aria-hidden="true" />
+            <X className="size-5" aria-hidden="true" />
           </button>
           <div className="flex min-w-0 items-center justify-center gap-2">
             <span className="truncate text-sm font-semibold">{topicName(slot.type)}</span>
             <span className="shrink-0 text-xs font-medium tabular-nums text-muted-foreground">
               {t("levelShort", { n: state.skills[slot.type].level })}
             </span>
-            {slot.rematch && (
-              <span className="flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                <RotateCcw className="size-3" aria-hidden="true" />
-                {t("rematchBadge")}
-              </span>
-            )}
           </div>
           <span
             className={cn(
               "flex h-9 items-center justify-end gap-0.5 text-xs font-semibold tabular-nums",
-              streakBonus ? "text-success" : streak > 0 ? "text-orange-500" : "text-muted-foreground/50"
+              streak > 0 ? "text-orange-500" : "text-muted-foreground/50"
             )}
-            aria-label={t("streakLabel", { n: streak, total: STREAK_LENGTH })}
+            aria-label={t("streakLabel", { n: streak })}
           >
             <Flame className="size-4" aria-hidden="true" />
-            {streakBonus ? t("streakBonus", { n: STREAK_BONUS }) : `${streak}/${STREAK_LENGTH}`}
+            {streak}
           </span>
-        </header>
+        </AppHeader>
         <div
           role="progressbar"
-          aria-label={t("runProgressLabel", { n: slot.number, total: slot.length })}
+          aria-label={t("runLevelBarLabel", { topic: topicName(slot.type), level })}
           aria-valuemin={0}
-          aria-valuemax={slot.length}
-          aria-valuenow={slot.number - 1}
-          className="mt-1.5 flex h-2 items-center justify-center gap-1.5"
+          aria-valuemax={MAX_LEVEL}
+          aria-valuenow={level}
+          className="relative mt-1.5 h-2 overflow-hidden rounded-full bg-muted"
         >
-          {Array.from({ length: slot.length }, (_, index) => (
-            <span
-              key={index}
-              className={cn(
-                "h-2 rounded-full transition-all duration-300",
-                index + 1 === slot.number
-                  ? "w-6 bg-foreground"
-                  : index + 1 < slot.number
-                    ? "w-2 bg-foreground/50"
-                    : "w-2 bg-muted"
-              )}
-            />
-          ))}
+          <span
+            className="absolute inset-y-0 left-0 bg-foreground/40 transition-all duration-300"
+            style={{ width: pct(Math.min(level, startLevel)) }}
+          />
+          <span
+            className={cn(
+              "absolute inset-y-0 transition-all duration-300",
+              level >= startLevel ? "bg-success" : "bg-destructive"
+            )}
+            style={{
+              left: pct(Math.min(level, startLevel)),
+              width: pct(Math.abs(level - startLevel)),
+            }}
+          />
         </div>
       </div>
 
@@ -117,9 +108,6 @@ export function FeedView({ feed }: { feed: Feed }) {
             <p className="text-lg font-semibold">{topicName(slot.type)}</p>
             <p className="text-6xl font-bold">{t("streakBonus", { n: STREAK_BONUS })}</p>
           </div>
-          <p className="absolute inset-x-0 bottom-2 text-sm font-medium">
-            {t("continueHint")} →
-          </p>
         </div>
       ) : (
         <>
@@ -140,10 +128,7 @@ export function FeedView({ feed }: { feed: Feed }) {
         )}
       >
         {answeredWrong ? (
-          <span>
-            {explanation && `${t(explanation)} `}
-            <span className="whitespace-nowrap">{t("continueHint")} →</span>
-          </span>
+          <span>{explanation && t(explanation)}</span>
         ) : (
           t("instruction")
         )}
@@ -195,6 +180,20 @@ export function FeedView({ feed }: { feed: Feed }) {
       </div>
         </>
       )}
+
+      <Button
+        size="lg"
+        onClick={advance}
+        disabled={!(answeredWrong || streakBonus)}
+        aria-hidden={!(answeredWrong || streakBonus)}
+        tabIndex={answeredWrong || streakBonus ? 0 : -1}
+        className={cn(
+          "h-12 w-full rounded-2xl text-base font-semibold short:col-span-2 short:h-10",
+          !(answeredWrong || streakBonus) && "invisible"
+        )}
+      >
+        {t("runNext")}
+      </Button>
     </section>
   )
 }

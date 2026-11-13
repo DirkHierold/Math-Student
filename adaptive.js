@@ -2,7 +2,7 @@ import { MAX_LEVEL } from './math-engine.js';
 
 export const START_LEVEL = 0;
 
-// Five flawless tasks in a row within one category earn a level bonus.
+// Every fifth flawless task in a row within one category earns a level bonus; the streak keeps counting.
 export const STREAK_LENGTH = 5;
 export const STREAK_BONUS = 5;
 

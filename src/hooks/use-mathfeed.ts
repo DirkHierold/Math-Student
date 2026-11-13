@@ -10,8 +10,8 @@ import {
   completeTask,
   createSession,
   finishSession,
-  isSessionDone,
   nextSlot,
+  MILESTONE,
 } from "../../session.js"
 import { recordStepAnswer } from "../../stats-data.js"
 import { useActiveTimer } from "@/hooks/use-active-timer"
@@ -26,7 +26,7 @@ import {
 import { t } from "@/lib/i18n"
 
 export type Mode = "idle" | "run"
-export type Slot = ReturnType<typeof nextSlot> & { number: number; length: number }
+export type Slot = ReturnType<typeof nextSlot> & { number: number }
 export type Summary = ReturnType<typeof finishSession>
 type Task = ReturnType<typeof generateTask>
 
@@ -60,11 +60,11 @@ export function useMathFeed() {
   const [appError, setAppError] = useState("")
   const [streakBonus, setStreakBonus] = useState(false)
 
+  const startLevels = useRef<Record<string, number>>({})
   const taskErrors = useRef(0)
   const stepShownAt = useRef(0)
   const completion = useRef(false)
   const pendingTask = useRef<Task | null>(null)
-  const pendingSummary = useRef<Summary | null>(null)
   const slotRef = useRef<Slot | null>(null)
 
   const reportError = useCallback((message: string, error: unknown) => {
@@ -99,7 +99,6 @@ export function useMathFeed() {
     const next = {
       ...nextSlot(state.session, state.skills, berlinDateKey()),
       number: state.session.index + 1,
-      length: state.session.length,
     }
     slotRef.current = next
     setSlot(next)
@@ -115,16 +114,7 @@ export function useMathFeed() {
     setStreakBonus(false)
     if (completion.current) {
       completion.current = false
-      if (pendingSummary.current) {
-        setSummary(pendingSummary.current)
-        pendingSummary.current = null
-        setMode("idle")
-        setTask(null)
-        setSlot(null)
-        resetStep()
-      } else {
-        loadSlot()
-      }
+      loadSlot()
     } else {
       if (pendingTask.current) setTask(pendingTask.current)
       pendingTask.current = null
@@ -132,23 +122,34 @@ export function useMathFeed() {
     }
   }, [loadSlot, resetStep])
 
-  const beginRun = useCallback(() => {
-    const state = stateRef.current
-    const day = berlinDateKey()
-    if (!state.session || state.session.date !== day) {
-      state.session = createSession({
-        date: day,
-        kind: state.rewards.lastDay === day ? "bonus" : "main",
-        skills: state.skills,
-      })
-    }
-    save()
-    setSummary(null)
-    setMode("run")
-    loadSlot()
-  }, [loadSlot, save])
+  const beginRun = useCallback(
+    (focus: string | null = null) => {
+      const state = stateRef.current
+      const day = berlinDateKey()
+      if (state.session && state.session.focus !== focus) {
+        if (state.session.results.length > 0) finishSession(state, state.session, day)
+        state.session = null
+      }
+      startLevels.current = Object.fromEntries(
+        Object.entries(state.skills).map(([type, skill]) => [type, (skill as { level: number }).level])
+      )
+      state.session ||= createSession({ date: day, focus, skills: state.skills })
+      save()
+      setSummary(null)
+      setMode("run")
+      loadSlot()
+    },
+    [loadSlot, save]
+  )
 
+  // Ending a run closes it: a summary only appears when at least one task was done.
   const exitRun = useCallback(() => {
+    const state = stateRef.current
+    const session = state.session
+    if (session && session.results.length > 0) {
+      setSummary(finishSession(state, session, berlinDateKey()))
+    }
+    state.session = null
     save()
     setMode("idle")
     setTask(null)
@@ -184,9 +185,8 @@ export function useMathFeed() {
         )
         paused = outcome.bonus
         setStreakBonus(outcome.bonus)
-        if (isSessionDone(session)) {
-          pendingSummary.current = finishSession(state, session, day)
-          state.session = null
+        if (session.index % MILESTONE === 0 && navigator.vibrate) {
+          navigator.vibrate([40, 60, 40])
         }
         save()
       } else {
@@ -216,6 +216,7 @@ export function useMathFeed() {
     selected,
     appError,
     streakBonus,
+    startLevels: startLevels.current,
     startupError,
     answer,
     advance,
