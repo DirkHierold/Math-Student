@@ -14,15 +14,14 @@ export default defineConfig({
       includeAssets: [
         "favicon.ico",
         "favicon-96.png",
-        "favicon-96-dark.png",
+        "icon.svg",
+        "apple-touch-icon.png",
         "icon-192.png",
-        "icon-192-dark.png",
         "icon-512.png",
-        "icon-512-dark.png",
       ],
       manifest: {
-        name: "MathFeed",
-        short_name: "MathFeed",
+        name: "Mathly",
+        short_name: "Mathly",
         start_url: "/",
         display: "standalone",
         background_color: "#ffffff",
@@ -31,6 +30,7 @@ export default defineConfig({
         icons: [
           { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "/icon-512.png", sizes: "512x512", type: "image/png" },
+          { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
       },
       workbox: {

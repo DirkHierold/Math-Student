@@ -153,6 +153,15 @@
   --color-success: var(--success);
 }
 
+/* Safe zone: the standalone iOS status area is covered by system glass, so keep extra room below it. */
+@utility pt-safe-top {
+  padding-top: max(calc(env(safe-area-inset-top) + 0.5rem), 0.75rem);
+}
+
+@utility pb-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* The app never scrolls: it fills the viewport and blocks rubber-banding. */
 @layer base {
   html,

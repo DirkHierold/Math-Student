@@ -54,8 +54,8 @@ export function HomeView({ feed }: { feed: Feed }) {
       <ThemeToggle />
     </AppHeader>
     <section className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-4 px-4 pt-6 pb-4 short:items-center">
-      <div className="flex min-h-0 flex-col items-center justify-center gap-3 short:gap-2">
-        <header className="flex min-h-40 flex-col items-center justify-center text-center short:min-h-0">
+      <div className="flex min-h-0 w-full flex-col items-center justify-center gap-3 short:gap-2">
+        <header className="flex min-h-32 shrink-0 flex-col items-center justify-center text-center short:min-h-0">
           <Check
             className={cn(
               "mx-auto size-9 rounded-full bg-success/15 p-1.5 text-success short:size-7 short:p-1",
@@ -70,7 +70,8 @@ export function HomeView({ feed }: { feed: Feed }) {
             {rewards.runs === 0 && !summary ? t("homeHint") : t("sumChallenge")}
           </p>
         </header>
-        <div className="relative aspect-square w-[min(92vw,22rem)] short:w-[min(calc(100dvh-8rem),20rem)]">
+        <div className="grid min-h-0 w-full flex-1 place-items-center [container-type:size]">
+        <div className="relative aspect-square w-[min(100cqw,100cqh,22rem)]">
           <button
             type="button"
             onClick={() => beginRun(null)}
@@ -158,6 +159,7 @@ export function HomeView({ feed }: { feed: Feed }) {
               </button>
             )
           })}
+        </div>
         </div>
       </div>
     </section>

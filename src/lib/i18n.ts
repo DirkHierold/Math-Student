@@ -1,5 +1,5 @@
 const de = {
-  appTitle: "MathFeed – Mathe lernen",
+  appTitle: "Mathly – Mathe lernen",
   appDescription: "Mathe üben im schnellen Aufgaben-Feed.",
   navHome: "Heute",
   navStats: "Fortschritt",
@@ -20,16 +20,16 @@ const de = {
   themeDark: "Dunkel",
   errStartTitle: "Start fehlgeschlagen",
   errNoticeTitle: "Hinweis",
-  errStart: "MathFeed konnte nicht gestartet werden.",
+  errStart: "Mathly konnte nicht gestartet werden.",
   errStorageFormat:
-    "Der gespeicherte MathFeed-Fortschritt hat ein unbekanntes Format.",
+    "Der gespeicherte Mathly-Fortschritt hat ein unbekanntes Format.",
   errSave: "Fortschritt konnte nicht gespeichert werden:",
   errMath: "Formeln konnten nicht angepasst werden:",
   errFitSpace:
     "Der verfügbare Platz für die Formeln konnte nicht bestimmt werden.",
   errFitShared:
     "Die gemeinsame Skalierung der Antworten konnte nicht bestimmt werden.",
-  appName: "MathFeed",
+  appName: "Mathly",
   homeStart: "Gemischt",
   homeHint: "Tippe ein Thema oder die Mitte für gemischtes Üben.",
   homeRecommended: "Empfohlen",
@@ -88,7 +88,7 @@ const de = {
 export type MessageKey = keyof typeof de
 
 const en: Record<MessageKey, string> = {
-  appTitle: "MathFeed – Learn math",
+  appTitle: "Mathly – Learn math",
   appDescription: "Practice math in a fast task feed.",
   navHome: "Today",
   navStats: "Progress",
@@ -109,13 +109,13 @@ const en: Record<MessageKey, string> = {
   themeDark: "Dark",
   errStartTitle: "Start failed",
   errNoticeTitle: "Notice",
-  errStart: "MathFeed could not be started.",
-  errStorageFormat: "The saved MathFeed progress has an unknown format.",
+  errStart: "Mathly could not be started.",
+  errStorageFormat: "The saved Mathly progress has an unknown format.",
   errSave: "Progress could not be saved:",
   errMath: "Formulas could not be fitted:",
   errFitSpace: "The space available for the formulas could not be determined.",
   errFitShared: "The shared scale of the answers could not be determined.",
-  appName: "MathFeed",
+  appName: "Mathly",
   homeStart: "Mixed",
   homeHint: "Tap a topic or the centre for mixed practice.",
   homeRecommended: "Suggested",

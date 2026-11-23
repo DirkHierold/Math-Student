@@ -21,7 +21,7 @@ export function BottomNav({
   return (
     <nav
       aria-label={t("navLabel")}
-      className="grid shrink-0 grid-cols-2 border-t bg-background pb-[env(safe-area-inset-bottom)]"
+      className="grid shrink-0 grid-cols-2 border-t bg-background pb-safe-bottom"
     >
       {ITEMS.map(({ view: target, icon: Icon, label }) => {
         const active = view === target
