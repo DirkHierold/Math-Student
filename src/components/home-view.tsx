@@ -24,7 +24,7 @@ const celebrated = new WeakSet<object>()
 
 // One decision per day: the big button. The ring shows the total level (sum of all category levels) as an incomplete circle (full = every category at 100).
 export function HomeView({ feed }: { feed: Feed }) {
-  const { state, beginRun, summary } = feed
+  const { state, beginRun, summary, daily } = feed
   const today = berlinDateKey()
   const { rewards, session, skills } = state
   const doneToday = rewards.lastDay === today && !session
@@ -41,6 +41,20 @@ export function HomeView({ feed }: { feed: Feed }) {
     topics: Record<string, { level: number }[]>
   }
   const change = levelChange(chart.total.slice(-2))
+
+  // Calculate daily stats
+  const minutes = Math.floor(daily.seconds / 60)
+  const { correct, total } = TYPE_KEYS.reduce(
+    (acc, type) => {
+      const steps = daily.steps[type]
+      return {
+        correct: acc.correct + steps.correct,
+        total: acc.total + steps.correct + steps.errors,
+      }
+    },
+    { correct: 0, total: 0 }
+  )
+
   useEffect(() => {
     if (!summary || celebrated.has(summary)) return
     celebrated.add(summary)
@@ -70,6 +84,9 @@ export function HomeView({ feed }: { feed: Feed }) {
             {rewards.runs === 0 && !summary ? t("homeHint") : t("sumChallenge")}
           </p>
         </header>
+        <p className="text-center text-sm text-muted-foreground">
+          {t("homeTodayStats", { minutes, correct, total })}
+        </p>
         <div className="grid min-h-0 w-full flex-1 place-items-center [container-type:size]">
         <div className="relative aspect-square w-[min(100cqw,100cqh,22rem)]">
           <button

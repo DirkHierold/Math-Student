@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { Check, Flame, X } from "lucide-react"
 
 import { currentLine, explanationKey } from "../../math-engine.js"
-import { AppHeader } from "@/components/app-header"
+import { AppHeader, ThemeToggle } from "@/components/app-header"
 import { MathBlock } from "@/components/math-block"
 import { EXPLAIN } from "@/components/task-types"
 import { Button } from "@/components/ui/button"
@@ -46,7 +46,7 @@ export function FeedView({ feed }: { feed: Feed }) {
       className="relative grid h-full min-h-0 grid-rows-[auto_minmax(0,3fr)_auto_minmax(0,4fr)_auto] gap-2 px-4 pt-0 pb-3 short:grid-cols-2 short:grid-rows-[auto_auto_minmax(0,1fr)_auto] short:gap-x-4"
     >
       <div className="short:col-span-2">
-        <AppHeader className="grid grid-cols-[2.25rem_minmax(0,1fr)_3.5rem] px-0">
+        <AppHeader className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto_auto] gap-2 px-0">
           <button
             type="button"
             onClick={exitRun}
@@ -63,7 +63,7 @@ export function FeedView({ feed }: { feed: Feed }) {
           </div>
           <span
             className={cn(
-              "flex h-9 items-center justify-end gap-0.5 text-xs font-semibold tabular-nums",
+              "flex h-9 shrink-0 items-center gap-0.5 text-xs font-semibold tabular-nums",
               streak > 0 ? "text-orange-500" : "text-muted-foreground/50"
             )}
             aria-label={t("streakLabel", { n: streak })}
@@ -71,6 +71,9 @@ export function FeedView({ feed }: { feed: Feed }) {
             <Flame className="size-4" aria-hidden="true" />
             {streak}
           </span>
+          <div className="flex shrink-0 items-center">
+            <ThemeToggle />
+          </div>
         </AppHeader>
         <div
           role="progressbar"

@@ -48,6 +48,7 @@ const de = {
   runLevelBarLabel: "{topic}: Level {level}",
   sumTitle: "Gut gemacht",
   sumChallenge: "Welche Aufgaben willst du als nächstes üben?",
+  homeTodayStats: "Du hast heute schon {minutes} Minuten geübt und {correct}/{total} Aufgaben richtig gelöst.",
   explainLinear0:
     "Rechne auf beiden Seiten das Gleiche: Bring die Zahl ohne x mit der Gegenoperation auf die andere Seite.",
   explainLinear1: "Teile beide Seiten durch die Zahl vor dem x.",
@@ -134,6 +135,7 @@ const en: Record<MessageKey, string> = {
   runLevelBarLabel: "{topic}: level {level}",
   sumTitle: "Well done",
   sumChallenge: "What do you want to practise next?",
+  homeTodayStats: "You've practiced {minutes} minutes today and solved {correct}/{total} tasks correctly.",
   explainLinear0:
     "Do the same on both sides: move the plain number across with its opposite operation.",
   explainLinear1: "Divide both sides by the number in front of x.",
