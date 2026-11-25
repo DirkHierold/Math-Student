@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
-import { Check, Flame, X } from "lucide-react"
+import { Check, Flame, Timer, X } from "lucide-react"
 
+import { formatDuration } from "../../format.js"
 import { currentLine, explanationKey } from "../../math-engine.js"
 import { AppHeader, ThemeToggle } from "@/components/app-header"
 import { MathBlock } from "@/components/math-block"
@@ -19,7 +20,7 @@ import { cn } from "@/lib/utils"
 type Feed = ReturnType<typeof useMathFeed>
 
 export function FeedView({ feed }: { feed: Feed }) {
-  const { state, streakBonus, startLevels, task, slot, currentStep, locked, selected, answer, advance, mathError, exitRun } =
+  const { state, daily, streakBonus, startLevels, task, slot, currentStep, locked, selected, answer, advance, mathError, exitRun } =
     feed
   const practiceRef = useRef<HTMLElement>(null)
   useMathFit(practiceRef, true, [task, currentStep], mathError)
@@ -46,7 +47,7 @@ export function FeedView({ feed }: { feed: Feed }) {
       className="relative grid h-full min-h-0 grid-rows-[auto_minmax(0,3fr)_auto_minmax(0,4fr)_auto] gap-2 px-4 pt-0 pb-3 short:grid-cols-2 short:grid-rows-[auto_auto_minmax(0,1fr)_auto] short:gap-x-4"
     >
       <div className="short:col-span-2">
-        <AppHeader className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto_auto] gap-2 px-0">
+        <AppHeader className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto_auto_auto] gap-2 px-0">
           <button
             type="button"
             onClick={exitRun}
@@ -61,6 +62,14 @@ export function FeedView({ feed }: { feed: Feed }) {
               {t("levelShort", { n: state.skills[slot.type].level })}
             </span>
           </div>
+          <span
+            role="timer"
+            className="flex h-9 shrink-0 items-center gap-0.5 text-xs font-semibold tabular-nums text-muted-foreground"
+            aria-label={t("timerLabel", { time: formatDuration(daily.seconds) })}
+          >
+            <Timer className="size-4" aria-hidden="true" />
+            {formatDuration(daily.seconds)}
+          </span>
           <span
             className={cn(
               "flex h-9 shrink-0 items-center gap-0.5 text-xs font-semibold tabular-nums",

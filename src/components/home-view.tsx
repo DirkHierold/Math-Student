@@ -1,6 +1,7 @@
 import { Check } from "lucide-react"
 import { useEffect, useMemo } from "react"
 
+import { formatDuration } from "../../format.js"
 import { recommendedTopic } from "../../session.js"
 import { overallLevel, topicLevel } from "../../skills.js"
 import { buildChart, levelChange } from "../../level-series.js"
@@ -42,8 +43,7 @@ export function HomeView({ feed }: { feed: Feed }) {
   }
   const change = levelChange(chart.total.slice(-2))
 
-  // Calculate daily stats
-  const minutes = Math.floor(daily.seconds / 60)
+  // Today's practice time and answered steps, shown as one line under the title.
   const { correct, total } = TYPE_KEYS.reduce(
     (acc, type) => {
       const steps = daily.steps[type]
@@ -67,8 +67,7 @@ export function HomeView({ feed }: { feed: Feed }) {
       <span className="text-lg font-semibold">{t("appName")}</span>
       <ThemeToggle />
     </AppHeader>
-    <section className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-4 px-4 pt-6 pb-4 short:items-center">
-      <div className="flex min-h-0 w-full flex-col items-center justify-center gap-3 short:gap-2">
+    <section className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] gap-3 px-4 pt-6 pb-4 short:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] short:grid-rows-[minmax(0,1fr)] short:gap-4 short:pt-1 short:pb-2">
         <header className="flex min-h-32 shrink-0 flex-col items-center justify-center text-center short:min-h-0">
           <Check
             className={cn(
@@ -77,16 +76,15 @@ export function HomeView({ feed }: { feed: Feed }) {
             )}
             aria-hidden="true"
           />
-          <h1 className="mt-1 text-xl font-semibold short:text-base">
+          <h1 className="mt-1 text-xl font-semibold short:text-lg">
             {summary ? t("sumTitle") : t("homeMotivation")}
           </h1>
-          <p className="mx-auto mt-1 max-w-64 text-xs text-muted-foreground">
-            {rewards.runs === 0 && !summary ? t("homeHint") : t("sumChallenge")}
+          <p className="mx-auto mt-1 max-w-64 text-xs text-muted-foreground tabular-nums short:text-sm">
+            {rewards.runs === 0 && !summary
+              ? t("homeHint")
+              : t("homeTodayStats", { time: formatDuration(daily.seconds), correct, total })}
           </p>
         </header>
-        <p className="text-center text-sm text-muted-foreground">
-          {t("homeTodayStats", { minutes, correct, total })}
-        </p>
         <div className="grid min-h-0 w-full flex-1 place-items-center [container-type:size]">
         <div className="relative aspect-square w-[min(100cqw,100cqh,22rem)]">
           <button
@@ -178,7 +176,6 @@ export function HomeView({ feed }: { feed: Feed }) {
           })}
         </div>
         </div>
-      </div>
     </section>
     </div>
   )
