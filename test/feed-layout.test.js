@@ -6,10 +6,10 @@ import { fittedMathScale, sharedMathScale } from '../math-layout.js';
 const read = file => readFile(new URL(`../${file}`, import.meta.url), 'utf8');
 
 test('UI is built from original shadcn/ui components and the existing math domain modules', async () => {
-    const [config, feed, stats, state, hook, main, css] = await Promise.all([
+    const [config, feed, badges, state, hook, main, css] = await Promise.all([
         read('components.json'),
         read('src/components/feed-view.tsx'),
-        read('src/components/stats-view.tsx'),
+        read('src/components/badges-view.tsx'),
         read('src/lib/mathfeed-state.ts'),
         read('src/hooks/use-mathfeed.ts'),
         read('src/main.tsx'),
@@ -22,7 +22,8 @@ test('UI is built from original shadcn/ui components and the existing math domai
         assert.match(feed, new RegExp(`from "@/components/ui/${component}"`));
         await read(`src/components/ui/${component}.tsx`);
     }
-    assert.match(stats, /from "\.\.\/\.\.\/stats-data\.js"/);
+    assert.match(badges, /from "\.\.\/\.\.\/badges\.js"/);
+    assert.match(badges, /from "@\/components\/ui\/milestone-grid"/);
     assert.match(feed, /from "\.\.\/\.\.\/math-engine\.js"/);
     assert.match(state, /STORAGE_KEY = "mathfeed-state-v1"/);
     assert.match(hook, /recordStepAnswer/);
@@ -61,7 +62,7 @@ test('UI texts live only in i18n.ts and every message exists in German and Engli
     assert.equal(detectLanguage(['fr']), 'en');
     assert.equal(detectLanguage([]), 'en');
 
-    const files = ['App.tsx', 'components/feed-view.tsx', 'components/stats-view.tsx', 'components/bottom-nav.tsx',
+    const files = ['App.tsx', 'components/feed-view.tsx', 'components/badges-view.tsx', 'components/bottom-nav.tsx',
         'components/task-types.tsx', 'hooks/use-mathfeed.ts', 'hooks/use-math-fit.ts', 'lib/mathfeed-state.ts'];
     for (const file of files) {
         const source = await read(`src/${file}`);

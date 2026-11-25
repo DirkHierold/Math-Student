@@ -37,7 +37,9 @@ export function useActiveTimer(
       if (document.visibilityState !== "visible" || !document.hasFocus()) return
       const state = stateRef.current
       pruneDailyStats(state.daily, berlinDateKey())
-      dailyFor(state).seconds += Math.max(0, Math.min(elapsed, MAX_TICK_MS)) / 1000
+      const seconds = Math.max(0, Math.min(elapsed, MAX_TICK_MS)) / 1000
+      dailyFor(state).seconds += seconds
+      state.rewards.totalSeconds += seconds
       tickRef.current()
       if (now - lastSave.current >= SAVE_INTERVAL_MS) {
         lastSave.current = now

@@ -1,4 +1,4 @@
-import { Check } from "lucide-react"
+import { Check, Timer } from "lucide-react"
 import { useEffect, useMemo } from "react"
 
 import { formatDuration } from "../../format.js"
@@ -79,11 +79,21 @@ export function HomeView({ feed }: { feed: Feed }) {
           <h1 className="mt-1 text-xl font-semibold short:text-lg">
             {summary ? t("sumTitle") : t("homeMotivation")}
           </h1>
-          <p className="mx-auto mt-1 max-w-64 text-xs text-muted-foreground tabular-nums short:text-sm">
-            {rewards.runs === 0 && !summary
-              ? t("homeHint")
-              : t("homeTodayStats", { time: formatDuration(daily.seconds), correct, total })}
-          </p>
+          {rewards.runs === 0 && !summary ? (
+            <p className="mx-auto mt-1 max-w-64 text-xs text-muted-foreground short:text-sm">
+              {t("homeHint")}
+            </p>
+          ) : (
+            <p
+              className="mt-1 flex items-center justify-center gap-1 text-sm font-semibold text-muted-foreground tabular-nums"
+              aria-label={t("homeTodayStats", { time: formatDuration(daily.seconds), correct, total })}
+            >
+              <Timer className="size-4" aria-hidden="true" />
+              <span aria-hidden="true">
+                {formatDuration(daily.seconds)} · {correct}/{total}
+              </span>
+            </p>
+          )}
         </header>
         <div className="grid min-h-0 w-full flex-1 place-items-center [container-type:size]">
         <div className="relative aspect-square w-[min(100cqw,100cqh,22rem)]">

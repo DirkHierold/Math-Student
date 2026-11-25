@@ -1,13 +1,13 @@
-import { BarChart3, Home } from "lucide-react"
+import { Award, Home } from "lucide-react"
 
 import { t } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
-export type View = "home" | "stats"
+export type View = "home" | "badges"
 
 const ITEMS = [
   { view: "home", icon: Home, label: () => t("navHome") },
-  { view: "stats", icon: BarChart3, label: () => t("navStats") },
+  { view: "badges", icon: Award, label: () => t("navBadges") },
 ] as const
 
 // Two top-level views in the thumb zone; icon plus label keeps the icon unambiguous.

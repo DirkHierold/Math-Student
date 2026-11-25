@@ -1,4 +1,5 @@
 import { t } from "@/lib/i18n"
+import { awardBadges } from "../../badges.js"
 import { TASK_TYPES } from "../../math-engine.js"
 import { createRewards, normalizeRewards } from "../../rewards.js"
 import { normalizeSkills } from "../../skills.js"
@@ -63,11 +64,19 @@ export function loadState(): MathFeedState {
   if (state.version !== 6 || !state.skills || !state.daily) {
     throw new Error(t("errStorageFormat"))
   }
+  const countedTime = Number.isFinite(state.rewards?.totalSeconds)
   state.skills = normalizeSkills(state.skills, TYPE_KEYS)
   state.rewards = normalizeRewards(state.rewards)
   state.session = validSession(state.session, today)
   state.daily = normalizeDailyStats(state.daily, TYPE_KEYS)
   pruneDailyStats(state.daily, today)
+  // Saves from before the lifetime timer start it with the days still kept; badges reachable from saved data are awarded right away.
+  if (!countedTime) {
+    state.rewards.totalSeconds = Object.values(
+      state.daily as MathFeedState["daily"]
+    ).reduce((sum, stats) => sum + stats.seconds, 0)
+  }
+  awardBadges(state, today, { silent: true })
   return state
 }
 

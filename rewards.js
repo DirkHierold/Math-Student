@@ -1,3 +1,5 @@
+import { addDays } from './dates.js';
+
 const LEVEL_HISTORY = 90;
 
 export const createRewards = () => ({
@@ -6,7 +8,14 @@ export const createRewards = () => ({
     level: 0,
     levelHistory: [],
     topicLevels: {},
-    topicHistory: {}
+    topicHistory: {},
+    dayStreak: 0,
+    bestStreak: 0,
+    totalSeconds: 0,
+    /** @type {Record<string, string>} badge id → day it was earned */
+    badges: {},
+    /** @type {string[]} earned badges not celebrated yet */
+    unseenBadges: []
 });
 
 const count = (value, fallback = 0) => Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback;
@@ -34,7 +43,17 @@ export const normalizeRewards = stored => {
         level: count(stored.level),
         levelHistory: toPoints(stored.levelHistory),
         topicLevels,
-        topicHistory
+        topicHistory,
+        // Saves from before the day streak existed start it at one practised day.
+        dayStreak: count(stored.dayStreak, count(stored.runs) > 0 ? 1 : 0),
+        bestStreak: count(stored.bestStreak),
+        totalSeconds: Number.isFinite(stored.totalSeconds) ? Math.max(0, stored.totalSeconds) : 0,
+        badges: Object.fromEntries(
+            Object.entries(plainObject(stored.badges)).filter(([, day]) => typeof day === 'string')
+        ),
+        unseenBadges: Array.isArray(stored.unseenBadges)
+            ? stored.unseenBadges.filter(id => typeof id === 'string')
+            : []
     };
 };
 
@@ -65,9 +84,10 @@ export const recordTopicLevels = (rewards, estimates, today) => {
     }
 };
 
-// A finished main run marks the day as done; there is no streak or goal, gaps cost nothing.
+// A finished run marks the day as done; consecutive days grow the day streak, a gap starts it again at one.
 export const completeDay = (rewards, today) => {
     if (rewards.lastDay === today) return;
+    rewards.dayStreak = rewards.lastDay && addDays(rewards.lastDay, 1) === today ? rewards.dayStreak + 1 : 1;
     rewards.lastDay = today;
     rewards.runs++;
 };

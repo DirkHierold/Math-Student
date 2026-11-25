@@ -13,6 +13,7 @@ import {
   nextSlot,
   MILESTONE,
 } from "../../session.js"
+import { awardBadges, markBadgeSeen } from "../../badges.js"
 import { recordStepAnswer } from "../../stats-data.js"
 import { useActiveTimer } from "@/hooks/use-active-timer"
 import {
@@ -28,6 +29,8 @@ import { t } from "@/lib/i18n"
 export type Mode = "idle" | "run"
 export type Slot = ReturnType<typeof nextSlot> & { number: number }
 export type Summary = ReturnType<typeof finishSession>
+// A praise shown on its own party screen: a streak bonus or a newly earned badge.
+export type Celebration = { kind: "streak"; type: string } | { kind: "badge"; id: string }
 type Task = ReturnType<typeof generateTask>
 
 type Boot = { state: MathFeedState; error: string }
@@ -58,7 +61,6 @@ export function useMathFeed() {
   const [locked, setLocked] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
   const [appError, setAppError] = useState("")
-  const [streakBonus, setStreakBonus] = useState(false)
 
   const startLevels = useRef<Record<string, number>>({})
   const taskErrors = useRef(0)
@@ -66,6 +68,9 @@ export function useMathFeed() {
   const completion = useRef(false)
   const pendingTask = useRef<Task | null>(null)
   const slotRef = useRef<Slot | null>(null)
+  // Praises of the last finished task, shown one after the other; `showing` is false while a wrong answer's explanation comes first.
+  const celebrations = useRef<Celebration[]>([])
+  const showing = useRef(false)
 
   const reportError = useCallback((message: string, error: unknown) => {
     console.error(message, error)
@@ -75,8 +80,10 @@ export function useMathFeed() {
     (error: Error) => reportError(t("errMath"), error),
     [reportError]
   )
+  // Every save first awards the badges reached since the last one, so nothing earned is ever lost.
   const save = useCallback(() => {
     try {
+      awardBadges(stateRef.current, berlinDateKey())
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stateRef.current))
     } catch (error) {
       reportError(t("errSave"), error)
@@ -106,12 +113,25 @@ export function useMathFeed() {
     taskErrors.current = 0
     completion.current = false
     pendingTask.current = null
-    setStreakBonus(false)
+    celebrations.current = []
+    showing.current = false
     resetStep()
   }, [resetStep])
 
   const advance = useCallback(() => {
-    setStreakBonus(false)
+    const queue = celebrations.current
+    if (showing.current) {
+      const done = queue.shift()
+      if (done?.kind === "badge") {
+        markBadgeSeen(stateRef.current.rewards, done.id)
+        save()
+      }
+      if (queue.length > 0) return rerender()
+      showing.current = false
+    } else if (queue.length > 0) {
+      showing.current = true
+      return rerender()
+    }
     if (completion.current) {
       completion.current = false
       loadSlot()
@@ -120,7 +140,7 @@ export function useMathFeed() {
       pendingTask.current = null
       resetStep()
     }
-  }, [loadSlot, resetStep])
+  }, [loadSlot, resetStep, rerender, save])
 
   const beginRun = useCallback(
     (focus: string | null = null) => {
@@ -146,6 +166,11 @@ export function useMathFeed() {
   const exitRun = useCallback(() => {
     const state = stateRef.current
     const session = state.session
+    // The praise on screen counts as seen; badges still queued stay unseen and appear on the home screen.
+    const shown = showing.current ? celebrations.current[0] : undefined
+    if (shown?.kind === "badge") markBadgeSeen(state.rewards, shown.id)
+    celebrations.current = []
+    showing.current = false
     if (session && session.results.length > 0) {
       setSummary(finishSession(state, session, berlinDateKey()))
     }
@@ -183,12 +208,17 @@ export function useMathFeed() {
           { errors: taskErrors.current },
           day
         )
-        paused = outcome.bonus
-        setStreakBonus(outcome.bonus)
         if (session.index % MILESTONE === 0 && navigator.vibrate) {
           navigator.vibrate([40, 60, 40])
         }
         save()
+        // Streak bonus first, then every badge reached so far (also those from the timer during the task).
+        celebrations.current = [
+          ...(outcome.bonus ? [{ kind: "streak" as const, type: current.type }] : []),
+          ...state.rewards.unseenBadges.map((id: string) => ({ kind: "badge" as const, id })),
+        ]
+        showing.current = correct && celebrations.current.length > 0
+        paused = showing.current
       } else {
         pendingTask.current = nextTask
       }
@@ -203,6 +233,14 @@ export function useMathFeed() {
     [task, currentStep, locked, save, advance, rerender]
   )
 
+  // On the home screen, badges that were never celebrated are shown one by one; only "Weiter" moves on.
+  const dismissBadge = useCallback(() => {
+    const rewards = stateRef.current.rewards
+    if (rewards.unseenBadges.length > 0) markBadgeSeen(rewards, rewards.unseenBadges[0])
+    save()
+    rerender()
+  }, [rerender, save])
+
   const state = stateRef.current
   return {
     state,
@@ -215,7 +253,7 @@ export function useMathFeed() {
     locked,
     selected,
     appError,
-    streakBonus,
+    celebration: showing.current ? (celebrations.current[0] ?? null) : null,
     startLevels: startLevels.current,
     startupError,
     answer,
@@ -223,5 +261,6 @@ export function useMathFeed() {
     mathError,
     beginRun,
     exitRun,
+    dismissBadge,
   }
 }

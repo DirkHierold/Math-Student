@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { Check, Flame, Timer, X } from "lucide-react"
 
 import { formatDuration } from "../../format.js"
 import { currentLine, explanationKey } from "../../math-engine.js"
 import { AppHeader, ThemeToggle } from "@/components/app-header"
+import { CelebrationContent } from "@/components/celebration"
 import { MathBlock } from "@/components/math-block"
 import { EXPLAIN } from "@/components/task-types"
 import { Button } from "@/components/ui/button"
@@ -11,8 +12,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useMathFit } from "@/hooks/use-math-fit"
 import { type useMathFeed } from "@/hooks/use-mathfeed"
 import { MAX_LEVEL } from "../../math-engine.js"
-import { STREAK_BONUS } from "../../adaptive.js"
-import { celebrate } from "@/lib/celebrate"
 import { t } from "@/lib/i18n"
 import { topicName } from "@/lib/series"
 import { cn } from "@/lib/utils"
@@ -20,18 +19,10 @@ import { cn } from "@/lib/utils"
 type Feed = ReturnType<typeof useMathFeed>
 
 export function FeedView({ feed }: { feed: Feed }) {
-  const { state, daily, streakBonus, startLevels, task, slot, currentStep, locked, selected, answer, advance, mathError, exitRun } =
+  const { state, daily, celebration, startLevels, task, slot, currentStep, locked, selected, answer, advance, mathError, exitRun } =
     feed
   const practiceRef = useRef<HTMLElement>(null)
   useMathFit(practiceRef, true, [task, currentStep], mathError)
-  useEffect(() => {
-    if (!streakBonus) return
-    let active = true
-    celebrate(() => active)
-    return () => {
-      active = false
-    }
-  }, [streakBonus])
 
   if (!task || !currentStep || !slot) return null
   const answeredWrong = locked && selected !== currentStep.answerId
@@ -109,17 +100,15 @@ export function FeedView({ feed }: { feed: Feed }) {
         </div>
       </div>
 
-      {streakBonus ? (
+      {celebration ? (
         <div
           role="status"
-          className="relative z-[110] row-span-3 grid min-h-0 place-items-center text-center text-success short:col-span-2 short:row-span-2"
+          className="relative z-[110] row-span-3 grid min-h-0 place-items-center short:col-span-2 short:row-span-2"
         >
-          <div className="animate-pop">
-            <Flame className="mx-auto size-14" aria-hidden="true" />
-            <p className="mt-2 text-lg font-semibold">{t("streakBonusTitle")}</p>
-            <p className="text-lg font-semibold">{topicName(slot.type)}</p>
-            <p className="text-6xl font-bold">{t("streakBonus", { n: STREAK_BONUS })}</p>
-          </div>
+          <CelebrationContent
+            key={celebration.kind === "badge" ? celebration.id : `streak-${celebration.type}`}
+            celebration={celebration}
+          />
         </div>
       ) : (
         <>
@@ -196,12 +185,12 @@ export function FeedView({ feed }: { feed: Feed }) {
       <Button
         size="lg"
         onClick={advance}
-        disabled={!(answeredWrong || streakBonus)}
-        aria-hidden={!(answeredWrong || streakBonus)}
-        tabIndex={answeredWrong || streakBonus ? 0 : -1}
+        disabled={!(answeredWrong || celebration)}
+        aria-hidden={!(answeredWrong || celebration)}
+        tabIndex={answeredWrong || celebration ? 0 : -1}
         className={cn(
           "h-12 w-full rounded-2xl text-base font-semibold short:col-span-2 short:h-10",
-          !(answeredWrong || streakBonus) && "invisible"
+          !(answeredWrong || celebration) && "invisible"
         )}
       >
         {t("runNext")}
