@@ -1,7 +1,7 @@
 import { Suspense, lazy, useState } from "react"
 import { TriangleAlert } from "lucide-react"
 
-import { AppHeader, ThemeToggle } from "@/components/app-header"
+import { AppHeader } from "@/components/app-header"
 import { BottomNav, type View } from "@/components/bottom-nav"
 import { CelebrationContent } from "@/components/celebration"
 import { FeedView } from "@/components/feed-view"
@@ -56,10 +56,10 @@ export function App() {
   if (unseenBadge) {
     return (
       <Shell>
-        <AppHeader>
-          <span className="text-lg font-semibold">{t("appName")}</span>
-          <ThemeToggle />
-        </AppHeader>
+        <AppHeader
+          daily={feed.daily}
+          start={<span className="truncate text-lg font-semibold">{t("appName")}</span>}
+        />
         <main className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_auto] gap-2 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
           <div role="status" className="relative z-[110] grid min-h-0 place-items-center">
             <CelebrationContent key={unseenBadge} celebration={{ kind: "badge", id: unseenBadge }} />

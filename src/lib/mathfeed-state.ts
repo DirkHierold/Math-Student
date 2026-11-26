@@ -1,5 +1,5 @@
 import { t } from "@/lib/i18n"
-import { awardBadges } from "../../badges.js"
+import { awardBadges, badgeById } from "../../badges.js"
 import { TASK_TYPES } from "../../math-engine.js"
 import { createRewards, normalizeRewards } from "../../rewards.js"
 import { normalizeSkills } from "../../skills.js"
@@ -76,6 +76,8 @@ export function loadState(): MathFeedState {
       state.daily as MathFeedState["daily"]
     ).reduce((sum, stats) => sum + stats.seconds, 0)
   }
+  // Badges that no longer exist (catalogue changes) must not leave an empty celebration behind.
+  state.rewards.unseenBadges = state.rewards.unseenBadges.filter((id: string) => badgeById(id))
   awardBadges(state, today, { silent: true })
   return state
 }
@@ -102,4 +104,17 @@ function migrateLegacy(today: string): MathFeedState {
 
 export function dailyFor(state: MathFeedState, key = berlinDateKey()) {
   return (state.daily[key] ||= createDailyStats(TYPE_KEYS))
+}
+
+export type DailyStats = ReturnType<typeof createDailyStats>
+
+// Correct and answered steps of one day over all topics.
+export function dailyTotals(daily: DailyStats) {
+  return Object.values(daily.steps).reduce(
+    (sum, steps) => ({
+      correct: sum.correct + steps.correct,
+      total: sum.total + steps.correct + steps.errors,
+    }),
+    { correct: 0, total: 0 }
+  )
 }

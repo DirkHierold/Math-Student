@@ -5,11 +5,7 @@ import {
   Flame,
   ListChecks,
   Medal,
-  Shapes,
-  Sparkles,
   Star,
-  Target,
-  Timer,
   Zap,
   type LucideIcon,
 } from "lucide-react"
@@ -26,13 +22,9 @@ export const BADGE_ICONS: Record<Badge["metric"], LucideIcon> = {
   total: Crown,
   tasks: ListChecks,
   days: CalendarCheck,
-  hours: Clock,
+  minutes: Clock,
   dayStreak: Flame,
   correctStreak: Zap,
-  dayMinutes: Timer,
-  dayTasks: Target,
-  dayFlawless: Sparkles,
-  allPractised: Shapes,
   allLevel: Medal,
 }
 
@@ -42,8 +34,8 @@ const GROUP_COLORS: Record<string, string> = {
   tasks: "oklch(0.6 0.17 250)",
   days: "oklch(0.62 0.15 165)",
   hours: "oklch(0.6 0.13 215)",
-  streak: "oklch(0.7 0.19 47)",
-  today: "oklch(0.62 0.2 350)",
+  dayStreak: "oklch(0.7 0.19 47)",
+  taskStreak: "oklch(0.62 0.2 350)",
   all: "oklch(0.74 0.15 80)",
 }
 
@@ -52,8 +44,8 @@ const GROUP_TITLES: Record<string, MessageKey> = {
   tasks: "badgeGroupTasks",
   days: "badgeGroupDays",
   hours: "badgeGroupHours",
-  streak: "badgeGroupStreak",
-  today: "badgeGroupToday",
+  dayStreak: "badgeGroupDayStreak",
+  taskStreak: "badgeGroupTaskStreak",
   all: "badgeGroupAll",
 }
 

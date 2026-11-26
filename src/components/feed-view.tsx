@@ -1,9 +1,8 @@
 import { useRef } from "react"
-import { Check, Flame, Timer, X } from "lucide-react"
+import { Check, Flame, X } from "lucide-react"
 
-import { formatDuration } from "../../format.js"
 import { currentLine, explanationKey } from "../../math-engine.js"
-import { AppHeader, ThemeToggle } from "@/components/app-header"
+import { AppHeader } from "@/components/app-header"
 import { CelebrationContent } from "@/components/celebration"
 import { MathBlock } from "@/components/math-block"
 import { EXPLAIN } from "@/components/task-types"
@@ -38,43 +37,20 @@ export function FeedView({ feed }: { feed: Feed }) {
       className="relative grid h-full min-h-0 grid-rows-[auto_minmax(0,3fr)_auto_minmax(0,4fr)_auto] gap-2 px-4 pt-0 pb-3 short:grid-cols-2 short:grid-rows-[auto_auto_minmax(0,1fr)_auto] short:gap-x-4"
     >
       <div className="short:col-span-2">
-        <AppHeader className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto_auto_auto] gap-2 px-0">
-          <button
-            type="button"
-            onClick={exitRun}
-            aria-label={t("runExit")}
-            className="grid size-9 shrink-0 place-items-center rounded-full text-muted-foreground outline-none focus-visible:bg-accent"
-          >
-            <X className="size-5" aria-hidden="true" />
-          </button>
-          <div className="flex min-w-0 items-center justify-center gap-2">
-            <span className="truncate text-sm font-semibold">{topicName(slot.type)}</span>
-            <span className="shrink-0 text-xs font-medium tabular-nums text-muted-foreground">
-              {t("levelShort", { n: state.skills[slot.type].level })}
-            </span>
-          </div>
-          <span
-            role="timer"
-            className="flex h-9 shrink-0 items-center gap-0.5 text-xs font-semibold tabular-nums text-muted-foreground"
-            aria-label={t("timerLabel", { time: formatDuration(daily.seconds) })}
-          >
-            <Timer className="size-4" aria-hidden="true" />
-            {formatDuration(daily.seconds)}
-          </span>
-          <span
-            className={cn(
-              "flex h-9 shrink-0 items-center gap-0.5 text-xs font-semibold tabular-nums",
-              streak > 0 ? "text-orange-500" : "text-muted-foreground/50"
-            )}
-            aria-label={t("streakLabel", { n: streak })}
-          >
-            <Flame className="size-4" aria-hidden="true" />
-            {streak}
-          </span>
-          <div className="flex shrink-0 items-center">
-            <ThemeToggle />
-          </div>
-        </AppHeader>
+        <AppHeader
+          className="px-0"
+          daily={daily}
+          start={
+            <button
+              type="button"
+              onClick={exitRun}
+              aria-label={t("runExit")}
+              className="grid size-9 shrink-0 place-items-center rounded-full text-muted-foreground outline-none focus-visible:bg-accent"
+            >
+              <X className="size-5" aria-hidden="true" />
+            </button>
+          }
+        />
         <div
           role="progressbar"
           aria-label={t("runLevelBarLabel", { topic: topicName(slot.type), level })}
@@ -128,10 +104,28 @@ export function FeedView({ feed }: { feed: Feed }) {
             : "text-muted-foreground"
         )}
       >
+        {/* Category, level and streak share the line with the instruction; a wrong answer's explanation takes the whole line. */}
         {answeredWrong ? (
           <span>{explanation && t(explanation)}</span>
         ) : (
-          t("instruction")
+          <>
+            <span className="shrink-0 font-semibold text-foreground">{topicName(slot.type)}</span>
+            <span className="shrink-0 font-medium tabular-nums">
+              {t("levelShort", { n: level })}
+            </span>
+            <span
+              className={cn(
+                "flex shrink-0 items-center gap-0.5 font-semibold tabular-nums",
+                streak > 0 ? "text-orange-500" : "text-muted-foreground/50"
+              )}
+              aria-label={t("streakLabel", { n: streak })}
+            >
+              <Flame className="size-3.5 sm:size-4" aria-hidden="true" />
+              {streak}
+            </span>
+            <span aria-hidden="true">·</span>
+            <span className="min-w-0 truncate">{t("instruction")}</span>
+          </>
         )}
       </p>
 

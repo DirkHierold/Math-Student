@@ -5,7 +5,6 @@ import { BADGE_GROUPS, BADGES, awardBadges, badgeProgress } from '../badges.js';
 import { TASK_TYPES } from '../math-engine.js';
 import { completeDay, createRewards, normalizeRewards } from '../rewards.js';
 import { normalizeSkills } from '../skills.js';
-import { createDailyStats } from '../stats-data.js';
 
 const TYPES = Object.keys(TASK_TYPES);
 const TODAY = '2026-11-25';
@@ -22,7 +21,9 @@ test('every badge has a unique id and belongs to a known group', () => {
     assert.equal(new Set(ids).size, ids.length);
     const groups = new Set(BADGE_GROUPS.map(group => group.id));
     for (const badge of BADGES) assert.ok(groups.has(badge.group), badge.id);
-    for (const group of BADGE_GROUPS) assert.ok(BADGES.some(badge => badge.group === group.id), group.id);
+    for (const group of BADGE_GROUPS) {
+        assert.equal(BADGES.filter(badge => badge.group === group.id).length, 6, group.id);
+    }
 });
 
 test('a fresh state earns nothing and shows zero progress', () => {
@@ -37,7 +38,7 @@ test('badges reachable from saved data are awarded at once and stay earned', () 
     state.skills[TYPES[0]].tasks = 120;
     state.rewards.runs = 1;
     const earned = awardBadges(state, TODAY);
-    for (const id of [`topic-${TYPES[0]}-topic-10`, `topic-${TYPES[0]}-topic-25`, 'tasks-tasks-100', 'days-days-1']) {
+    for (const id of [`topic-${TYPES[0]}-topic-5`, `topic-${TYPES[0]}-topic-25`, 'tasks-tasks-10', 'tasks-tasks-100', 'days-days-1']) {
         assert.ok(earned.includes(id), id);
         assert.equal(state.rewards.badges[id], TODAY);
     }
@@ -54,11 +55,11 @@ test('badges reachable from saved data are awarded at once and stay earned', () 
 test('the best correct streak is remembered after the streak breaks', () => {
     const state = makeState();
     state.skills[TYPES[1]].streak = 12;
-    assert.ok(awardBadges(state, TODAY).includes('streak-correctStreak-10'));
+    assert.ok(awardBadges(state, TODAY).includes('taskStreak-correctStreak-10'));
     state.skills[TYPES[1]].streak = 0;
     awardBadges(state, TODAY);
     assert.equal(state.rewards.bestStreak, 12);
-    assert.equal(badgeProgress(byId('streak-correctStreak-25'), state, TODAY), 12 / 25);
+    assert.equal(badgeProgress(byId('taskStreak-correctStreak-15'), state, TODAY), 12 / 15);
 });
 
 test('the day streak grows on consecutive days, restarts after a gap and expires', () => {
@@ -74,39 +75,20 @@ test('the day streak grows on consecutive days, restarts after a gap and expires
     const state = { ...makeState(), rewards };
     rewards.dayStreak = 3;
     rewards.lastDay = '2026-11-24';
-    assert.ok(awardBadges(state, '2026-11-25').includes('streak-dayStreak-3'));
-    assert.equal(badgeProgress(byId('streak-dayStreak-7'), state, '2026-11-25'), 3 / 7);
-    assert.equal(badgeProgress(byId('streak-dayStreak-7'), state, '2026-11-27'), 0);
-});
-
-test('day records read only today and need a flawless day for the flawless badge', () => {
-    const state = makeState();
-    const today = createDailyStats(TYPES);
-    today.seconds = 16 * 60;
-    today.steps[TYPES[0]].correct = 25;
-    state.daily[TODAY] = today;
-    const earned = awardBadges(state, TODAY);
-    assert.ok(earned.includes('today-dayMinutes-15'));
-    assert.ok(earned.includes('today-dayFlawless-20'));
-    assert.ok(!earned.includes('today-dayMinutes-30'));
-    assert.equal(badgeProgress(byId('today-dayTasks-50'), state, TODAY), 0.5);
-
-    const other = makeState();
-    const day = createDailyStats(TYPES);
-    day.steps[TYPES[0]].correct = 25;
-    day.steps[TYPES[0]].errors = 1;
-    other.daily[TODAY] = day;
-    assert.ok(!awardBadges(other, TODAY).includes('today-dayFlawless-20'));
+    assert.ok(awardBadges(state, '2026-11-25').includes('dayStreak-dayStreak-3'));
+    assert.equal(badgeProgress(byId('dayStreak-dayStreak-7'), state, '2026-11-25'), 3 / 7);
+    assert.equal(badgeProgress(byId('dayStreak-dayStreak-7'), state, '2026-11-27'), 0);
 });
 
 test('practice time and all-rounder badges', () => {
     const state = makeState();
     state.rewards.totalSeconds = 3700;
-    for (const type of TYPES) state.skills[type].tasks = 1;
+    for (const type of TYPES) state.skills[type].level = 7;
     const earned = awardBadges(state, TODAY);
-    assert.ok(earned.includes('hours-hours-1'));
-    assert.ok(earned.includes(`all-allPractised-${TYPES.length}`));
-    assert.ok(!earned.includes('all-allLevel-25'));
+    for (const id of ['hours-minutes-15', 'hours-minutes-30', 'hours-minutes-60', 'all-allLevel-5']) assert.ok(earned.includes(id), id);
+    assert.ok(!earned.includes('hours-minutes-120'));
+    assert.ok(!earned.includes('all-allLevel-10'));
+    assert.equal(byId('hours-minutes-120').n, 2);
 });
 
 test('badge data survives saving and loading; old saves get sensible defaults', () => {
@@ -129,10 +111,10 @@ test('new badges queue up as unseen until marked seen; silent awards skip the qu
     state.rewards.runs = 1;
     state.skills[TYPES[0]].tasks = 100;
     awardBadges(state, TODAY);
-    assert.deepEqual(state.rewards.unseenBadges, ['tasks-tasks-100', 'days-days-1']);
+    assert.deepEqual(state.rewards.unseenBadges, ['tasks-tasks-10', 'tasks-tasks-50', 'tasks-tasks-100', 'days-days-1']);
     markBadgeSeen(state.rewards, 'tasks-tasks-100');
-    assert.deepEqual(state.rewards.unseenBadges, ['days-days-1']);
-    assert.deepEqual(normalizeRewards(JSON.parse(JSON.stringify(state.rewards))).unseenBadges, ['days-days-1']);
+    assert.deepEqual(state.rewards.unseenBadges, ['tasks-tasks-10', 'tasks-tasks-50', 'days-days-1']);
+    assert.deepEqual(normalizeRewards(JSON.parse(JSON.stringify(state.rewards))).unseenBadges, ['tasks-tasks-10', 'tasks-tasks-50', 'days-days-1']);
     assert.equal(badgeById('days-days-1').target, 1);
     assert.equal(badgeById('nope'), null);
 

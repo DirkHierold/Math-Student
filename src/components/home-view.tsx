@@ -1,11 +1,10 @@
-import { Check, Timer } from "lucide-react"
+import { Check } from "lucide-react"
 import { useEffect, useMemo } from "react"
 
-import { formatDuration } from "../../format.js"
 import { recommendedTopic } from "../../session.js"
 import { overallLevel, topicLevel } from "../../skills.js"
 import { buildChart, levelChange } from "../../level-series.js"
-import { AppHeader, ThemeToggle } from "@/components/app-header"
+import { AppHeader } from "@/components/app-header"
 import { celebrate } from "@/lib/celebrate"
 import { type useMathFeed } from "@/hooks/use-mathfeed"
 import { berlinDateKey, TYPE_KEYS } from "@/lib/mathfeed-state"
@@ -43,18 +42,6 @@ export function HomeView({ feed }: { feed: Feed }) {
   }
   const change = levelChange(chart.total.slice(-2))
 
-  // Today's practice time and answered steps, shown as one line under the title.
-  const { correct, total } = TYPE_KEYS.reduce(
-    (acc, type) => {
-      const steps = daily.steps[type]
-      return {
-        correct: acc.correct + steps.correct,
-        total: acc.total + steps.correct + steps.errors,
-      }
-    },
-    { correct: 0, total: 0 }
-  )
-
   useEffect(() => {
     if (!summary || celebrated.has(summary)) return
     celebrated.add(summary)
@@ -63,10 +50,10 @@ export function HomeView({ feed }: { feed: Feed }) {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-    <AppHeader>
-      <span className="text-lg font-semibold">{t("appName")}</span>
-      <ThemeToggle />
-    </AppHeader>
+    <AppHeader
+      daily={daily}
+      start={<span className="truncate text-lg font-semibold">{t("appName")}</span>}
+    />
     <section className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] gap-3 px-4 pt-6 pb-4 short:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] short:grid-rows-[minmax(0,1fr)] short:gap-4 short:pt-1 short:pb-2">
         <header className="flex min-h-32 shrink-0 flex-col items-center justify-center text-center short:min-h-0">
           <Check
@@ -79,19 +66,9 @@ export function HomeView({ feed }: { feed: Feed }) {
           <h1 className="mt-1 text-xl font-semibold short:text-lg">
             {summary ? t("sumTitle") : t("homeMotivation")}
           </h1>
-          {rewards.runs === 0 && !summary ? (
+          {rewards.runs === 0 && !summary && (
             <p className="mx-auto mt-1 max-w-64 text-xs text-muted-foreground short:text-sm">
               {t("homeHint")}
-            </p>
-          ) : (
-            <p
-              className="mt-1 flex items-center justify-center gap-1 text-sm font-semibold text-muted-foreground tabular-nums"
-              aria-label={t("homeTodayStats", { time: formatDuration(daily.seconds), correct, total })}
-            >
-              <Timer className="size-4" aria-hidden="true" />
-              <span aria-hidden="true">
-                {formatDuration(daily.seconds)} · {correct}/{total}
-              </span>
             </p>
           )}
         </header>
