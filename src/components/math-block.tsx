@@ -19,7 +19,8 @@ export function MathBlock({ tex, kind, onError, className }: MathBlockProps) {
     try {
       element.classList.remove("math-ready")
       element.replaceChildren()
-      katex.render(tex, element, {
+      // \mathsf sets digits and letters in KaTeX's sans-serif face.
+      katex.render(`\\mathsf{${tex}}`, element, {
         displayMode: true,
         throwOnError: true,
         trust: false,

@@ -10,7 +10,7 @@ const [block, fit] = await Promise.all([
 ]);
 
 test('React formula renderer waits for fonts and applies a shared answer scale', () => {
-    assert.match(block, /katex\.render\(tex, element, \{\s*displayMode: true,\s*throwOnError: true,\s*trust: false/);
+    assert.match(block, /katex\.render\(`\\\\mathsf\{\$\{tex\}\}`, element, \{\s*displayMode: true,\s*throwOnError: true,\s*trust: false/);
     assert.match(fit, /document\.fonts\.ready\s*\.then\(\(\) => \{\s*fontsReady = true\s*fit\(\)/);
     assert.match(fit, /new ResizeObserver\(fit\)/);
     assert.match(fit, /sharedMathScale\(\s*items\s*\.filter/);

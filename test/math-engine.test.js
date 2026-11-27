@@ -57,9 +57,9 @@ test('every generated family has four distinct tile choices and terminates', () 
                 assert.equal(new Set(step.choices.map(choice => choice.tex)).size, step.choices.length);
                 assert.ok(!step.choices.some(choice => /\d+\.\d+/.test(choice.tex)), 'decimal output is forbidden');
                 assert.notEqual(step.answerTex, currentLine(task), `${type} produced a no-op step`);
-                assert.doesNotThrow(() => katex.renderToString(currentLine(task), { displayMode: true, throwOnError: true, trust: false }));
+                assert.doesNotThrow(() => katex.renderToString(`\\mathsf{${currentLine(task)}}`, { displayMode: true, throwOnError: true, trust: false }));
                 for (const choice of step.choices) {
-                    assert.doesNotThrow(() => katex.renderToString(choice.tex, { displayMode: true, throwOnError: true, trust: false }));
+                    assert.doesNotThrow(() => katex.renderToString(`\\mathsf{${choice.tex}}`, { displayMode: true, throwOnError: true, trust: false }));
                 }
                 task = applyNextStep(task);
                 steps++;
